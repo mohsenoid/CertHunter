@@ -1,2 +1,105 @@
-# CertHunter
-An Android Util app which help querying installed apps certificate's fingerprints
+# CertHunter 🛡️
+
+**CertHunter** is a lightweight, modern Android utility tool built with **Jetpack Compose**. It allows developers and security researchers to inspect the
+signing certificate fingerprints (SHA-256, SHA-1) and X.509 details of any application installed on their device.
+
+## 🚀 Features
+
+- **App Inspection:** Lists all user and system applications installed on the device.
+- **Real-time Search:** Filter apps instantly by App Name or Package Name.
+- **Signature Extraction:** Retrieves valid signing fingerprints:
+    - SHA-256
+    - SHA-1
+- **X.509 Parsing:** Decodes the raw certificate to display:
+    - Owner (Subject DN)
+    - Issuer
+    - Serial Number
+    - Validity Period (Valid From / Valid Until)
+- **Clipboard Support:** Tap any field in the details dialog to copy the value to the clipboard.
+- **Modern UI:** Built entirely with Jetpack Compose and Material 3 design.
+
+## 🛠️ Tech Stack
+
+- **Language:** Kotlin
+- **UI Framework:** Jetpack Compose (Material 3)
+- **Concurrency:** Kotlin Coroutines (Dispatchers.IO for background loading)
+- **Security API:** `java.security.MessageDigest`, `java.security.cert.X509Certificate`
+- **Minimum SDK:** 24 (Android 7.0)
+- **Target SDK:** 34 (Android 14)
+
+## 📸 Screenshots
+
+| **App List & Search**                               | **Certificate Details**                                   |
+|-----------------------------------------------------|-----------------------------------------------------------|
+| ![screenshot_app_list.png](screenshot_app_list.png) | ![screenshot_cert_dialog.png](screenshot_cert_dialog.png) |
+
+## 🔑 Permissions & Privacy
+
+This application requires the following specific permission to function on Android 11 (API 30) and above:
+
+XML
+
+```
+<uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+```
+
+**Why?**
+
+Due to Android's *Package Visibility* changes, apps cannot see other installed apps by default. Since the core purpose of CertHunter is to inspect *other* apps,
+this permission is mandatory.
+
+*Note: No data leaves the device. All processing is done locally.*
+
+## 💻 Installation
+
+1. Clone the repository:
+
+   Bash
+
+   ```
+   git clone https://github.com/your-username/CertHunter.git
+   ```
+
+2. Open the project in **Android Studio** (Hedgehog or newer recommended).
+
+3. Sync Gradle files.
+
+4. Run on an emulator or physical device (Android 7.0+).
+
+## 🧩 Code Highlight
+
+How we extract signatures across different Android versions (Legacy vs Modern API):
+
+Kotlin
+
+```
+val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+    // Android 9+ (API 28+)
+    packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES)
+} else {
+    // Legacy (API 24-27)
+    packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+}
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+Copyright 2026 Mohsen Mirhoseini
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
+License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
