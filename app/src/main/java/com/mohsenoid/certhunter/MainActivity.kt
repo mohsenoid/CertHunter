@@ -27,11 +27,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -98,11 +104,15 @@ data class CertificateDetails(
 @Composable
 fun AppListScreen() {
     val context = LocalContext.current
-    // State for the list of apps
-    var appList by remember { mutableStateOf<List<AppItem>>(emptyList()) }
-    // State for the loading indicator
+
+    // Master list of all apps
+    var allApps by remember { mutableStateOf<List<AppItem>>(emptyList()) }
+    // Loading state
     var isLoading by remember { mutableStateOf(true) }
-    // State for the currently selected app (to show dialog)
+    // Search query state
+    var searchQuery by remember { mutableStateOf("") }
+
+    // Selected app for dialog
     var selectedApp by remember { mutableStateOf<AppItem?>(null) }
     var selectedAppCert by remember { mutableStateOf<CertificateDetails?>(null) }
 
@@ -110,7 +120,6 @@ fun AppListScreen() {
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
             val pm = context.packageManager
-            // Query all packages
             val packages = pm.getInstalledPackages(PackageManager.GET_META_DATA)
 
             val apps = packages.map {
@@ -119,16 +128,49 @@ fun AppListScreen() {
                     packageName = it.packageName,
                     icon = it.applicationInfo?.loadIcon(pm)
                 )
-            }.sortedBy { it.name } // Sort alphabetically
+            }.sortedBy { it.name.lowercase() }
 
-            appList = apps
+            allApps = apps
             isLoading = false
+        }
+    }
+
+    // Dynamic filtering based on search query
+    val filteredList = remember(searchQuery, allApps) {
+        if (searchQuery.isBlank()) {
+            allApps
+        } else {
+            allApps.filter {
+                it.name.contains(searchQuery, ignoreCase = true) ||
+                        it.packageName.contains(searchQuery, ignoreCase = true)
+            }
         }
     }
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("CertHunter") })
+            Column {
+                TopAppBar(title = { Text("CertHunter") })
+                // Search Bar Area
+                OutlinedTextField(
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    placeholder = { Text("Search apps or packages...") },
+                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
+                    trailingIcon = {
+                        if (searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { searchQuery = "" }) {
+                                Icon(Icons.Default.Close, contentDescription = "Clear")
+                            }
+                        }
+                    },
+                    singleLine = true
+                )
+                HorizontalDivider()
+            }
         }
     ) { padding ->
         if (isLoading) {
@@ -141,21 +183,37 @@ fun AppListScreen() {
                     .fillMaxSize()
                     .padding(padding)
             ) {
-                items(appList) { app ->
+                items(filteredList) { app ->
                     AppRow(app = app) {
-                        // On Click: Fetch signatures and show dialog
                         selectedApp = app
                         selectedAppCert = getAppCertificateDetails(context.packageManager, app.packageName)
+                    }
+                }
+
+                // Show a helpful message if search returns nothing
+                if (filteredList.isEmpty() && !isLoading) {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(32.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                "No apps found matching \"$searchQuery\"",
+                                color = MaterialTheme.colorScheme.secondary
+                            )
+                        }
                     }
                 }
             }
         }
     }
 
-    // Show Dialog if an app is selected
-    selectedApp?.let { app ->
+    // Show Dialog
+    if (selectedApp != null) {
         CertificateDialog(
-            app = app,
+            app = selectedApp!!,
             details = selectedAppCert,
             onDismiss = { selectedApp = null }
         )
