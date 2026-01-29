@@ -18,7 +18,14 @@ output-metadata.json
 
 # IntelliJ
 *.iml
-.idea/
+.idea/assetWizardSettings.xml
+.idea/caches
+.idea/gradle.xml
+.idea/libraries
+.idea/markdown.xml
+.idea/modules.xml
+.idea/navEditor.xml
+.idea/workspace.xml
 misc.xml
 deploymentTargetDropDown.xml
 render.experimental.xml
@@ -32,3 +39,5 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+.DS_Store
