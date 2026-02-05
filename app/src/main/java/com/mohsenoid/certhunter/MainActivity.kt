@@ -273,6 +273,8 @@ fun CertificateDialog(app: AppItem, details: CertificateDetails?, onDismiss: () 
                         .fillMaxWidth()
                         .verticalScroll(rememberScrollState())
                 ) {
+                    DetailRow("Package Name", app.packageName)
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
                     DetailRow("SHA-256", details.sha256)
                     DetailRow("SHA-1", details.sha1)
 
