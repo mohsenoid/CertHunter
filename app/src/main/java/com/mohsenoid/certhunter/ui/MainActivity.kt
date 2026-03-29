@@ -54,10 +54,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.createBitmap
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mohsenoid.certhunter.domain.model.AppItem
 import com.mohsenoid.certhunter.domain.model.CertificateDetails
 import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,7 +74,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppListScreen(viewModel: AppViewModel = viewModel()) {
+fun AppListScreen(viewModel: AppViewModel = koinViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
