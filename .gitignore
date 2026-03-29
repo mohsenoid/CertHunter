@@ -18,10 +18,12 @@ output-metadata.json
 
 # IntelliJ
 *.iml
-.idea/assetWizardSettings.xml
 .idea/caches
-.idea/gradle.xml
+.idea/firebender
 .idea/libraries
+.idea/assetWizardSettings.xml
+.idea/deviceManager.xml
+.idea/gradle.xml
 .idea/markdown.xml
 .idea/modules.xml
 .idea/navEditor.xml
