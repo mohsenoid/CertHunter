@@ -1,5 +1,7 @@
 package com.mohsenoid.certhunter.di
 
+import com.mohsenoid.certhunter.coroutine.DefaultDispatcherProvider
+import com.mohsenoid.certhunter.coroutine.DispatcherProvider
 import com.mohsenoid.certhunter.data.repository.AppRepositoryImpl
 import com.mohsenoid.certhunter.domain.repository.AppRepository
 import com.mohsenoid.certhunter.ui.detail.AppDetailViewModel
@@ -9,7 +11,8 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
-    single<AppRepository> { AppRepositoryImpl(androidContext().packageManager) }
-    viewModel { AppListViewModel(repository = get()) }
-    viewModel { (packageName: String) -> AppDetailViewModel(packageName = packageName, repository = get()) }
+    single<DispatcherProvider> { DefaultDispatcherProvider() }
+    single<AppRepository> { AppRepositoryImpl(androidContext().packageManager, get()) }
+    viewModel { AppListViewModel(repository = get(), dispatcherProvider = get()) }
+    viewModel { (packageName: String) -> AppDetailViewModel(packageName = packageName, repository = get(), dispatcherProvider = get()) }
 }

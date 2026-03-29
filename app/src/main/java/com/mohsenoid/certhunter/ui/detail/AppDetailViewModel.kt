@@ -2,6 +2,7 @@ package com.mohsenoid.certhunter.ui.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mohsenoid.certhunter.coroutine.DispatcherProvider
 import com.mohsenoid.certhunter.domain.repository.AppRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,6 +14,7 @@ import kotlinx.coroutines.launch
 class AppDetailViewModel(
     private val packageName: String,
     private val repository: AppRepository,
+    private val dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AppDetailUiModel(packageName = packageName))
@@ -23,7 +25,7 @@ class AppDetailViewModel(
     }
 
     private fun load() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcherProvider.io) {
             val appDeferred = async { repository.getAppItem(packageName) }
             val certDeferred = async { repository.getCertificateDetails(packageName) }
             val app = appDeferred.await()

@@ -3,11 +3,11 @@ package com.mohsenoid.certhunter.data.repository
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
+import com.mohsenoid.certhunter.coroutine.DispatcherProvider
 import com.mohsenoid.certhunter.domain.model.AppCertificateDetails
 import com.mohsenoid.certhunter.domain.model.AppItem
 import com.mohsenoid.certhunter.domain.repository.AppRepository
 import com.mohsenoid.klogx.DefaultKLogWriter
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayInputStream
 import java.security.MessageDigest
@@ -16,13 +16,16 @@ import java.security.cert.X509Certificate
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class AppRepositoryImpl(private val packageManager: PackageManager) : AppRepository {
+class AppRepositoryImpl(
+    private val packageManager: PackageManager,
+    private val dispatcherProvider: DispatcherProvider,
+) : AppRepository {
 
     private val logger = object : DefaultKLogWriter {
         override val tag: String = "AppRepositoryImpl"
     }
 
-    override suspend fun getInstalledApps(): List<AppItem> = withContext(Dispatchers.IO) {
+    override suspend fun getInstalledApps(): List<AppItem> = withContext(dispatcherProvider.io) {
         val packages = packageManager.getInstalledPackages(PackageManager.GET_META_DATA)
         packages.map {
             val flags = it.applicationInfo?.flags ?: 0
@@ -35,7 +38,7 @@ class AppRepositoryImpl(private val packageManager: PackageManager) : AppReposit
     }
 
     override suspend fun getAppItem(packageName: String): AppItem? =
-        withContext(Dispatchers.IO) {
+        withContext(dispatcherProvider.io) {
             runCatching {
                 val info = packageManager.getApplicationInfo(packageName, 0)
                 val flags = info.flags
@@ -48,7 +51,7 @@ class AppRepositoryImpl(private val packageManager: PackageManager) : AppReposit
         }
 
     override suspend fun getCertificateDetails(packageName: String): AppCertificateDetails? =
-        withContext(Dispatchers.IO) {
+        withContext(dispatcherProvider.io) {
             try {
                 val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     PackageManager.GET_SIGNING_CERTIFICATES

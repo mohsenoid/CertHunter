@@ -2,6 +2,7 @@ package com.mohsenoid.certhunter.ui.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mohsenoid.certhunter.coroutine.DispatcherProvider
 import com.mohsenoid.certhunter.domain.repository.AppRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -9,7 +10,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class AppListViewModel(private val repository: AppRepository) : ViewModel() {
+class AppListViewModel(
+    private val repository: AppRepository,
+    private val dispatcherProvider: DispatcherProvider,
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AppListUiModel())
     val uiState: StateFlow<AppListUiModel> = _uiState.asStateFlow()
@@ -19,7 +23,7 @@ class AppListViewModel(private val repository: AppRepository) : ViewModel() {
     }
 
     private fun loadApps() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcherProvider.io) {
             val apps = repository.getInstalledApps()
             _uiState.update { it.copy(allApps = apps, isLoadingApps = false) }
         }
