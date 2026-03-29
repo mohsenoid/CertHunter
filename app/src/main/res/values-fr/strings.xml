@@ -29,5 +29,9 @@
     <string name="app_list_search_clear_content_description">Effacer</string>
     <string name="app_list_search_placeholder">Rechercher des apps ou des paquets…</string>
     <string name="app_list_show_system_apps">Afficher les apps système</string>
+    <string name="app_list_sort_install_newest">Installation la plus récente</string>
+    <string name="app_list_sort_install_oldest">Installation la plus ancienne</string>
+    <string name="app_list_sort_name_asc">Nom (A→Z)</string>
+    <string name="app_list_sort_name_desc">Nom (Z→A)</string>
     <string name="app_list_system_label">Système</string>
 </resources>

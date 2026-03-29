@@ -41,14 +41,15 @@ class AppRepositoryImpl(
     override suspend fun getInstalledApps(): List<AppItem> = withContext(dispatcherProvider.io) {
         val packages = packageManager.getInstalledPackages(PackageManager.GET_META_DATA)
         packages
-            .mapNotNull { it.applicationInfo?.toAppItem(it.packageName) }
+            .mapNotNull { pkgInfo -> pkgInfo.applicationInfo?.toAppItem(pkgInfo.packageName, pkgInfo.firstInstallTime) }
             .sortedBy { it.name.lowercase() }
     }
 
     override suspend fun getAppDetails(packageName: String): Result<AppDetails, AppDetailsError> =
         withContext(dispatcherProvider.io) {
             runCatching {
-                packageManager.getApplicationInfo(packageName, 0).toAppItem(packageName)
+                val firstInstallTime = packageManager.getPackageInfo(packageName, 0).firstInstallTime
+                packageManager.getApplicationInfo(packageName, 0).toAppItem(packageName, firstInstallTime)
             }.mapError { AppDetailsError.ItemLoadFailed(it) }
                 .andThen { item ->
                     getCertificateDetails(packageName).mapError { error ->
@@ -120,10 +121,11 @@ class AppRepositoryImpl(
             }
         }
 
-    private fun ApplicationInfo.toAppItem(packageName: String): AppItem = AppItem(
+    private fun ApplicationInfo.toAppItem(packageName: String, firstInstallTime: Long): AppItem = AppItem(
         name = loadLabel(packageManager).toString(),
         packageName = packageName,
         isSystemApp = flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0,
+        firstInstallTime = firstInstallTime,
     )
 
     private fun hashBytes(bytes: ByteArray, algorithm: String): String {

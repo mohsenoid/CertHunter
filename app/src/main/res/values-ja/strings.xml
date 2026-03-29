@@ -29,5 +29,9 @@
     <string name="app_list_search_clear_content_description">クリア</string>
     <string name="app_list_search_placeholder">アプリまたはパッケージを検索…</string>
     <string name="app_list_show_system_apps">システムアプリを表示</string>
+    <string name="app_list_sort_install_newest">インストール日（新しい順）</string>
+    <string name="app_list_sort_install_oldest">インストール日（古い順）</string>
+    <string name="app_list_sort_name_asc">名前（A→Z）</string>
+    <string name="app_list_sort_name_desc">名前（Z→A）</string>
     <string name="app_list_system_label">システム</string>
 </resources>

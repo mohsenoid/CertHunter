@@ -29,5 +29,9 @@
     <string name="app_list_search_clear_content_description">साफ़ करें</string>
     <string name="app_list_search_placeholder">ऐप्स या पैकेज खोजें…</string>
     <string name="app_list_show_system_apps">सिस्टम ऐप्स दिखाएं</string>
+    <string name="app_list_sort_install_newest">सबसे नया इंस्टॉल</string>
+    <string name="app_list_sort_install_oldest">सबसे पुराना इंस्टॉल</string>
+    <string name="app_list_sort_name_asc">नाम (अ→ज्ञ)</string>
+    <string name="app_list_sort_name_desc">नाम (ज्ञ→अ)</string>
     <string name="app_list_system_label">सिस्टम</string>
 </resources>

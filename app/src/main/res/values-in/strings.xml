@@ -29,5 +29,9 @@
     <string name="app_list_search_clear_content_description">Hapus</string>
     <string name="app_list_search_placeholder">Cari aplikasi atau paket…</string>
     <string name="app_list_show_system_apps">Tampilkan aplikasi sistem</string>
+    <string name="app_list_sort_install_newest">Terbaru diinstal</string>
+    <string name="app_list_sort_install_oldest">Terlama diinstal</string>
+    <string name="app_list_sort_name_asc">Nama (A→Z)</string>
+    <string name="app_list_sort_name_desc">Nama (Z→A)</string>
     <string name="app_list_system_label">Sistem</string>
 </resources>

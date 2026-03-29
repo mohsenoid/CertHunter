@@ -29,5 +29,9 @@
     <string name="app_list_search_clear_content_description">Borrar</string>
     <string name="app_list_search_placeholder">Buscar apps o paquetes…</string>
     <string name="app_list_show_system_apps">Mostrar apps del sistema</string>
+    <string name="app_list_sort_install_newest">Instalación más reciente</string>
+    <string name="app_list_sort_install_oldest">Instalación más antigua</string>
+    <string name="app_list_sort_name_asc">Nombre (A→Z)</string>
+    <string name="app_list_sort_name_desc">Nombre (Z→A)</string>
     <string name="app_list_system_label">Sistema</string>
 </resources>

@@ -29,5 +29,9 @@
     <string name="app_list_search_clear_content_description">مسح</string>
     <string name="app_list_search_placeholder">ابحث عن تطبيقات أو حزم…</string>
     <string name="app_list_show_system_apps">إظهار تطبيقات النظام</string>
+    <string name="app_list_sort_install_newest">الأحدث تثبيتاً</string>
+    <string name="app_list_sort_install_oldest">الأقدم تثبيتاً</string>
+    <string name="app_list_sort_name_asc">الاسم (أ→ي)</string>
+    <string name="app_list_sort_name_desc">الاسم (ي→أ)</string>
     <string name="app_list_system_label">نظام</string>
 </resources>

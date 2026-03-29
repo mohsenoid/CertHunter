@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
@@ -16,6 +17,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -36,6 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.mohsenoid.certhunter.R
 import com.mohsenoid.certhunter.domain.model.AppItem
+import com.mohsenoid.certhunter.domain.model.AppSortOrder
 import com.mohsenoid.certhunter.ui.list.widget.AppListRow
 import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
 import com.mohsenoid.certhunter.ui.util.ComponentPreviews
@@ -47,6 +50,7 @@ fun AppListScreen(
     onSearchQueryChanged: (String) -> Unit,
     onAppClick: (AppItem) -> Unit,
     onToggleSystemApps: () -> Unit,
+    onSortOrderChanged: (AppSortOrder) -> Unit,
     onAboutClick: () -> Unit,
 ) {
     var showMenu by remember { mutableStateOf(false) }
@@ -120,6 +124,32 @@ fun AppListScreen(
                                                         showMenu = false
                                                     }
                                                 )
+                                                HorizontalDivider()
+                                                AppSortOrder.entries.forEach { order ->
+                                                    DropdownMenuItem(
+                                                        text = {
+                                                            Text(
+                                                                stringResource(
+                                                                    when (order) {
+                                                                        AppSortOrder.NameAscending -> R.string.app_list_sort_name_asc
+                                                                        AppSortOrder.NameDescending -> R.string.app_list_sort_name_desc
+                                                                        AppSortOrder.InstallDateNewest -> R.string.app_list_sort_install_newest
+                                                                        AppSortOrder.InstallDateOldest -> R.string.app_list_sort_install_oldest
+                                                                    }
+                                                                )
+                                                            )
+                                                        },
+                                                        trailingIcon = {
+                                                            if (uiState.sortOrder == order) {
+                                                                Icon(Icons.Default.Check, contentDescription = null)
+                                                            }
+                                                        },
+                                                        onClick = {
+                                                            onSortOrderChanged(order)
+                                                            showMenu = false
+                                                        }
+                                                    )
+                                                }
                                             }
                                         }
                                     }
@@ -177,6 +207,7 @@ private fun AppListScreenPreview() {
             onSearchQueryChanged = {},
             onAppClick = {},
             onToggleSystemApps = {},
+            onSortOrderChanged = {},
             onAboutClick = {},
         )
     }
@@ -191,6 +222,7 @@ private fun AppListScreenLoadingPreview() {
             onSearchQueryChanged = {},
             onAppClick = {},
             onToggleSystemApps = {},
+            onSortOrderChanged = {},
             onAboutClick = {},
         )
     }
@@ -209,6 +241,7 @@ private fun AppListScreenEmptyPreview() {
             onSearchQueryChanged = {},
             onAppClick = {},
             onToggleSystemApps = {},
+            onSortOrderChanged = {},
             onAboutClick = {},
         )
     }

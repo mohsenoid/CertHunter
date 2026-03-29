@@ -29,5 +29,9 @@
     <string name="app_list_search_clear_content_description">清除</string>
     <string name="app_list_search_placeholder">搜索应用或包名…</string>
     <string name="app_list_show_system_apps">显示系统应用</string>
+    <string name="app_list_sort_install_newest">最新安装</string>
+    <string name="app_list_sort_install_oldest">最早安装</string>
+    <string name="app_list_sort_name_asc">名称（A→Z）</string>
+    <string name="app_list_sort_name_desc">名称（Z→A）</string>
     <string name="app_list_system_label">系统</string>
 </resources>

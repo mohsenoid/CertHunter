@@ -25,6 +25,7 @@ fun AppNavHost() {
         onSearchQueryChanged = listViewModel::onSearchQueryChanged,
         onAppClick = { app -> backStack.add(AppDetail(app.packageName)) },
         onToggleSystemApps = listViewModel::onToggleSystemApps,
+        onSortOrderChanged = listViewModel::onSortOrderChanged,
         onAboutClick = { backStack.add(AppAbout) },
     )
 

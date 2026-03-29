@@ -32,5 +32,9 @@
     <string name="app_list_search_clear_content_description">Clear</string>
     <string name="app_list_search_placeholder">Search apps or packages…</string>
     <string name="app_list_show_system_apps">Show system apps</string>
+    <string name="app_list_sort_install_newest">Newest installed</string>
+    <string name="app_list_sort_install_oldest">Oldest installed</string>
+    <string name="app_list_sort_name_asc">Name (A→Z)</string>
+    <string name="app_list_sort_name_desc">Name (Z→A)</string>
     <string name="app_list_system_label">System</string>
 </resources>

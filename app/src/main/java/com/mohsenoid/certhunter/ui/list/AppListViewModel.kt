@@ -3,6 +3,7 @@ package com.mohsenoid.certhunter.ui.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mohsenoid.certhunter.coroutine.DispatcherProvider
+import com.mohsenoid.certhunter.domain.model.AppSortOrder
 import com.mohsenoid.certhunter.domain.repository.AppRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,5 +36,9 @@ class AppListViewModel(
 
     fun onToggleSystemApps() {
         _uiState.update { it.copy(showSystemApps = !it.showSystemApps) }
+    }
+
+    fun onSortOrderChanged(sortOrder: AppSortOrder) {
+        _uiState.update { it.copy(sortOrder = sortOrder) }
     }
 }
