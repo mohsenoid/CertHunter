@@ -14,6 +14,7 @@ import com.mohsenoid.certhunter.domain.model.AppDetails
 import com.mohsenoid.certhunter.domain.model.AppDetailsError
 import com.mohsenoid.certhunter.domain.model.AppItem
 import com.mohsenoid.certhunter.domain.model.CertificateError
+import com.mohsenoid.certhunter.domain.model.CertificateValidity
 import com.mohsenoid.certhunter.domain.repository.AppRepository
 import com.mohsenoid.klogx.DefaultKLogWriter
 import kotlinx.coroutines.withContext
@@ -21,8 +22,10 @@ import java.io.ByteArrayInputStream
 import java.security.MessageDigest
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
+import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 class AppRepositoryImpl(
     private val packageManager: PackageManager,
@@ -85,6 +88,14 @@ class AppRepositoryImpl(
             val x509Cert =
                 certFactory.generateCertificate(ByteArrayInputStream(rawBytes)) as X509Certificate
 
+            val expiryDate = x509Cert.notAfter.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+            val daysLeft = ChronoUnit.DAYS.between(LocalDate.now(), expiryDate)
+            val validity = when {
+                daysLeft < 0 -> CertificateValidity.Expired
+                daysLeft <= 30 -> CertificateValidity.ExpiringSoon(daysLeft)
+                else -> CertificateValidity.Valid
+            }
+
             AppCertificateDetails(
                 sha256 = hashBytes(rawBytes, "SHA-256"),
                 sha1 = hashBytes(rawBytes, "SHA-1"),
@@ -92,7 +103,8 @@ class AppRepositoryImpl(
                 issuer = x509Cert.issuerX500Principal.name,
                 serialNumber = x509Cert.serialNumber.toString(16).uppercase(),
                 validFrom = x509Cert.notBefore.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(dateFormatter),
-                validUntil = x509Cert.notAfter.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(dateFormatter),
+                validUntil = expiryDate.format(dateFormatter),
+                validity = validity,
             )
         }.mapError { e ->
             when (e) {

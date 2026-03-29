@@ -15,6 +15,8 @@
     <string name="app_detail_label_valid_from">בתוקף מ־</string>
     <string name="app_detail_label_valid_until">בתוקף עד</string>
     <string name="app_detail_certificate_error">כשל בקריאת האישור. ייתכן שהחבילה פגומה.</string>
+    <string name="app_detail_certificate_status_expired">פג תוקף</string>
+    <string name="app_detail_certificate_status_expiring_soon">פג תוקף בעוד %1$d ימים</string>
     <string name="app_detail_no_signature_found">לא נמצאה חתימה עבור חבילה זו.</string>
     <string name="app_detail_system_app_no">לא</string>
     <string name="app_detail_system_app_yes">כן</string>

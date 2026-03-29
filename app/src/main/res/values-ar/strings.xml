@@ -15,6 +15,8 @@
     <string name="app_detail_label_valid_from">صالح من</string>
     <string name="app_detail_label_valid_until">صالح حتى</string>
     <string name="app_detail_certificate_error">فشل في قراءة الشهادة. قد تكون الحزمة تالفة.</string>
+    <string name="app_detail_certificate_status_expired">منتهية الصلاحية</string>
+    <string name="app_detail_certificate_status_expiring_soon">تنتهي خلال %1$d يوم</string>
     <string name="app_detail_no_signature_found">لم يتم العثور على توقيع لهذه الحزمة.</string>
     <string name="app_detail_system_app_no">لا</string>
     <string name="app_detail_system_app_yes">نعم</string>

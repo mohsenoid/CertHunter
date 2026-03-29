@@ -18,6 +18,11 @@ val OnTertiary = Color(0xFFFFFFFF)
 val TertiaryContainer = Color(0xFFD9E2FF)
 val OnTertiaryContainer = Color(0xFF041949)
 
+val Warning = Color(0xFFB25F00)
+val OnWarning = Color(0xFFFFFFFF)
+val WarningContainer = Color(0xFFFFDDB8)
+val OnWarningContainer = Color(0xFF371D00)
+
 // Dark theme
 val PrimaryDark = Color(0xFF8DCDFF)
 val OnPrimaryDark = Color(0xFF00344F)
@@ -33,3 +38,8 @@ val TertiaryDark = Color(0xFFB0C6FF)
 val OnTertiaryDark = Color(0xFF1D2E60)
 val TertiaryContainerDark = Color(0xFF344578)
 val OnTertiaryContainerDark = Color(0xFFD9E2FF)
+
+val WarningDark = Color(0xFFFFB870)
+val OnWarningDark = Color(0xFF5F3800)
+val WarningContainerDark = Color(0xFF874E00)
+val OnWarningContainerDark = Color(0xFFFFDDB8)

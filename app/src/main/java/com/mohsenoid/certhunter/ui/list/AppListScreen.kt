@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.mohsenoid.certhunter.R
 import com.mohsenoid.certhunter.domain.model.AppItem
+import com.mohsenoid.certhunter.ui.list.widget.AppListRow
 import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
 import com.mohsenoid.certhunter.ui.util.ComponentPreviews
 
@@ -136,7 +137,7 @@ fun AppListScreen(
                 }
 
                 items(uiState.filteredApps) { app ->
-                    AppListRowWidget(app = app, onClick = { onAppClick(app) })
+                    AppListRow(app = app, onClick = { onAppClick(app) })
                 }
 
                 if (uiState.filteredApps.isEmpty()) {

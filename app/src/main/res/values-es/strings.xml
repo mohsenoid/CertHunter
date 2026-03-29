@@ -15,6 +15,8 @@
     <string name="app_detail_label_valid_from">Válido desde</string>
     <string name="app_detail_label_valid_until">Válido hasta</string>
     <string name="app_detail_certificate_error">No se pudo leer el certificado. El paquete puede estar dañado.</string>
+    <string name="app_detail_certificate_status_expired">Vencido</string>
+    <string name="app_detail_certificate_status_expiring_soon">Vence en %1$d días</string>
     <string name="app_detail_no_signature_found">No se encontró ninguna firma para este paquete.</string>
     <string name="app_detail_system_app_no">No</string>
     <string name="app_detail_system_app_yes">Sí</string>

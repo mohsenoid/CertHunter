@@ -21,6 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mohsenoid.certhunter.R
 import com.mohsenoid.certhunter.domain.model.AppCertificateDetails
+import com.mohsenoid.certhunter.domain.model.CertificateValidity
+import com.mohsenoid.certhunter.ui.detail.widget.AppDetailRow
+import com.mohsenoid.certhunter.ui.detail.widget.CertificateValidityBadge
 import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
 import com.mohsenoid.certhunter.ui.util.ComponentPreviews
 
@@ -62,20 +65,21 @@ fun AppDetailScreen(
                         .fillMaxWidth()
                         .verticalScroll(rememberScrollState())
                 ) {
-                    AppDetailRowWidget(stringResource(R.string.app_detail_label_package_name), uiState.packageName)
-                    AppDetailRowWidget(
+                    AppDetailRow(stringResource(R.string.app_detail_label_package_name), uiState.packageName)
+                    AppDetailRow(
                         stringResource(R.string.app_detail_label_system_app),
                         if (uiState.isSystemApp) stringResource(R.string.app_detail_system_app_yes) else stringResource(R.string.app_detail_system_app_no)
                     )
                     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                    AppDetailRowWidget(stringResource(R.string.app_detail_label_sha256), uiState.details.sha256)
-                    AppDetailRowWidget(stringResource(R.string.app_detail_label_sha1), uiState.details.sha1)
+                    AppDetailRow(stringResource(R.string.app_detail_label_sha256), uiState.details.sha256)
+                    AppDetailRow(stringResource(R.string.app_detail_label_sha1), uiState.details.sha1)
                     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                    AppDetailRowWidget(stringResource(R.string.app_detail_label_owner), uiState.details.owner)
-                    AppDetailRowWidget(stringResource(R.string.app_detail_label_issuer), uiState.details.issuer)
-                    AppDetailRowWidget(stringResource(R.string.app_detail_label_serial), uiState.details.serialNumber)
-                    AppDetailRowWidget(stringResource(R.string.app_detail_label_valid_from), uiState.details.validFrom)
-                    AppDetailRowWidget(stringResource(R.string.app_detail_label_valid_until), uiState.details.validUntil)
+                    AppDetailRow(stringResource(R.string.app_detail_label_owner), uiState.details.owner)
+                    AppDetailRow(stringResource(R.string.app_detail_label_issuer), uiState.details.issuer)
+                    AppDetailRow(stringResource(R.string.app_detail_label_serial), uiState.details.serialNumber)
+                    AppDetailRow(stringResource(R.string.app_detail_label_valid_from), uiState.details.validFrom)
+                    AppDetailRow(stringResource(R.string.app_detail_label_valid_until), uiState.details.validUntil)
+                    CertificateValidityBadge(uiState.details.validity)
                 }
             }
         }
@@ -90,6 +94,7 @@ private val previewCert = AppCertificateDetails(
     serialNumber = "123456789",
     validFrom = "2023-01-01",
     validUntil = "2033-01-01",
+    validity = CertificateValidity.Valid,
 )
 
 @ComponentPreviews

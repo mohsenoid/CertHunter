@@ -1,4 +1,4 @@
-package com.mohsenoid.certhunter.ui.detail
+package com.mohsenoid.certhunter.ui.detail.widget
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -25,7 +25,7 @@ import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
 import com.mohsenoid.certhunter.ui.util.ComponentPreviews
 
 @Composable
-fun AppDetailRowWidget(label: String, value: String) {
+fun AppDetailRow(label: String, value: String) {
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
     val copiedMessage = stringResource(R.string.app_detail_copied_toast, label)
@@ -61,9 +61,9 @@ fun AppDetailRowWidget(label: String, value: String) {
 
 @ComponentPreviews
 @Composable
-private fun AppDetailRowWidgetPreview() {
+private fun AppDetailRowPreview() {
     CertHunterTheme {
-        AppDetailRowWidget(
+        AppDetailRow(
             label = "SHA-256",
             value = "A1:B2:C3:D4:E5:F6:A1:B2:C3:D4:E5:F6:A1:B2:C3:D4",
         )

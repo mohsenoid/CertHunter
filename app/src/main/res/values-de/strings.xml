@@ -15,6 +15,8 @@
     <string name="app_detail_label_valid_from">Gültig ab</string>
     <string name="app_detail_label_valid_until">Gültig bis</string>
     <string name="app_detail_certificate_error">Zertifikat konnte nicht gelesen werden. Das Paket ist möglicherweise beschädigt.</string>
+    <string name="app_detail_certificate_status_expired">Abgelaufen</string>
+    <string name="app_detail_certificate_status_expiring_soon">Läuft in %1$d Tagen ab</string>
     <string name="app_detail_no_signature_found">Keine Signatur für dieses Paket gefunden.</string>
     <string name="app_detail_system_app_no">Nein</string>
     <string name="app_detail_system_app_yes">Ja</string>

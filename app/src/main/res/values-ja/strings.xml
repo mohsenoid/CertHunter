@@ -15,6 +15,8 @@
     <string name="app_detail_label_valid_from">有効開始日</string>
     <string name="app_detail_label_valid_until">有効期限</string>
     <string name="app_detail_certificate_error">証明書の読み取りに失敗しました。パッケージが破損している可能性があります。</string>
+    <string name="app_detail_certificate_status_expired">期限切れ</string>
+    <string name="app_detail_certificate_status_expiring_soon">%1$d 日後に期限切れ</string>
     <string name="app_detail_no_signature_found">このパッケージの署名が見つかりませんでした。</string>
     <string name="app_detail_system_app_no">いいえ</string>
     <string name="app_detail_system_app_yes">はい</string>

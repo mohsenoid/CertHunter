@@ -1,7 +1,8 @@
-package com.mohsenoid.certhunter.ui.list
+package com.mohsenoid.certhunter.ui.list.widget
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -35,7 +36,7 @@ import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
 import com.mohsenoid.certhunter.ui.util.ComponentPreviews
 
 @Composable
-fun AppListRowWidget(app: AppItem, onClick: () -> Unit) {
+fun AppListRow(app: AppItem, onClick: () -> Unit) {
     val context = LocalContext.current
     val icon = remember(app.packageName) {
         runCatching { context.packageManager.getApplicationIcon(app.packageName) }.getOrNull()
@@ -95,7 +96,7 @@ fun AppListRowWidget(app: AppItem, onClick: () -> Unit) {
 }
 
 private fun Drawable.toBitmap(): Bitmap {
-    if (this is android.graphics.drawable.BitmapDrawable) {
+    if (this is BitmapDrawable) {
         return bitmap
     }
     val bitmap = createBitmap(intrinsicWidth.coerceAtLeast(1), intrinsicHeight.coerceAtLeast(1))
@@ -107,9 +108,9 @@ private fun Drawable.toBitmap(): Bitmap {
 
 @ComponentPreviews
 @Composable
-private fun AppListRowWidgetPreview() {
+private fun AppListRowPreview() {
     CertHunterTheme {
-        AppListRowWidget(
+        AppListRow(
             app = AppItem(name = "CertHunter", packageName = "com.mohsenoid.certhunter", isSystemApp = true),
             onClick = {},
         )

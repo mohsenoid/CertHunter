@@ -7,5 +7,6 @@ data class AppCertificateDetails(
     val issuer: String,
     val serialNumber: String,
     val validFrom: String,
-    val validUntil: String
+    val validUntil: String,
+    val validity: CertificateValidity,
 )
