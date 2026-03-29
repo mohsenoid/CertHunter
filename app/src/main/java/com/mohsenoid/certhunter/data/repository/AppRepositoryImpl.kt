@@ -13,8 +13,8 @@ import java.io.ByteArrayInputStream
 import java.security.MessageDigest
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
-import java.text.SimpleDateFormat
-import java.util.Locale
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 class AppRepositoryImpl(
     private val packageManager: PackageManager,
@@ -24,6 +24,8 @@ class AppRepositoryImpl(
     private val logger = object : DefaultKLogWriter {
         override val tag: String = "AppRepositoryImpl"
     }
+
+    private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
     override suspend fun getInstalledApps(): List<AppItem> = withContext(dispatcherProvider.io) {
         val packages = packageManager.getInstalledPackages(PackageManager.GET_META_DATA)
@@ -77,16 +79,14 @@ class AppRepositoryImpl(
                 val x509Cert =
                     certFactory.generateCertificate(ByteArrayInputStream(rawBytes)) as X509Certificate
 
-                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-
                 AppCertificateDetails(
                     sha256 = hashBytes(rawBytes, "SHA-256"),
                     sha1 = hashBytes(rawBytes, "SHA-1"),
                     owner = x509Cert.subjectX500Principal.name,
                     issuer = x509Cert.issuerX500Principal.name,
                     serialNumber = x509Cert.serialNumber.toString(16).uppercase(),
-                    validFrom = dateFormat.format(x509Cert.notBefore),
-                    validUntil = dateFormat.format(x509Cert.notAfter)
+                    validFrom = x509Cert.notBefore.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(dateFormatter),
+                    validUntil = x509Cert.notAfter.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(dateFormatter),
                 )
             } catch (e: Exception) {
                 logger.e("Failed to get certificate for $packageName", throwable = e)

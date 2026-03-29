@@ -27,6 +27,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
@@ -55,6 +56,7 @@ dependencies {
     implementation(platform(libs.klogx.bom))
     implementation(libs.klogx.core)
     implementation(libs.klogx.android.logcat)
+    coreLibraryDesugaring(libs.android.tools.desugar.jdk.libs)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
