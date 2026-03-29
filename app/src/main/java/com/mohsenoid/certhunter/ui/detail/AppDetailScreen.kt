@@ -52,6 +52,8 @@ fun AppDetailScreen(
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
+            } else if (uiState.certificateError) {
+                Text(stringResource(R.string.app_detail_certificate_error))
             } else if (uiState.details == null) {
                 Text(stringResource(R.string.app_detail_no_signature_found))
             } else {

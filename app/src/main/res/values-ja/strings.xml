@@ -14,7 +14,8 @@
     <string name="app_detail_label_system_app">システムアプリ</string>
     <string name="app_detail_label_valid_from">有効開始日</string>
     <string name="app_detail_label_valid_until">有効期限</string>
-    <string name="app_detail_no_signature_found">署名が見つからないか、解析できませんでした。</string>
+    <string name="app_detail_certificate_error">証明書の読み取りに失敗しました。パッケージが破損している可能性があります。</string>
+    <string name="app_detail_no_signature_found">このパッケージの署名が見つかりませんでした。</string>
     <string name="app_detail_system_app_no">いいえ</string>
     <string name="app_detail_system_app_yes">はい</string>
     <string name="app_detail_tap_to_copy">フィールドをタップしてコピー</string>

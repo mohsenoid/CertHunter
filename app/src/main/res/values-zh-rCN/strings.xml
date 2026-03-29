@@ -14,7 +14,8 @@
     <string name="app_detail_label_system_app">系统应用</string>
     <string name="app_detail_label_valid_from">有效期自</string>
     <string name="app_detail_label_valid_until">有效期至</string>
-    <string name="app_detail_no_signature_found">未找到签名或无法解析。</string>
+    <string name="app_detail_certificate_error">读取证书失败。该软件包可能已损坏。</string>
+    <string name="app_detail_no_signature_found">未找到此软件包的签名。</string>
     <string name="app_detail_system_app_no">否</string>
     <string name="app_detail_system_app_yes">是</string>
     <string name="app_detail_tap_to_copy">点击任意字段以复制</string>

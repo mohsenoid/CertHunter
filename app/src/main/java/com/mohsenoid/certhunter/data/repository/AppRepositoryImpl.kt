@@ -3,9 +3,17 @@ package com.mohsenoid.certhunter.data.repository
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.andThen
+import com.github.michaelbull.result.map
+import com.github.michaelbull.result.mapError
+import com.github.michaelbull.result.runCatching
 import com.mohsenoid.certhunter.coroutine.DispatcherProvider
 import com.mohsenoid.certhunter.domain.model.AppCertificateDetails
+import com.mohsenoid.certhunter.domain.model.AppDetails
+import com.mohsenoid.certhunter.domain.model.AppDetailsError
 import com.mohsenoid.certhunter.domain.model.AppItem
+import com.mohsenoid.certhunter.domain.model.CertificateError
 import com.mohsenoid.certhunter.domain.repository.AppRepository
 import com.mohsenoid.klogx.DefaultKLogWriter
 import kotlinx.coroutines.withContext
@@ -29,70 +37,82 @@ class AppRepositoryImpl(
 
     override suspend fun getInstalledApps(): List<AppItem> = withContext(dispatcherProvider.io) {
         val packages = packageManager.getInstalledPackages(PackageManager.GET_META_DATA)
-        packages.map {
-            val flags = it.applicationInfo?.flags ?: 0
-            AppItem(
-                name = it.applicationInfo?.loadLabel(packageManager).toString(),
-                packageName = it.packageName,
-                isSystemApp = flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0,
-            )
-        }.sortedBy { it.name.lowercase() }
+        packages
+            .mapNotNull { it.applicationInfo?.toAppItem(it.packageName) }
+            .sortedBy { it.name.lowercase() }
     }
 
-    override suspend fun getAppItem(packageName: String): AppItem? =
+    override suspend fun getAppDetails(packageName: String): Result<AppDetails, AppDetailsError> =
         withContext(dispatcherProvider.io) {
             runCatching {
-                val info = packageManager.getApplicationInfo(packageName, 0)
-                val flags = info.flags
-                AppItem(
-                    name = info.loadLabel(packageManager).toString(),
-                    packageName = packageName,
-                    isSystemApp = flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0,
-                )
-            }.getOrNull()
+                packageManager.getApplicationInfo(packageName, 0).toAppItem(packageName)
+            }.mapError { AppDetailsError.ItemLoadFailed(it) }
+                .andThen { item ->
+                    getCertificateDetails(packageName).mapError { error ->
+                        when (error) {
+                            is CertificateError.NotFound -> AppDetailsError.CertificateNotFound
+                            is CertificateError.ParseError -> AppDetailsError.CertificateParseFailed(error.cause)
+                        }
+                    }.map { certificate ->
+                        AppDetails(item = item, certificate = certificate)
+                    }
+                }
         }
 
-    override suspend fun getCertificateDetails(packageName: String): AppCertificateDetails? =
-        withContext(dispatcherProvider.io) {
-            try {
-                val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    PackageManager.GET_SIGNING_CERTIFICATES
-                } else {
-                    @Suppress("DEPRECATION")
-                    PackageManager.GET_SIGNATURES
+    private fun getCertificateDetails(packageName: String): Result<AppCertificateDetails, CertificateError> =
+        runCatching {
+            val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                PackageManager.GET_SIGNING_CERTIFICATES
+            } else {
+                @Suppress("DEPRECATION")
+                PackageManager.GET_SIGNATURES
+            }
+
+            val pkgInfo = packageManager.getPackageInfo(packageName, flags)
+
+            val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                pkgInfo.signingInfo?.apkContentsSigners
+                    ?: pkgInfo.signingInfo?.signingCertificateHistory
+            } else {
+                @Suppress("DEPRECATION")
+                pkgInfo.signatures
+            }
+
+            if (signatures.isNullOrEmpty()) throw NoSuchElementException("No signatures for $packageName")
+
+            val rawBytes = signatures[0].toByteArray()
+            val certFactory = CertificateFactory.getInstance("X509")
+            val x509Cert =
+                certFactory.generateCertificate(ByteArrayInputStream(rawBytes)) as X509Certificate
+
+            AppCertificateDetails(
+                sha256 = hashBytes(rawBytes, "SHA-256"),
+                sha1 = hashBytes(rawBytes, "SHA-1"),
+                owner = x509Cert.subjectX500Principal.name,
+                issuer = x509Cert.issuerX500Principal.name,
+                serialNumber = x509Cert.serialNumber.toString(16).uppercase(),
+                validFrom = x509Cert.notBefore.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(dateFormatter),
+                validUntil = x509Cert.notAfter.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(dateFormatter),
+            )
+        }.mapError { e ->
+            when (e) {
+                is NoSuchElementException -> {
+                    logger.w("No certificate found for $packageName", throwable = e)
+                    CertificateError.NotFound
                 }
 
-                val pkgInfo = packageManager.getPackageInfo(packageName, flags)
-
-                val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    pkgInfo.signingInfo?.apkContentsSigners
-                        ?: pkgInfo.signingInfo?.signingCertificateHistory
-                } else {
-                    @Suppress("DEPRECATION")
-                    pkgInfo.signatures
+                else -> {
+                    logger.e("Failed to get certificate for $packageName", throwable = e)
+                    CertificateError.ParseError(e)
                 }
-
-                if (signatures.isNullOrEmpty()) return@withContext null
-
-                val rawBytes = signatures[0].toByteArray()
-                val certFactory = CertificateFactory.getInstance("X509")
-                val x509Cert =
-                    certFactory.generateCertificate(ByteArrayInputStream(rawBytes)) as X509Certificate
-
-                AppCertificateDetails(
-                    sha256 = hashBytes(rawBytes, "SHA-256"),
-                    sha1 = hashBytes(rawBytes, "SHA-1"),
-                    owner = x509Cert.subjectX500Principal.name,
-                    issuer = x509Cert.issuerX500Principal.name,
-                    serialNumber = x509Cert.serialNumber.toString(16).uppercase(),
-                    validFrom = x509Cert.notBefore.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(dateFormatter),
-                    validUntil = x509Cert.notAfter.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(dateFormatter),
-                )
-            } catch (e: Exception) {
-                logger.e("Failed to get certificate for $packageName", throwable = e)
-                null
             }
         }
+
+    private fun ApplicationInfo.toAppItem(packageName: String): AppItem = AppItem(
+        name = loadLabel(packageManager).toString(),
+        packageName = packageName,
+        isSystemApp = flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0,
+    )
 
     private fun hashBytes(bytes: ByteArray, algorithm: String): String {
         val md = MessageDigest.getInstance(algorithm)

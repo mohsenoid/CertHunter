@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.klogx.core)
     implementation(libs.klogx.android.logcat)
     coreLibraryDesugaring(libs.android.tools.desugar.jdk.libs)
+    implementation(libs.kotlin.result)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

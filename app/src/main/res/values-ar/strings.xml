@@ -14,7 +14,8 @@
     <string name="app_detail_label_system_app">تطبيق نظام</string>
     <string name="app_detail_label_valid_from">صالح من</string>
     <string name="app_detail_label_valid_until">صالح حتى</string>
-    <string name="app_detail_no_signature_found">لم يتم العثور على توقيع أو تعذّر تحليله.</string>
+    <string name="app_detail_certificate_error">فشل في قراءة الشهادة. قد تكون الحزمة تالفة.</string>
+    <string name="app_detail_no_signature_found">لم يتم العثور على توقيع لهذه الحزمة.</string>
     <string name="app_detail_system_app_no">لا</string>
     <string name="app_detail_system_app_yes">نعم</string>
     <string name="app_detail_tap_to_copy">اضغط على أي حقل للنسخ</string>

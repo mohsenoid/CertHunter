@@ -14,7 +14,8 @@
     <string name="app_detail_label_system_app">Aplikasi sistem</string>
     <string name="app_detail_label_valid_from">Berlaku dari</string>
     <string name="app_detail_label_valid_until">Berlaku hingga</string>
-    <string name="app_detail_no_signature_found">Tidak ada tanda tangan ditemukan atau tidak dapat diurai.</string>
+    <string name="app_detail_certificate_error">Gagal membaca sertifikat. Paket mungkin rusak.</string>
+    <string name="app_detail_no_signature_found">Tidak ada tanda tangan yang ditemukan untuk paket ini.</string>
     <string name="app_detail_system_app_no">Tidak</string>
     <string name="app_detail_system_app_yes">Ya</string>
     <string name="app_detail_tap_to_copy">Ketuk bidang mana pun untuk menyalin</string>

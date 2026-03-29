@@ -17,7 +17,8 @@
     <string name="app_detail_label_system_app">System App</string>
     <string name="app_detail_label_valid_from">Valid From</string>
     <string name="app_detail_label_valid_until">Valid Until</string>
-    <string name="app_detail_no_signature_found">No signature found or unable to parse.</string>
+    <string name="app_detail_certificate_error">Failed to read certificate. The package may be corrupted.</string>
+    <string name="app_detail_no_signature_found">No signature found for this package.</string>
     <string name="app_detail_system_app_no">No</string>
     <string name="app_detail_system_app_yes">Yes</string>
     <string name="app_detail_tap_to_copy">Tap any field to copy</string>

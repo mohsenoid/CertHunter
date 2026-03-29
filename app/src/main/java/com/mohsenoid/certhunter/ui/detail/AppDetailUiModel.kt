@@ -8,4 +8,5 @@ data class AppDetailUiModel(
     val appName: String = "",
     val isSystemApp: Boolean = false,
     val details: AppCertificateDetails? = null,
+    val certificateError: Boolean = false,
 )

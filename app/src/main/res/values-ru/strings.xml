@@ -14,7 +14,8 @@
     <string name="app_detail_label_system_app">Системное приложение</string>
     <string name="app_detail_label_valid_from">Действителен с</string>
     <string name="app_detail_label_valid_until">Действителен до</string>
-    <string name="app_detail_no_signature_found">Подпись не найдена или не удалось выполнить анализ.</string>
+    <string name="app_detail_certificate_error">Не удалось прочитать сертификат. Пакет может быть повреждён.</string>
+    <string name="app_detail_no_signature_found">Подпись для этого пакета не найдена.</string>
     <string name="app_detail_system_app_no">Нет</string>
     <string name="app_detail_system_app_yes">Да</string>
     <string name="app_detail_tap_to_copy">Нажмите на поле для копирования</string>

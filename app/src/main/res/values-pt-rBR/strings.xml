@@ -14,7 +14,8 @@
     <string name="app_detail_label_system_app">App do sistema</string>
     <string name="app_detail_label_valid_from">Válido a partir de</string>
     <string name="app_detail_label_valid_until">Válido até</string>
-    <string name="app_detail_no_signature_found">Nenhuma assinatura encontrada ou não foi possível analisar.</string>
+    <string name="app_detail_certificate_error">Falha ao ler o certificado. O pacote pode estar corrompido.</string>
+    <string name="app_detail_no_signature_found">Nenhuma assinatura encontrada para este pacote.</string>
     <string name="app_detail_system_app_no">Não</string>
     <string name="app_detail_system_app_yes">Sim</string>
     <string name="app_detail_tap_to_copy">Toque em qualquer campo para copiar</string>

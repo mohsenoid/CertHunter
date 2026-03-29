@@ -14,7 +14,8 @@
     <string name="app_detail_label_system_app">सिस्टम ऐप</string>
     <string name="app_detail_label_valid_from">से मान्य</string>
     <string name="app_detail_label_valid_until">तक मान्य</string>
-    <string name="app_detail_no_signature_found">कोई हस्ताक्षर नहीं मिला या पार्स नहीं किया जा सका।</string>
+    <string name="app_detail_certificate_error">प्रमाणपत्र पढ़ने में विफल। पैकेज दूषित हो सकता है।</string>
+    <string name="app_detail_no_signature_found">इस पैकेज के लिए कोई हस्ताक्षर नहीं मिला।</string>
     <string name="app_detail_system_app_no">नहीं</string>
     <string name="app_detail_system_app_yes">हाँ</string>
     <string name="app_detail_tap_to_copy">कॉपी करने के लिए किसी फ़ील्ड पर टैप करें</string>

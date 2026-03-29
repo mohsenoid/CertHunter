@@ -1,10 +1,11 @@
 package com.mohsenoid.certhunter.domain.repository
 
-import com.mohsenoid.certhunter.domain.model.AppCertificateDetails
+import com.github.michaelbull.result.Result
+import com.mohsenoid.certhunter.domain.model.AppDetails
+import com.mohsenoid.certhunter.domain.model.AppDetailsError
 import com.mohsenoid.certhunter.domain.model.AppItem
 
 interface AppRepository {
     suspend fun getInstalledApps(): List<AppItem>
-    suspend fun getAppItem(packageName: String): AppItem?
-    suspend fun getCertificateDetails(packageName: String): AppCertificateDetails?
+    suspend fun getAppDetails(packageName: String): Result<AppDetails, AppDetailsError>
 }
