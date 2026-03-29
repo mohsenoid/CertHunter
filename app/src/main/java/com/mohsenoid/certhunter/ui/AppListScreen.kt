@@ -41,6 +41,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -137,8 +138,9 @@ fun AppRow(app: AppItem, onClick: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (app.icon != null) {
+            val bitmap = remember(app.packageName) { drawableToBitmap(app.icon).asImageBitmap() }
             Image(
-                painter = BitmapPainter(drawableToBitmap(app.icon).asImageBitmap()),
+                painter = BitmapPainter(bitmap),
                 contentDescription = null,
                 modifier = Modifier.size(48.dp)
             )
