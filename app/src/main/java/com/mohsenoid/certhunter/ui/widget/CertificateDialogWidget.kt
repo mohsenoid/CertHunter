@@ -60,6 +60,7 @@ fun CertificateDialogWidget(
                         .verticalScroll(rememberScrollState())
                 ) {
                     DetailRowWidget("Package Name", app.packageName)
+                    DetailRowWidget("System App", if (app.isSystemApp) "Yes" else "No")
                     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
                     DetailRowWidget("SHA-256", details.sha256)
                     DetailRowWidget("SHA-1", details.sha1)

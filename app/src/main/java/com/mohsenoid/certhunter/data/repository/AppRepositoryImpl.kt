@@ -1,5 +1,6 @@
 package com.mohsenoid.certhunter.data.repository
 
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import com.mohsenoid.certhunter.domain.model.AppItem
@@ -24,9 +25,11 @@ class AppRepositoryImpl(private val packageManager: PackageManager) : AppReposit
     override suspend fun getInstalledApps(): List<AppItem> = withContext(Dispatchers.IO) {
         val packages = packageManager.getInstalledPackages(PackageManager.GET_META_DATA)
         packages.map {
+            val flags = it.applicationInfo?.flags ?: 0
             AppItem(
                 name = it.applicationInfo?.loadLabel(packageManager).toString(),
                 packageName = it.packageName,
+                isSystemApp = flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0,
             )
         }.sortedBy { it.name.lowercase() }
     }
