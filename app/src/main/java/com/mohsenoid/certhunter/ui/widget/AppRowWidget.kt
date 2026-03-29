@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
@@ -53,21 +51,7 @@ fun AppRowWidget(app: AppItem, onClick: () -> Unit) {
         }
         Spacer(modifier = Modifier.width(16.dp))
         Column {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = app.name, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                if (app.isSystemApp) {
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "System",
-                        fontSize = 10.sp,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier
-                            .clip(MaterialTheme.shapes.extraSmall)
-                            .border(1.dp, MaterialTheme.colorScheme.primary, MaterialTheme.shapes.extraSmall)
-                            .padding(horizontal = 4.dp, vertical = 2.dp)
-                    )
-                }
-            }
+            Text(text = app.name, fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Text(text = app.packageName, fontSize = 12.sp, color = MaterialTheme.colorScheme.secondary)
         }
     }

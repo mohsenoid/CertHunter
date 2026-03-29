@@ -39,6 +39,10 @@ class AppListViewModel(private val repository: AppRepository) : ViewModel() {
         }
     }
 
+    fun onToggleSystemApps() {
+        _uiState.update { it.copy(showSystemApps = !it.showSystemApps) }
+    }
+
     fun onDialogDismissed() {
         _uiState.update { it.copy(selectedApp = null, selectedAppCert = null) }
     }
