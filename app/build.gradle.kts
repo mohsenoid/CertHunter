@@ -31,6 +31,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -46,6 +47,9 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
+    implementation(platform(libs.klogx.bom))
+    implementation(libs.klogx.core)
+    implementation(libs.klogx.android.logcat)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

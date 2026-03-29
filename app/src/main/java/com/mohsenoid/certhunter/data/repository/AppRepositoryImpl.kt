@@ -2,10 +2,10 @@ package com.mohsenoid.certhunter.data.repository
 
 import android.content.pm.PackageManager
 import android.os.Build
-import android.util.Log
 import com.mohsenoid.certhunter.domain.model.AppItem
 import com.mohsenoid.certhunter.domain.model.CertificateDetails
 import com.mohsenoid.certhunter.domain.repository.AppRepository
+import com.mohsenoid.klogx.DefaultKLogWriter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayInputStream
@@ -16,6 +16,10 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class AppRepositoryImpl(private val packageManager: PackageManager) : AppRepository {
+
+    private val logger = object : DefaultKLogWriter {
+        override val tag: String = "AppRepositoryImpl"
+    }
 
     override suspend fun getInstalledApps(): List<AppItem> = withContext(Dispatchers.IO) {
         val packages = packageManager.getInstalledPackages(PackageManager.GET_META_DATA)
@@ -66,7 +70,7 @@ class AppRepositoryImpl(private val packageManager: PackageManager) : AppReposit
                     validUntil = dateFormat.format(x509Cert.notAfter)
                 )
             } catch (e: Exception) {
-                Log.e(TAG, "Failed to get certificate for $packageName", e)
+                logger.e("Failed to get certificate for $packageName", throwable = e)
                 null
             }
         }
@@ -75,9 +79,5 @@ class AppRepositoryImpl(private val packageManager: PackageManager) : AppReposit
         val md = MessageDigest.getInstance(algorithm)
         val digest = md.digest(bytes)
         return digest.joinToString(":") { "%02X".format(it) }
-    }
-
-    companion object {
-        private const val TAG = "AppRepositoryImpl"
     }
 }

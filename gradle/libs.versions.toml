@@ -9,6 +9,7 @@ activityCompose = "1.13.0"
 kotlin = "2.3.20"
 composeBom = "2026.03.01"
 koin = "4.2.0"
+klogx = "2024.09.29"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -28,6 +29,9 @@ androidx-compose-material3 = { group = "androidx.compose.material3", name = "mat
 androidx-compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
+klogx-bom = { group = "com.mohsenoid.klogx", name = "klogx-bom", version.ref = "klogx" }
+klogx-core = { group = "com.mohsenoid.klogx", name = "core" }
+klogx-android-logcat = { group = "com.mohsenoid.klogx.android", name = "logcat" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
