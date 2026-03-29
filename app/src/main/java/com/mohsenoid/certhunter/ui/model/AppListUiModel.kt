@@ -3,7 +3,7 @@ package com.mohsenoid.certhunter.ui.model
 import com.mohsenoid.certhunter.domain.model.AppItem
 import com.mohsenoid.certhunter.domain.model.CertificateDetails
 
-data class AppUiModel(
+data class AppListUiModel(
     val allApps: List<AppItem> = emptyList(),
     val isLoadingApps: Boolean = true,
     val searchQuery: String = "",
