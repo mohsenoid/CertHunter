@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,6 +29,11 @@ import com.mohsenoid.certhunter.domain.model.AppItem
 
 @Composable
 fun AppRowWidget(app: AppItem, onClick: () -> Unit) {
+    val context = LocalContext.current
+    val icon = remember(app.packageName) {
+        runCatching { context.packageManager.getApplicationIcon(app.packageName) }.getOrNull()
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -35,8 +41,8 @@ fun AppRowWidget(app: AppItem, onClick: () -> Unit) {
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (app.icon != null) {
-            val bitmap = remember(app.packageName) { app.icon.toBitmap().asImageBitmap() }
+        if (icon != null) {
+            val bitmap = remember(app.packageName) { icon.toBitmap().asImageBitmap() }
             Image(
                 painter = BitmapPainter(bitmap),
                 contentDescription = null,

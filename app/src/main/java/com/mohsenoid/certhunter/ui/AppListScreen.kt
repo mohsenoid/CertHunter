@@ -82,10 +82,12 @@ fun AppListScreen(viewModel: AppListViewModel = koinViewModel()) {
                                 .padding(32.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(
-                                "No apps found matching \"${uiState.searchQuery}\"",
-                                color = MaterialTheme.colorScheme.secondary
-                            )
+                            val message = if (uiState.searchQuery.isBlank()) {
+                                "No apps found"
+                            } else {
+                                "No apps found matching \"${uiState.searchQuery}\""
+                            }
+                            Text(message, color = MaterialTheme.colorScheme.secondary)
                         }
                     }
                 }

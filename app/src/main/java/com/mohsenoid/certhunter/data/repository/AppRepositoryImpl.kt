@@ -2,6 +2,7 @@ package com.mohsenoid.certhunter.data.repository
 
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import com.mohsenoid.certhunter.domain.model.AppItem
 import com.mohsenoid.certhunter.domain.model.CertificateDetails
 import com.mohsenoid.certhunter.domain.repository.AppRepository
@@ -22,7 +23,6 @@ class AppRepositoryImpl(private val packageManager: PackageManager) : AppReposit
             AppItem(
                 name = it.applicationInfo?.loadLabel(packageManager).toString(),
                 packageName = it.packageName,
-                icon = it.applicationInfo?.loadIcon(packageManager)
             )
         }.sortedBy { it.name.lowercase() }
     }
@@ -59,14 +59,14 @@ class AppRepositoryImpl(private val packageManager: PackageManager) : AppReposit
                 CertificateDetails(
                     sha256 = hashBytes(rawBytes, "SHA-256"),
                     sha1 = hashBytes(rawBytes, "SHA-1"),
-                    owner = x509Cert.subjectDN.name,
-                    issuer = x509Cert.issuerDN.name,
+                    owner = x509Cert.subjectX500Principal.name,
+                    issuer = x509Cert.issuerX500Principal.name,
                     serialNumber = x509Cert.serialNumber.toString(16).uppercase(),
                     validFrom = dateFormat.format(x509Cert.notBefore),
                     validUntil = dateFormat.format(x509Cert.notAfter)
                 )
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e(TAG, "Failed to get certificate for $packageName", e)
                 null
             }
         }
@@ -75,5 +75,9 @@ class AppRepositoryImpl(private val packageManager: PackageManager) : AppReposit
         val md = MessageDigest.getInstance(algorithm)
         val digest = md.digest(bytes)
         return digest.joinToString(":") { "%02X".format(it) }
+    }
+
+    companion object {
+        private const val TAG = "AppRepositoryImpl"
     }
 }
