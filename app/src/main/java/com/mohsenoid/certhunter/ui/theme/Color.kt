@@ -2,10 +2,34 @@ package com.mohsenoid.certhunter.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+// Light theme
+val Primary = Color(0xFF006493)
+val OnPrimary = Color(0xFFFFFFFF)
+val PrimaryContainer = Color(0xFFCAE6FF)
+val OnPrimaryContainer = Color(0xFF001E30)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val Secondary = Color(0xFF006A60)
+val OnSecondary = Color(0xFFFFFFFF)
+val SecondaryContainer = Color(0xFF74F8E5)
+val OnSecondaryContainer = Color(0xFF00201C)
+
+val Tertiary = Color(0xFF4C5D91)
+val OnTertiary = Color(0xFFFFFFFF)
+val TertiaryContainer = Color(0xFFD9E2FF)
+val OnTertiaryContainer = Color(0xFF041949)
+
+// Dark theme
+val PrimaryDark = Color(0xFF8DCDFF)
+val OnPrimaryDark = Color(0xFF00344F)
+val PrimaryContainerDark = Color(0xFF004B70)
+val OnPrimaryContainerDark = Color(0xFFCAE6FF)
+
+val SecondaryDark = Color(0xFF53DBC9)
+val OnSecondaryDark = Color(0xFF003731)
+val SecondaryContainerDark = Color(0xFF005048)
+val OnSecondaryContainerDark = Color(0xFF74F8E5)
+
+val TertiaryDark = Color(0xFFB0C6FF)
+val OnTertiaryDark = Color(0xFF1D2E60)
+val TertiaryContainerDark = Color(0xFF344578)
+val OnTertiaryContainerDark = Color(0xFFD9E2FF)

@@ -22,10 +22,13 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.createBitmap
 import com.mohsenoid.certhunter.domain.model.AppItem
+import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
+import com.mohsenoid.certhunter.ui.util.ComponentPreviews
 
 @Composable
 fun AppRowWidget(app: AppItem, onClick: () -> Unit) {
@@ -51,8 +54,15 @@ fun AppRowWidget(app: AppItem, onClick: () -> Unit) {
         }
         Spacer(modifier = Modifier.width(16.dp))
         Column {
-            Text(text = app.name, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            Text(text = app.packageName, fontSize = 12.sp, color = MaterialTheme.colorScheme.secondary)
+            Text(
+                text = app.name,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.secondary,
+                fontSize = 16.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(text = app.packageName, fontSize = 12.sp, color = MaterialTheme.colorScheme.secondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
     }
 }
@@ -66,4 +76,15 @@ private fun Drawable.toBitmap(): Bitmap {
     setBounds(0, 0, canvas.width, canvas.height)
     draw(canvas)
     return bitmap
+}
+
+@ComponentPreviews
+@Composable
+private fun AppRowWidgetPreview() {
+    CertHunterTheme {
+        AppRowWidget(
+            app = AppItem(name = "CertHunter", packageName = "com.mohsenoid.certhunter", isSystemApp = false),
+            onClick = {},
+        )
+    }
 }

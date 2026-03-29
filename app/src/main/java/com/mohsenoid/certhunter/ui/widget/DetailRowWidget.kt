@@ -17,6 +17,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
+import com.mohsenoid.certhunter.ui.util.ComponentPreviews
 
 @Composable
 fun DetailRowWidget(label: String, value: String) {
@@ -39,12 +41,24 @@ fun DetailRowWidget(label: String, value: String) {
             text = label,
             fontWeight = FontWeight.SemiBold,
             fontSize = 11.sp,
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.secondary
         )
         Text(
             text = value,
             fontSize = 12.sp,
-            lineHeight = 14.sp
+            lineHeight = 14.sp,
+            color = MaterialTheme.colorScheme.secondary
+        )
+    }
+}
+
+@ComponentPreviews
+@Composable
+private fun DetailRowWidgetPreview() {
+    CertHunterTheme {
+        DetailRowWidget(
+            label = "SHA-256",
+            value = "A1:B2:C3:D4:E5:F6:A1:B2:C3:D4:E5:F6:A1:B2:C3:D4",
         )
     }
 }

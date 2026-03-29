@@ -20,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mohsenoid.certhunter.domain.model.AppItem
 import com.mohsenoid.certhunter.domain.model.CertificateDetails
+import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
+import com.mohsenoid.certhunter.ui.util.ComponentPreviews
 
 @Composable
 fun CertificateDialogWidget(
@@ -74,4 +76,59 @@ fun CertificateDialogWidget(
             }
         }
     )
+}
+
+private val previewApp = AppItem(
+    name = "CertHunter",
+    packageName = "com.mohsenoid.certhunter",
+    isSystemApp = false,
+)
+
+private val previewCert = CertificateDetails(
+    sha256 = "A1:B2:C3:D4:E5:F6:A1:B2:C3:D4:E5:F6:A1:B2:C3:D4",
+    sha1 = "A1:B2:C3:D4:E5:F6:A1:B2:C3:D4",
+    owner = "CN=Example, O=Example Corp, C=US",
+    issuer = "CN=Example CA, O=Example Corp, C=US",
+    serialNumber = "123456789",
+    validFrom = "2023-01-01",
+    validUntil = "2033-01-01",
+)
+
+@ComponentPreviews
+@Composable
+private fun CertificateDialogLoadingPreview() {
+    CertHunterTheme {
+        CertificateDialogWidget(
+            app = previewApp,
+            details = null,
+            isLoading = true,
+            onDismiss = {},
+        )
+    }
+}
+
+@ComponentPreviews
+@Composable
+private fun CertificateDialogWithDetailsPreview() {
+    CertHunterTheme {
+        CertificateDialogWidget(
+            app = previewApp,
+            details = previewCert,
+            isLoading = false,
+            onDismiss = {},
+        )
+    }
+}
+
+@ComponentPreviews
+@Composable
+private fun CertificateDialogNoDetailsPreview() {
+    CertHunterTheme {
+        CertificateDialogWidget(
+            app = previewApp,
+            details = null,
+            isLoading = false,
+            onDismiss = {},
+        )
+    }
 }

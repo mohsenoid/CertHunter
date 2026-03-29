@@ -1,8 +1,8 @@
 package com.mohsenoid.certhunter.ui
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,14 +16,15 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,7 +33,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mohsenoid.certhunter.domain.model.AppItem
+import com.mohsenoid.certhunter.ui.model.AppListUiModel
+import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
 import com.mohsenoid.certhunter.ui.widget.AppRowWidget
 import com.mohsenoid.certhunter.ui.widget.CertificateDialogWidget
 import org.koin.androidx.compose.koinViewModel
@@ -41,58 +46,36 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun AppListScreen(viewModel: AppListViewModel = koinViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
+    AppListContent(
+        uiState = uiState,
+        onSearchQueryChanged = viewModel::onSearchQueryChanged,
+        onAppSelected = viewModel::onAppSelected,
+        onToggleSystemApps = viewModel::onToggleSystemApps,
+        onDialogDismissed = viewModel::onDialogDismissed,
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppListContent(
+    uiState: AppListUiModel,
+    onSearchQueryChanged: (String) -> Unit,
+    onAppSelected: (AppItem) -> Unit,
+    onToggleSystemApps: () -> Unit,
+    onDialogDismissed: () -> Unit,
+) {
     var showMenu by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
-            Column {
-                TopAppBar(
-                    title = { Text("CertHunter") },
-                    actions = {
-                        IconButton(onClick = { showMenu = !showMenu }) {
-                            Icon(
-                                imageVector = Icons.Default.MoreVert,
-                                contentDescription = "More"
-                            )
-                        }
-                        DropdownMenu(
-                            expanded = showMenu,
-                            onDismissRequest = { showMenu = false }
-                        ) {
-                            DropdownMenuItem(
-                                text = { Text(if (uiState.showSystemApps) "Hide system apps" else "Show system apps") },
-                                onClick = {
-                                    viewModel.onToggleSystemApps()
-                                    showMenu = false
-                                }
-                            )
-                        }
-                    }
+            TopAppBar(
+                title = { Text("CertHunter") },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                    actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
                 )
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    OutlinedTextField(
-                        value = uiState.searchQuery,
-                        onValueChange = viewModel::onSearchQueryChanged,
-                        modifier = Modifier.weight(1f),
-                        placeholder = { Text("Search apps or packages...") },
-                        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
-                        trailingIcon = {
-                            if (uiState.searchQuery.isNotEmpty()) {
-                                IconButton(onClick = { viewModel.onSearchQueryChanged("") }) {
-                                    Icon(Icons.Default.Close, contentDescription = "Clear")
-                                }
-                            }
-                        },
-                        singleLine = true
-                    )
-                }
-                HorizontalDivider()
-            }
+            )
         }
     ) { padding ->
         if (uiState.isLoadingApps) {
@@ -105,8 +88,63 @@ fun AppListScreen(viewModel: AppListViewModel = koinViewModel()) {
                     .fillMaxSize()
                     .padding(padding)
             ) {
+                stickyHeader {
+                    SearchBar(
+                        inputField = {
+                            SearchBarDefaults.InputField(
+                                query = uiState.searchQuery,
+                                onQueryChange = onSearchQueryChanged,
+                                onSearch = {},
+                                expanded = false,
+                                onExpandedChange = {},
+                                placeholder = { Text("Search apps or packages...") },
+                                leadingIcon = {
+                                    Icon(Icons.Default.Search, contentDescription = null)
+                                },
+                                trailingIcon = {
+                                    if (uiState.searchQuery.isNotEmpty()) {
+                                        IconButton(onClick = { onSearchQueryChanged("") }) {
+                                            Icon(Icons.Default.Close, contentDescription = "Clear")
+                                        }
+                                    } else {
+                                        Box {
+                                            IconButton(onClick = { showMenu = !showMenu }) {
+                                                Icon(Icons.Default.MoreVert, contentDescription = "More")
+                                            }
+                                            DropdownMenu(
+                                                expanded = showMenu,
+                                                onDismissRequest = { showMenu = false }
+                                            ) {
+                                                DropdownMenuItem(
+                                                    text = {
+                                                        Text(
+                                                            if (uiState.showSystemApps) "Hide system apps"
+                                                            else "Show system apps"
+                                                        )
+                                                    },
+                                                    onClick = {
+                                                        onToggleSystemApps()
+                                                        showMenu = false
+                                                    }
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            )
+                        },
+                        expanded = false,
+                        onExpandedChange = {},
+                        shape = MaterialTheme.shapes.extraLarge,
+                        windowInsets = WindowInsets(0),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
+                    ) {}
+                }
+
                 items(uiState.filteredApps) { app ->
-                    AppRowWidget(app = app, onClick = { viewModel.onAppSelected(app) })
+                    AppRowWidget(app = app, onClick = { onAppSelected(app) })
                 }
 
                 if (uiState.filteredApps.isEmpty()) {
@@ -135,7 +173,73 @@ fun AppListScreen(viewModel: AppListViewModel = koinViewModel()) {
             app = app,
             details = uiState.selectedAppCert,
             isLoading = uiState.isLoadingCert,
-            onDismiss = viewModel::onDialogDismissed
+            onDismiss = onDialogDismissed,
+        )
+    }
+}
+
+private val previewApps = listOf(
+    AppItem(name = "CertHunter", packageName = "com.mohsenoid.certhunter", isSystemApp = false),
+    AppItem(name = "Settings", packageName = "com.android.settings", isSystemApp = true),
+    AppItem(name = "Chrome", packageName = "com.android.chrome", isSystemApp = false),
+)
+
+@Preview(showBackground = true)
+@Composable
+private fun AppListContentPreview() {
+    CertHunterTheme {
+        AppListContent(
+            uiState = AppListUiModel(allApps = previewApps, isLoadingApps = false),
+            onSearchQueryChanged = {},
+            onAppSelected = {},
+            onToggleSystemApps = {},
+            onDialogDismissed = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun AppListContentDarkPreview() {
+    CertHunterTheme {
+        AppListContent(
+            uiState = AppListUiModel(allApps = previewApps, isLoadingApps = false),
+            onSearchQueryChanged = {},
+            onAppSelected = {},
+            onToggleSystemApps = {},
+            onDialogDismissed = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AppListContentLoadingPreview() {
+    CertHunterTheme {
+        AppListContent(
+            uiState = AppListUiModel(isLoadingApps = true),
+            onSearchQueryChanged = {},
+            onAppSelected = {},
+            onToggleSystemApps = {},
+            onDialogDismissed = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun AppListContentEmptyPreview() {
+    CertHunterTheme {
+        AppListContent(
+            uiState = AppListUiModel(
+                allApps = emptyList(),
+                isLoadingApps = false,
+                searchQuery = "nonexistent",
+            ),
+            onSearchQueryChanged = {},
+            onAppSelected = {},
+            onToggleSystemApps = {},
+            onDialogDismissed = {},
         )
     }
 }
