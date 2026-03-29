@@ -1,4 +1,4 @@
-package com.mohsenoid.certhunter.ui.widget
+package com.mohsenoid.certhunter.ui.list
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -31,7 +31,7 @@ import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
 import com.mohsenoid.certhunter.ui.util.ComponentPreviews
 
 @Composable
-fun AppRowWidget(app: AppItem, onClick: () -> Unit) {
+fun AppListRowWidget(app: AppItem, onClick: () -> Unit) {
     val context = LocalContext.current
     val icon = remember(app.packageName) {
         runCatching { context.packageManager.getApplicationIcon(app.packageName) }.getOrNull()
@@ -80,9 +80,9 @@ private fun Drawable.toBitmap(): Bitmap {
 
 @ComponentPreviews
 @Composable
-private fun AppRowWidgetPreview() {
+private fun AppListRowWidgetPreview() {
     CertHunterTheme {
-        AppRowWidget(
+        AppListRowWidget(
             app = AppItem(name = "CertHunter", packageName = "com.mohsenoid.certhunter", isSystemApp = false),
             onClick = {},
         )

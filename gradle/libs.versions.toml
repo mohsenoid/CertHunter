@@ -10,6 +10,8 @@ kotlin = "2.3.20"
 composeBom = "2026.03.01"
 koin = "4.2.0"
 klogx = "2024.09.29"
+navigation3 = "1.0.1"
+kotlinxSerializationJson = "1.10.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -33,8 +35,12 @@ koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compos
 klogx-bom = { group = "com.mohsenoid.klogx", name = "klogx-bom", version.ref = "klogx" }
 klogx-core = { group = "com.mohsenoid.klogx", name = "core" }
 klogx-android-logcat = { group = "com.mohsenoid.klogx.android", name = "logcat" }
+navigation3-runtime = { group = "androidx.navigation3", name = "navigation3-runtime", version.ref = "navigation3" }
+navigation3-ui = { group = "androidx.navigation3", name = "navigation3-ui", version.ref = "navigation3" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 

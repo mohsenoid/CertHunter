@@ -3,8 +3,8 @@ package com.mohsenoid.certhunter.data.repository
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
+import com.mohsenoid.certhunter.domain.model.AppCertificateDetails
 import com.mohsenoid.certhunter.domain.model.AppItem
-import com.mohsenoid.certhunter.domain.model.CertificateDetails
 import com.mohsenoid.certhunter.domain.repository.AppRepository
 import com.mohsenoid.klogx.DefaultKLogWriter
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +34,20 @@ class AppRepositoryImpl(private val packageManager: PackageManager) : AppReposit
         }.sortedBy { it.name.lowercase() }
     }
 
-    override suspend fun getCertificateDetails(packageName: String): CertificateDetails? =
+    override suspend fun getAppItem(packageName: String): AppItem? =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                val info = packageManager.getApplicationInfo(packageName, 0)
+                val flags = info.flags
+                AppItem(
+                    name = info.loadLabel(packageManager).toString(),
+                    packageName = packageName,
+                    isSystemApp = flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0,
+                )
+            }.getOrNull()
+        }
+
+    override suspend fun getCertificateDetails(packageName: String): AppCertificateDetails? =
         withContext(Dispatchers.IO) {
             try {
                 val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -63,7 +76,7 @@ class AppRepositoryImpl(private val packageManager: PackageManager) : AppReposit
 
                 val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
-                CertificateDetails(
+                AppCertificateDetails(
                     sha256 = hashBytes(rawBytes, "SHA-256"),
                     sha1 = hashBytes(rawBytes, "SHA-1"),
                     owner = x509Cert.subjectX500Principal.name,

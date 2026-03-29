@@ -1,4 +1,4 @@
-package com.mohsenoid.certhunter.ui.widget
+package com.mohsenoid.certhunter.ui.detail
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,16 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mohsenoid.certhunter.domain.model.AppItem
-import com.mohsenoid.certhunter.domain.model.CertificateDetails
+import com.mohsenoid.certhunter.domain.model.AppCertificateDetails
 import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
 import com.mohsenoid.certhunter.ui.util.ComponentPreviews
 
 @Composable
-fun CertificateDialogWidget(
-    app: AppItem,
-    details: CertificateDetails?,
-    isLoading: Boolean,
+fun AppDetailScreen(
+    uiState: AppDetailUiModel,
     onDismiss: () -> Unit,
 ) {
     AlertDialog(
@@ -37,8 +34,8 @@ fun CertificateDialogWidget(
         },
         title = {
             Column {
-                Text(text = app.name, fontWeight = FontWeight.Bold)
-                if (!isLoading) {
+                Text(text = uiState.appName, fontWeight = FontWeight.Bold)
+                if (!uiState.isLoading) {
                     Text(
                         text = "Tap any field to copy",
                         fontSize = 12.sp,
@@ -49,11 +46,11 @@ fun CertificateDialogWidget(
             }
         },
         text = {
-            if (isLoading) {
+            if (uiState.isLoading) {
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
-            } else if (details == null) {
+            } else if (uiState.details == null) {
                 Text("No signature found or unable to parse.")
             } else {
                 Column(
@@ -61,30 +58,24 @@ fun CertificateDialogWidget(
                         .fillMaxWidth()
                         .verticalScroll(rememberScrollState())
                 ) {
-                    DetailRowWidget("Package Name", app.packageName)
-                    DetailRowWidget("System App", if (app.isSystemApp) "Yes" else "No")
+                    AppDetailRowWidget("Package Name", uiState.packageName)
+                    AppDetailRowWidget("System App", if (uiState.isSystemApp) "Yes" else "No")
                     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                    DetailRowWidget("SHA-256", details.sha256)
-                    DetailRowWidget("SHA-1", details.sha1)
+                    AppDetailRowWidget("SHA-256", uiState.details.sha256)
+                    AppDetailRowWidget("SHA-1", uiState.details.sha1)
                     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                    DetailRowWidget("Owner", details.owner)
-                    DetailRowWidget("Issuer", details.issuer)
-                    DetailRowWidget("Serial", details.serialNumber)
-                    DetailRowWidget("Valid From", details.validFrom)
-                    DetailRowWidget("Valid Until", details.validUntil)
+                    AppDetailRowWidget("Owner", uiState.details.owner)
+                    AppDetailRowWidget("Issuer", uiState.details.issuer)
+                    AppDetailRowWidget("Serial", uiState.details.serialNumber)
+                    AppDetailRowWidget("Valid From", uiState.details.validFrom)
+                    AppDetailRowWidget("Valid Until", uiState.details.validUntil)
                 }
             }
         }
     )
 }
 
-private val previewApp = AppItem(
-    name = "CertHunter",
-    packageName = "com.mohsenoid.certhunter",
-    isSystemApp = false,
-)
-
-private val previewCert = CertificateDetails(
+private val previewCert = AppCertificateDetails(
     sha256 = "A1:B2:C3:D4:E5:F6:A1:B2:C3:D4:E5:F6:A1:B2:C3:D4",
     sha1 = "A1:B2:C3:D4:E5:F6:A1:B2:C3:D4",
     owner = "CN=Example, O=Example Corp, C=US",
@@ -96,12 +87,16 @@ private val previewCert = CertificateDetails(
 
 @ComponentPreviews
 @Composable
-private fun CertificateDialogLoadingPreview() {
+private fun AppDetailScreenPreview() {
     CertHunterTheme {
-        CertificateDialogWidget(
-            app = previewApp,
-            details = null,
-            isLoading = true,
+        AppDetailScreen(
+            uiState = AppDetailUiModel(
+                isLoading = false,
+                packageName = "com.mohsenoid.certhunter",
+                appName = "CertHunter",
+                isSystemApp = false,
+                details = previewCert,
+            ),
             onDismiss = {},
         )
     }
@@ -109,12 +104,10 @@ private fun CertificateDialogLoadingPreview() {
 
 @ComponentPreviews
 @Composable
-private fun CertificateDialogWithDetailsPreview() {
+private fun AppDetailScreenLoadingPreview() {
     CertHunterTheme {
-        CertificateDialogWidget(
-            app = previewApp,
-            details = previewCert,
-            isLoading = false,
+        AppDetailScreen(
+            uiState = AppDetailUiModel(isLoading = true),
             onDismiss = {},
         )
     }
@@ -122,12 +115,10 @@ private fun CertificateDialogWithDetailsPreview() {
 
 @ComponentPreviews
 @Composable
-private fun CertificateDialogNoDetailsPreview() {
+private fun AppDetailScreenNoDetailsPreview() {
     CertHunterTheme {
-        CertificateDialogWidget(
-            app = previewApp,
-            details = null,
-            isLoading = false,
+        AppDetailScreen(
+            uiState = AppDetailUiModel(isLoading = false, appName = "CertHunter", details = null),
             onDismiss = {},
         )
     }

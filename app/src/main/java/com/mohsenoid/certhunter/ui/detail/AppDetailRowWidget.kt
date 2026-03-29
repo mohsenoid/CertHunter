@@ -1,4 +1,4 @@
-package com.mohsenoid.certhunter.ui.widget
+package com.mohsenoid.certhunter.ui.detail
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -21,7 +21,7 @@ import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
 import com.mohsenoid.certhunter.ui.util.ComponentPreviews
 
 @Composable
-fun DetailRowWidget(label: String, value: String) {
+fun AppDetailRowWidget(label: String, value: String) {
     val context = LocalContext.current
 
     Column(
@@ -54,9 +54,9 @@ fun DetailRowWidget(label: String, value: String) {
 
 @ComponentPreviews
 @Composable
-private fun DetailRowWidgetPreview() {
+private fun AppDetailRowWidgetPreview() {
     CertHunterTheme {
-        DetailRowWidget(
+        AppDetailRowWidget(
             label = "SHA-256",
             value = "A1:B2:C3:D4:E5:F6:A1:B2:C3:D4:E5:F6:A1:B2:C3:D4",
         )

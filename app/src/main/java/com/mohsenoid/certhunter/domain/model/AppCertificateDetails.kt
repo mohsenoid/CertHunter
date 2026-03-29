@@ -1,6 +1,6 @@
 package com.mohsenoid.certhunter.domain.model
 
-data class CertificateDetails(
+data class AppCertificateDetails(
     val sha256: String,
     val sha1: String,
     val owner: String,

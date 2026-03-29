@@ -1,10 +1,8 @@
-package com.mohsenoid.certhunter.ui
+package com.mohsenoid.certhunter.ui.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mohsenoid.certhunter.domain.model.AppItem
 import com.mohsenoid.certhunter.domain.repository.AppRepository
-import com.mohsenoid.certhunter.ui.model.AppListUiModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,19 +29,7 @@ class AppListViewModel(private val repository: AppRepository) : ViewModel() {
         _uiState.update { it.copy(searchQuery = query) }
     }
 
-    fun onAppSelected(app: AppItem) {
-        _uiState.update { it.copy(selectedApp = app, selectedAppCert = null, isLoadingCert = true) }
-        viewModelScope.launch {
-            val cert = repository.getCertificateDetails(app.packageName)
-            _uiState.update { it.copy(selectedAppCert = cert, isLoadingCert = false) }
-        }
-    }
-
     fun onToggleSystemApps() {
         _uiState.update { it.copy(showSystemApps = !it.showSystemApps) }
-    }
-
-    fun onDialogDismissed() {
-        _uiState.update { it.copy(selectedApp = null, selectedAppCert = null) }
     }
 }

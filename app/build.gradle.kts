@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -48,6 +49,9 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
+    implementation(libs.navigation3.runtime)
+    implementation(libs.navigation3.ui)
+    implementation(libs.kotlinx.serialization.json)
     implementation(platform(libs.klogx.bom))
     implementation(libs.klogx.core)
     implementation(libs.klogx.android.logcat)

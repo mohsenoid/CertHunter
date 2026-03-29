@@ -1,6 +1,5 @@
-package com.mohsenoid.certhunter.ui
+package com.mohsenoid.certhunter.ui.list
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,43 +25,24 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mohsenoid.certhunter.domain.model.AppItem
-import com.mohsenoid.certhunter.ui.model.AppListUiModel
 import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
-import com.mohsenoid.certhunter.ui.widget.AppRowWidget
-import com.mohsenoid.certhunter.ui.widget.CertificateDialogWidget
-import org.koin.androidx.compose.koinViewModel
+import com.mohsenoid.certhunter.ui.util.ComponentPreviews
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppListScreen(viewModel: AppListViewModel = koinViewModel()) {
-    val uiState by viewModel.uiState.collectAsState()
-    AppListContent(
-        uiState = uiState,
-        onSearchQueryChanged = viewModel::onSearchQueryChanged,
-        onAppSelected = viewModel::onAppSelected,
-        onToggleSystemApps = viewModel::onToggleSystemApps,
-        onDialogDismissed = viewModel::onDialogDismissed,
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AppListContent(
+fun AppListScreen(
     uiState: AppListUiModel,
     onSearchQueryChanged: (String) -> Unit,
-    onAppSelected: (AppItem) -> Unit,
+    onAppClick: (AppItem) -> Unit,
     onToggleSystemApps: () -> Unit,
-    onDialogDismissed: () -> Unit,
 ) {
     var showMenu by remember { mutableStateOf(false) }
 
@@ -144,7 +124,7 @@ fun AppListContent(
                 }
 
                 items(uiState.filteredApps) { app ->
-                    AppRowWidget(app = app, onClick = { onAppSelected(app) })
+                    AppListRowWidget(app = app, onClick = { onAppClick(app) })
                 }
 
                 if (uiState.filteredApps.isEmpty()) {
@@ -167,15 +147,6 @@ fun AppListContent(
             }
         }
     }
-
-    uiState.selectedApp?.let { app ->
-        CertificateDialogWidget(
-            app = app,
-            details = uiState.selectedAppCert,
-            isLoading = uiState.isLoadingCert,
-            onDismiss = onDialogDismissed,
-        )
-    }
 }
 
 private val previewApps = listOf(
@@ -184,62 +155,45 @@ private val previewApps = listOf(
     AppItem(name = "Chrome", packageName = "com.android.chrome", isSystemApp = false),
 )
 
-@Preview(showBackground = true)
+@ComponentPreviews
 @Composable
-private fun AppListContentPreview() {
+private fun AppListScreenPreview() {
     CertHunterTheme {
-        AppListContent(
+        AppListScreen(
             uiState = AppListUiModel(allApps = previewApps, isLoadingApps = false),
             onSearchQueryChanged = {},
-            onAppSelected = {},
+            onAppClick = {},
             onToggleSystemApps = {},
-            onDialogDismissed = {},
         )
     }
 }
 
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@ComponentPreviews
 @Composable
-private fun AppListContentDarkPreview() {
+private fun AppListScreenLoadingPreview() {
     CertHunterTheme {
-        AppListContent(
-            uiState = AppListUiModel(allApps = previewApps, isLoadingApps = false),
-            onSearchQueryChanged = {},
-            onAppSelected = {},
-            onToggleSystemApps = {},
-            onDialogDismissed = {},
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun AppListContentLoadingPreview() {
-    CertHunterTheme {
-        AppListContent(
+        AppListScreen(
             uiState = AppListUiModel(isLoadingApps = true),
             onSearchQueryChanged = {},
-            onAppSelected = {},
+            onAppClick = {},
             onToggleSystemApps = {},
-            onDialogDismissed = {},
         )
     }
 }
 
-@Preview(showBackground = true)
+@ComponentPreviews
 @Composable
-private fun AppListContentEmptyPreview() {
+private fun AppListScreenEmptyPreview() {
     CertHunterTheme {
-        AppListContent(
+        AppListScreen(
             uiState = AppListUiModel(
                 allApps = emptyList(),
                 isLoadingApps = false,
                 searchQuery = "nonexistent",
             ),
             onSearchQueryChanged = {},
-            onAppSelected = {},
+            onAppClick = {},
             onToggleSystemApps = {},
-            onDialogDismissed = {},
         )
     }
 }
