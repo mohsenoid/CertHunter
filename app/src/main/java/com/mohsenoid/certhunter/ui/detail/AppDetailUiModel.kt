@@ -1,6 +1,7 @@
 package com.mohsenoid.certhunter.ui.detail
 
 import com.mohsenoid.certhunter.domain.model.AppCertificateDetails
+import com.mohsenoid.certhunter.domain.model.AppDetailsError
 
 data class AppDetailUiModel(
     val isLoading: Boolean = true,
@@ -8,5 +9,5 @@ data class AppDetailUiModel(
     val appName: String = "",
     val isSystemApp: Boolean = false,
     val details: AppCertificateDetails? = null,
-    val certificateError: Boolean = false,
+    val error: AppDetailsError? = null,
 )

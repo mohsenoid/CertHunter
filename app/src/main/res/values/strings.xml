@@ -19,6 +19,7 @@
     <string name="app_detail_label_valid_from">Valid From</string>
     <string name="app_detail_label_valid_until">Valid Until</string>
     <string name="app_detail_certificate_error">Failed to read certificate. The package may be corrupted.</string>
+    <string name="app_detail_package_load_error">Failed to load package info. The app may have been uninstalled.</string>
     <string name="app_detail_certificate_status_expired">Expired</string>
     <string name="app_detail_certificate_status_expiring_soon">Expiring in %1$d days</string>
     <string name="app_detail_no_signature_found">No signature found for this package.</string>

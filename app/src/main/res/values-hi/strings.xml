@@ -16,6 +16,7 @@
     <string name="app_detail_label_valid_from">से मान्य</string>
     <string name="app_detail_label_valid_until">तक मान्य</string>
     <string name="app_detail_certificate_error">प्रमाणपत्र पढ़ने में विफल। पैकेज दूषित हो सकता है।</string>
+    <string name="app_detail_package_load_error">पैकेज जानकारी लोड करने में विफल। हो सकता है कि ऐप अनइंस्टॉल हो गया हो।</string>
     <string name="app_detail_certificate_status_expired">समाप्त हो गया</string>
     <string name="app_detail_certificate_status_expiring_soon">%1$d दिनों में समाप्त होगा</string>
     <string name="app_detail_no_signature_found">इस पैकेज के लिए कोई हस्ताक्षर नहीं मिला।</string>

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mohsenoid.certhunter.R
 import com.mohsenoid.certhunter.domain.model.AppCertificateDetails
+import com.mohsenoid.certhunter.domain.model.AppDetailsError
 import com.mohsenoid.certhunter.domain.model.CertificateValidity
 import com.mohsenoid.certhunter.ui.detail.widget.AppDetailRow
 import com.mohsenoid.certhunter.ui.detail.widget.CertificateValidityBadge
@@ -55,8 +56,16 @@ fun AppDetailScreen(
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
-            } else if (uiState.certificateError) {
-                Text(stringResource(R.string.app_detail_certificate_error))
+            } else if (uiState.error != null) {
+                Text(
+                    stringResource(
+                        when (uiState.error) {
+                            is AppDetailsError.ItemLoadFailed -> R.string.app_detail_package_load_error
+                            AppDetailsError.CertificateNotFound -> R.string.app_detail_no_signature_found
+                            is AppDetailsError.CertificateParseFailed -> R.string.app_detail_certificate_error
+                        }
+                    )
+                )
             } else if (uiState.details == null) {
                 Text(stringResource(R.string.app_detail_no_signature_found))
             } else {

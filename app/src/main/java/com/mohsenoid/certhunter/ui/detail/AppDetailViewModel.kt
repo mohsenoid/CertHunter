@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.michaelbull.result.fold
 import com.mohsenoid.certhunter.coroutine.DispatcherProvider
-import com.mohsenoid.certhunter.domain.model.AppDetailsError
 import com.mohsenoid.certhunter.domain.repository.AppRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,7 +33,7 @@ class AppDetailViewModel(
                     appName = result.fold({ it.item.name }, { packageName }),
                     isSystemApp = result.fold({ it.item.isSystemApp }, { false }),
                     details = result.fold({ it.certificate }, { null }),
-                    certificateError = result.fold({ false }, { it is AppDetailsError.CertificateParseFailed }),
+                    error = result.fold({ null }, { it }),
                     packageName = packageName,
                 )
             }

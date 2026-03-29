@@ -16,6 +16,7 @@
     <string name="app_detail_label_valid_from">有效期自</string>
     <string name="app_detail_label_valid_until">有效期至</string>
     <string name="app_detail_certificate_error">读取证书失败。该软件包可能已损坏。</string>
+    <string name="app_detail_package_load_error">加载包信息失败。该应用可能已被卸载。</string>
     <string name="app_detail_certificate_status_expired">已过期</string>
     <string name="app_detail_certificate_status_expiring_soon">还有 %1$d 天过期</string>
     <string name="app_detail_no_signature_found">未找到此软件包的签名。</string>

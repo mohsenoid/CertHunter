@@ -16,6 +16,7 @@
     <string name="app_detail_label_valid_from">Berlaku dari</string>
     <string name="app_detail_label_valid_until">Berlaku hingga</string>
     <string name="app_detail_certificate_error">Gagal membaca sertifikat. Paket mungkin rusak.</string>
+    <string name="app_detail_package_load_error">Gagal memuat informasi paket. Aplikasi mungkin sudah dihapus.</string>
     <string name="app_detail_certificate_status_expired">Kedaluwarsa</string>
     <string name="app_detail_certificate_status_expiring_soon">Kedaluwarsa dalam %1$d hari</string>
     <string name="app_detail_no_signature_found">Tidak ada tanda tangan yang ditemukan untuk paket ini.</string>
