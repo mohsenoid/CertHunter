@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -49,6 +48,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,7 +59,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.createBitmap
+import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayInputStream
 import java.security.MessageDigest
@@ -113,9 +116,12 @@ fun AppListScreen() {
     // Search query state
     var searchQuery by remember { mutableStateOf("") }
 
+    val coroutineScope = rememberCoroutineScope()
+
     // Selected app for dialog
     var selectedApp by remember { mutableStateOf<AppItem?>(null) }
     var selectedAppCert by remember { mutableStateOf<CertificateDetails?>(null) }
+    var isLoadingCert by remember { mutableStateOf(false) }
 
     // Load apps asynchronously
     LaunchedEffect(Unit) {
@@ -187,7 +193,13 @@ fun AppListScreen() {
                 items(filteredList) { app ->
                     AppRow(app = app) {
                         selectedApp = app
-                        selectedAppCert = getAppCertificateDetails(context.packageManager, app.packageName)
+                        selectedAppCert = null
+                        isLoadingCert = true
+                        coroutineScope.launch(Dispatchers.IO) {
+                            val cert = getAppCertificateDetails(context.packageManager, app.packageName)
+                            isLoadingCert = false
+                            selectedAppCert = cert
+                        }
                     }
                 }
 
@@ -212,10 +224,11 @@ fun AppListScreen() {
     }
 
     // Show Dialog
-    if (selectedApp != null) {
+    selectedApp?.let { app ->
         CertificateDialog(
-            app = selectedApp!!,
+            app = app,
             details = selectedAppCert,
+            isLoading = isLoadingCert,
             onDismiss = { selectedApp = null }
         )
     }
@@ -247,7 +260,7 @@ fun AppRow(app: AppItem, onClick: () -> Unit) {
 }
 
 @Composable
-fun CertificateDialog(app: AppItem, details: CertificateDetails?, onDismiss: () -> Unit) {
+fun CertificateDialog(app: AppItem, details: CertificateDetails?, isLoading: Boolean, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
@@ -256,16 +269,22 @@ fun CertificateDialog(app: AppItem, details: CertificateDetails?, onDismiss: () 
         title = {
             Column {
                 Text(text = app.name, fontWeight = FontWeight.Bold)
-                Text(
-                    text = "Tap any field to copy",
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = MaterialTheme.colorScheme.secondary
-                )
+                if (!isLoading) {
+                    Text(
+                        text = "Tap any field to copy",
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                }
             }
         },
         text = {
-            if (details == null) {
+            if (isLoading) {
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            } else if (details == null) {
                 Text("No signature found or unable to parse.")
             } else {
                 // Make the content scrollable in case strings are very long
