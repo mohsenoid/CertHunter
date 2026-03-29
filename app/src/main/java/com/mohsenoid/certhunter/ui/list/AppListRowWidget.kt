@@ -4,7 +4,9 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,11 +23,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.createBitmap
+import com.mohsenoid.certhunter.R
 import com.mohsenoid.certhunter.domain.model.AppItem
 import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
 import com.mohsenoid.certhunter.ui.util.ComponentPreviews
@@ -53,17 +57,40 @@ fun AppListRowWidget(app: AppItem, onClick: () -> Unit) {
             )
         }
         Spacer(modifier = Modifier.width(16.dp))
-        Column {
-            Text(
-                text = app.name,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.secondary,
-                fontSize = 16.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+        Column(modifier = Modifier.weight(1f)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = app.name,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.secondary,
+                    fontSize = 16.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
+                )
+                if (app.isSystemApp) {
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Box(
+                        modifier = Modifier
+                            .border(
+                                width = 1.dp,
+                                color = MaterialTheme.colorScheme.outline,
+                                shape = MaterialTheme.shapes.large
+                            )
+                            .padding(horizontal = 8.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.app_list_system_label),
+                            fontSize = 12.sp,
+                            maxLines = 1,
+                            color = MaterialTheme.colorScheme.secondary,
+                        )
+                    }
+                }
+            }
             Text(text = app.packageName, fontSize = 12.sp, color = MaterialTheme.colorScheme.secondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
+
     }
 }
 
@@ -83,7 +110,7 @@ private fun Drawable.toBitmap(): Bitmap {
 private fun AppListRowWidgetPreview() {
     CertHunterTheme {
         AppListRowWidget(
-            app = AppItem(name = "CertHunter", packageName = "com.mohsenoid.certhunter", isSystemApp = false),
+            app = AppItem(name = "CertHunter", packageName = "com.mohsenoid.certhunter", isSystemApp = true),
             onClick = {},
         )
     }
