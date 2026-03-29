@@ -4,6 +4,7 @@
     <string name="app_about_version">Version</string>
     <string name="app_about_website">Site web</string>
     <string name="app_detail_close">Fermer</string>
+    <string name="app_detail_row_click_label">Copier %1$s</string>
     <string name="app_detail_copied_toast">%1$s copié</string>
     <string name="app_detail_label_issuer">Émetteur</string>
     <string name="app_detail_label_owner">Propriétaire</string>
@@ -22,6 +23,7 @@
     <string name="app_detail_system_app_yes">Oui</string>
     <string name="app_detail_tap_to_copy">Appuyer sur un champ pour copier</string>
     <string name="app_list_about">À propos</string>
+    <string name="app_list_item_click_label">Voir le certificat</string>
     <string name="app_list_hide_system_apps">Masquer les apps système</string>
     <string name="app_list_more_options_content_description">Plus</string>
     <string name="app_list_no_apps_found">Aucune application trouvée</string>

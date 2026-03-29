@@ -7,6 +7,7 @@
     <string name="app_about_website">Website</string>
     <string name="app_about_website_url" translatable="false">https://mohsenoid.com</string>
     <string name="app_detail_close">Close</string>
+    <string name="app_detail_row_click_label">Copy %1$s</string>
     <string name="app_detail_copied_toast">%1$s copied</string>
     <string name="app_detail_label_issuer">Issuer</string>
     <string name="app_detail_label_owner">Owner</string>
@@ -25,6 +26,7 @@
     <string name="app_detail_system_app_yes">Yes</string>
     <string name="app_detail_tap_to_copy">Tap any field to copy</string>
     <string name="app_list_about">About</string>
+    <string name="app_list_item_click_label">View certificate</string>
     <string name="app_list_hide_system_apps">Hide system apps</string>
     <string name="app_list_more_options_content_description">More</string>
     <string name="app_list_no_apps_found">No apps found</string>

@@ -4,6 +4,7 @@
     <string name="app_about_version">גרסה</string>
     <string name="app_about_website">אתר אינטרנט</string>
     <string name="app_detail_close">סגור</string>
+    <string name="app_detail_row_click_label">העתק %1$s</string>
     <string name="app_detail_copied_toast">%1$s הועתק</string>
     <string name="app_detail_label_issuer">מנפיק</string>
     <string name="app_detail_label_owner">בעלים</string>
@@ -22,6 +23,7 @@
     <string name="app_detail_system_app_yes">כן</string>
     <string name="app_detail_tap_to_copy">הקש על שדה כלשהו כדי להעתיק</string>
     <string name="app_list_about">אודות</string>
+    <string name="app_list_item_click_label">הצג אישור</string>
     <string name="app_list_hide_system_apps">הסתר אפליקציות מערכת</string>
     <string name="app_list_more_options_content_description">עוד</string>
     <string name="app_list_no_apps_found">לא נמצאו אפליקציות</string>

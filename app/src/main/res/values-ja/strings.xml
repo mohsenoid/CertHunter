@@ -4,6 +4,7 @@
     <string name="app_about_version">バージョン</string>
     <string name="app_about_website">ウェブサイト</string>
     <string name="app_detail_close">閉じる</string>
+    <string name="app_detail_row_click_label">%1$s をコピー</string>
     <string name="app_detail_copied_toast">%1$s をコピーしました</string>
     <string name="app_detail_label_issuer">発行者</string>
     <string name="app_detail_label_owner">所有者</string>
@@ -22,6 +23,7 @@
     <string name="app_detail_system_app_yes">はい</string>
     <string name="app_detail_tap_to_copy">フィールドをタップしてコピー</string>
     <string name="app_list_about">このアプリについて</string>
+    <string name="app_list_item_click_label">証明書を表示</string>
     <string name="app_list_hide_system_apps">システムアプリを非表示</string>
     <string name="app_list_more_options_content_description">その他</string>
     <string name="app_list_no_apps_found">アプリが見つかりません</string>

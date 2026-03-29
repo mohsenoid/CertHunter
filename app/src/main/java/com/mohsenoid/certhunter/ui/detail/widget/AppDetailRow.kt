@@ -17,6 +17,9 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,11 +32,13 @@ fun AppDetailRow(label: String, value: String) {
     val context = LocalContext.current
     val haptic = LocalHapticFeedback.current
     val copiedMessage = stringResource(R.string.app_detail_copied_toast, label)
+    val clickLabel = stringResource(R.string.app_detail_row_click_label, label)
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
+            .semantics { role = Role.Button }
+            .clickable(onClickLabel = clickLabel) {
                 val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clip = ClipData.newPlainText(label, value)
                 clipboard.setPrimaryClip(clip)

@@ -4,6 +4,7 @@
     <string name="app_about_version">Версия</string>
     <string name="app_about_website">Сайт</string>
     <string name="app_detail_close">Закрыть</string>
+    <string name="app_detail_row_click_label">Копировать %1$s</string>
     <string name="app_detail_copied_toast">%1$s скопировано</string>
     <string name="app_detail_label_issuer">Издатель</string>
     <string name="app_detail_label_owner">Владелец</string>
@@ -22,6 +23,7 @@
     <string name="app_detail_system_app_yes">Да</string>
     <string name="app_detail_tap_to_copy">Нажмите на поле для копирования</string>
     <string name="app_list_about">О приложении</string>
+    <string name="app_list_item_click_label">Просмотр сертификата</string>
     <string name="app_list_hide_system_apps">Скрыть системные приложения</string>
     <string name="app_list_more_options_content_description">Ещё</string>
     <string name="app_list_no_apps_found">Приложения не найдены</string>

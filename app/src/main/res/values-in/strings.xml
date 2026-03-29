@@ -4,6 +4,7 @@
     <string name="app_about_version">Versi</string>
     <string name="app_about_website">Situs web</string>
     <string name="app_detail_close">Tutup</string>
+    <string name="app_detail_row_click_label">Salin %1$s</string>
     <string name="app_detail_copied_toast">%1$s disalin</string>
     <string name="app_detail_label_issuer">Penerbit</string>
     <string name="app_detail_label_owner">Pemilik</string>
@@ -22,6 +23,7 @@
     <string name="app_detail_system_app_yes">Ya</string>
     <string name="app_detail_tap_to_copy">Ketuk bidang mana pun untuk menyalin</string>
     <string name="app_list_about">Tentang</string>
+    <string name="app_list_item_click_label">Lihat sertifikat</string>
     <string name="app_list_hide_system_apps">Sembunyikan aplikasi sistem</string>
     <string name="app_list_more_options_content_description">Lainnya</string>
     <string name="app_list_no_apps_found">Tidak ada aplikasi ditemukan</string>

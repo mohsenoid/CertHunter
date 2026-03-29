@@ -4,6 +4,7 @@
     <string name="app_about_version">संस्करण</string>
     <string name="app_about_website">वेबसाइट</string>
     <string name="app_detail_close">बंद करें</string>
+    <string name="app_detail_row_click_label">%1$s कॉपी करें</string>
     <string name="app_detail_copied_toast">%1$s कॉपी किया गया</string>
     <string name="app_detail_label_issuer">जारीकर्ता</string>
     <string name="app_detail_label_owner">स्वामी</string>
@@ -22,6 +23,7 @@
     <string name="app_detail_system_app_yes">हाँ</string>
     <string name="app_detail_tap_to_copy">कॉपी करने के लिए किसी फ़ील्ड पर टैप करें</string>
     <string name="app_list_about">के बारे में</string>
+    <string name="app_list_item_click_label">प्रमाणपत्र देखें</string>
     <string name="app_list_hide_system_apps">सिस्टम ऐप्स छुपाएं</string>
     <string name="app_list_more_options_content_description">अधिक</string>
     <string name="app_list_no_apps_found">कोई ऐप नहीं मिला</string>

@@ -4,6 +4,7 @@
     <string name="app_about_version">版本</string>
     <string name="app_about_website">网站</string>
     <string name="app_detail_close">关闭</string>
+    <string name="app_detail_row_click_label">复制 %1$s</string>
     <string name="app_detail_copied_toast">已复制 %1$s</string>
     <string name="app_detail_label_issuer">颁发者</string>
     <string name="app_detail_label_owner">所有者</string>
@@ -22,6 +23,7 @@
     <string name="app_detail_system_app_yes">是</string>
     <string name="app_detail_tap_to_copy">点击任意字段以复制</string>
     <string name="app_list_about">关于</string>
+    <string name="app_list_item_click_label">查看证书</string>
     <string name="app_list_hide_system_apps">隐藏系统应用</string>
     <string name="app_list_more_options_content_description">更多</string>
     <string name="app_list_no_apps_found">未找到应用</string>

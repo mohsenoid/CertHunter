@@ -4,6 +4,7 @@
     <string name="app_about_version">버전</string>
     <string name="app_about_website">웹사이트</string>
     <string name="app_detail_close">닫기</string>
+    <string name="app_detail_row_click_label">%1$s 복사</string>
     <string name="app_detail_copied_toast">%1$s 복사됨</string>
     <string name="app_detail_label_issuer">발급자</string>
     <string name="app_detail_label_owner">소유자</string>
@@ -22,6 +23,7 @@
     <string name="app_detail_system_app_yes">예</string>
     <string name="app_detail_tap_to_copy">필드를 탭하여 복사</string>
     <string name="app_list_about">정보</string>
+    <string name="app_list_item_click_label">인증서 보기</string>
     <string name="app_list_hide_system_apps">시스템 앱 숨기기</string>
     <string name="app_list_more_options_content_description">더보기</string>
     <string name="app_list_no_apps_found">앱을 찾을 수 없습니다</string>

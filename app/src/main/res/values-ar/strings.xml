@@ -4,6 +4,7 @@
     <string name="app_about_version">الإصدار</string>
     <string name="app_about_website">الموقع الإلكتروني</string>
     <string name="app_detail_close">إغلاق</string>
+    <string name="app_detail_row_click_label">نسخ %1$s</string>
     <string name="app_detail_copied_toast">تم نسخ %1$s</string>
     <string name="app_detail_label_issuer">الجهة المصدِرة</string>
     <string name="app_detail_label_owner">المالك</string>
@@ -22,6 +23,7 @@
     <string name="app_detail_system_app_yes">نعم</string>
     <string name="app_detail_tap_to_copy">اضغط على أي حقل للنسخ</string>
     <string name="app_list_about">حول</string>
+    <string name="app_list_item_click_label">عرض الشهادة</string>
     <string name="app_list_hide_system_apps">إخفاء تطبيقات النظام</string>
     <string name="app_list_more_options_content_description">المزيد</string>
     <string name="app_list_no_apps_found">لم يتم العثور على تطبيقات</string>
