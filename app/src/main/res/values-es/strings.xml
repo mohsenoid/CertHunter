@@ -1,25 +1,29 @@
 <resources>
-    <string name="app_list_search_placeholder">Buscar apps o paquetes…</string>
-    <string name="app_list_search_clear_content_description">Borrar</string>
-    <string name="app_list_more_options_content_description">Más</string>
-    <string name="app_list_hide_system_apps">Ocultar apps del sistema</string>
-    <string name="app_list_show_system_apps">Mostrar apps del sistema</string>
-    <string name="app_list_no_apps_found">No se encontraron apps</string>
-    <string name="app_list_no_apps_found_matching">No se encontraron apps para \"%1$s\"</string>
-
+    <string name="app_about_description">Inspecciona las huellas digitales de certificados de firma y los detalles X.509 de cualquier app instalada en tu dispositivo. Todo el procesamiento se realiza localmente — ningún dato abandona tu dispositivo.</string>
+    <string name="app_about_developer">Desarrollador</string>
+    <string name="app_about_version">Versión</string>
+    <string name="app_about_website">Sitio web</string>
     <string name="app_detail_close">Cerrar</string>
-    <string name="app_detail_tap_to_copy">Toca cualquier campo para copiar</string>
-    <string name="app_detail_no_signature_found">No se encontró firma o no se pudo analizar.</string>
-    <string name="app_detail_label_package_name">Nombre del paquete</string>
-    <string name="app_detail_label_system_app">App del sistema</string>
-    <string name="app_detail_system_app_yes">Sí</string>
-    <string name="app_detail_system_app_no">No</string>
-    <string name="app_detail_label_sha256">SHA-256</string>
-    <string name="app_detail_label_sha1">SHA-1</string>
-    <string name="app_detail_label_owner">Propietario</string>
+    <string name="app_detail_copied_toast">%1$s copiado</string>
     <string name="app_detail_label_issuer">Emisor</string>
+    <string name="app_detail_label_owner">Propietario</string>
+    <string name="app_detail_label_package_name">Nombre del paquete</string>
     <string name="app_detail_label_serial">Número de serie</string>
+    <string name="app_detail_label_sha1">SHA-1</string>
+    <string name="app_detail_label_sha256">SHA-256</string>
+    <string name="app_detail_label_system_app">App del sistema</string>
     <string name="app_detail_label_valid_from">Válido desde</string>
     <string name="app_detail_label_valid_until">Válido hasta</string>
-    <string name="app_detail_copied_toast">%1$s copiado</string>
+    <string name="app_detail_no_signature_found">No se encontró firma o no se pudo analizar.</string>
+    <string name="app_detail_system_app_no">No</string>
+    <string name="app_detail_system_app_yes">Sí</string>
+    <string name="app_detail_tap_to_copy">Toca cualquier campo para copiar</string>
+    <string name="app_list_about">Acerca de</string>
+    <string name="app_list_hide_system_apps">Ocultar apps del sistema</string>
+    <string name="app_list_more_options_content_description">Más</string>
+    <string name="app_list_no_apps_found">No se encontraron apps</string>
+    <string name="app_list_no_apps_found_matching">No se encontraron apps para \"%1$s\"</string>
+    <string name="app_list_search_clear_content_description">Borrar</string>
+    <string name="app_list_search_placeholder">Buscar apps o paquetes…</string>
+    <string name="app_list_show_system_apps">Mostrar apps del sistema</string>
 </resources>

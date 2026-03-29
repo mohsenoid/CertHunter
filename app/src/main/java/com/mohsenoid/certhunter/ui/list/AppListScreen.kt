@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
@@ -45,6 +46,7 @@ fun AppListScreen(
     onSearchQueryChanged: (String) -> Unit,
     onAppClick: (AppItem) -> Unit,
     onToggleSystemApps: () -> Unit,
+    onAboutClick: () -> Unit,
 ) {
     var showMenu by remember { mutableStateOf(false) }
 
@@ -52,6 +54,11 @@ fun AppListScreen(
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(R.string.app_name)) },
+                actions = {
+                    IconButton(onClick = onAboutClick) {
+                        Icon(Icons.Default.Info, contentDescription = stringResource(R.string.app_list_about))
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onPrimary,
@@ -169,6 +176,7 @@ private fun AppListScreenPreview() {
             onSearchQueryChanged = {},
             onAppClick = {},
             onToggleSystemApps = {},
+            onAboutClick = {},
         )
     }
 }
@@ -182,6 +190,7 @@ private fun AppListScreenLoadingPreview() {
             onSearchQueryChanged = {},
             onAppClick = {},
             onToggleSystemApps = {},
+            onAboutClick = {},
         )
     }
 }
@@ -199,6 +208,7 @@ private fun AppListScreenEmptyPreview() {
             onSearchQueryChanged = {},
             onAppClick = {},
             onToggleSystemApps = {},
+            onAboutClick = {},
         )
     }
 }

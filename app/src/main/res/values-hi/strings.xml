@@ -1,25 +1,29 @@
 <resources>
-    <string name="app_list_search_placeholder">ऐप्स या पैकेज खोजें…</string>
-    <string name="app_list_search_clear_content_description">साफ़ करें</string>
-    <string name="app_list_more_options_content_description">अधिक</string>
-    <string name="app_list_hide_system_apps">सिस्टम ऐप्स छुपाएं</string>
-    <string name="app_list_show_system_apps">सिस्टम ऐप्स दिखाएं</string>
-    <string name="app_list_no_apps_found">कोई ऐप नहीं मिला</string>
-    <string name="app_list_no_apps_found_matching">"%1$s" से मेल खाता कोई ऐप नहीं मिला</string>
-
+    <string name="app_about_description">अपने डिवाइस पर इंस्टॉल किसी भी ऐप के साइनिंग सर्टिफिकेट फिंगरप्रिंट और X.509 विवरण जांचें। सभी प्रोसेसिंग स्थानीय रूप से होती है — कोई डेटा आपके डिवाइस से बाहर नहीं जाता।</string>
+    <string name="app_about_developer">डेवलपर</string>
+    <string name="app_about_version">संस्करण</string>
+    <string name="app_about_website">वेबसाइट</string>
     <string name="app_detail_close">बंद करें</string>
-    <string name="app_detail_tap_to_copy">कॉपी करने के लिए किसी फ़ील्ड पर टैप करें</string>
-    <string name="app_detail_no_signature_found">कोई हस्ताक्षर नहीं मिला या पार्स नहीं किया जा सका।</string>
-    <string name="app_detail_label_package_name">पैकेज का नाम</string>
-    <string name="app_detail_label_system_app">सिस्टम ऐप</string>
-    <string name="app_detail_system_app_yes">हाँ</string>
-    <string name="app_detail_system_app_no">नहीं</string>
-    <string name="app_detail_label_sha256">SHA-256</string>
-    <string name="app_detail_label_sha1">SHA-1</string>
-    <string name="app_detail_label_owner">स्वामी</string>
+    <string name="app_detail_copied_toast">%1$s कॉपी किया गया</string>
     <string name="app_detail_label_issuer">जारीकर्ता</string>
+    <string name="app_detail_label_owner">स्वामी</string>
+    <string name="app_detail_label_package_name">पैकेज का नाम</string>
     <string name="app_detail_label_serial">क्रमांक</string>
+    <string name="app_detail_label_sha1">SHA-1</string>
+    <string name="app_detail_label_sha256">SHA-256</string>
+    <string name="app_detail_label_system_app">सिस्टम ऐप</string>
     <string name="app_detail_label_valid_from">से मान्य</string>
     <string name="app_detail_label_valid_until">तक मान्य</string>
-    <string name="app_detail_copied_toast">%1$s कॉपी किया गया</string>
+    <string name="app_detail_no_signature_found">कोई हस्ताक्षर नहीं मिला या पार्स नहीं किया जा सका।</string>
+    <string name="app_detail_system_app_no">नहीं</string>
+    <string name="app_detail_system_app_yes">हाँ</string>
+    <string name="app_detail_tap_to_copy">कॉपी करने के लिए किसी फ़ील्ड पर टैप करें</string>
+    <string name="app_list_about">के बारे में</string>
+    <string name="app_list_hide_system_apps">सिस्टम ऐप्स छुपाएं</string>
+    <string name="app_list_more_options_content_description">अधिक</string>
+    <string name="app_list_no_apps_found">कोई ऐप नहीं मिला</string>
+    <string name="app_list_no_apps_found_matching">"%1$s" से मेल खाता कोई ऐप नहीं मिला</string>
+    <string name="app_list_search_clear_content_description">साफ़ करें</string>
+    <string name="app_list_search_placeholder">ऐप्स या पैकेज खोजें…</string>
+    <string name="app_list_show_system_apps">सिस्टम ऐप्स दिखाएं</string>
 </resources>

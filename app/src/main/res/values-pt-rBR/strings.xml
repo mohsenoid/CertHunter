@@ -1,25 +1,29 @@
 <resources>
-    <string name="app_list_search_placeholder">Pesquisar apps ou pacotes…</string>
-    <string name="app_list_search_clear_content_description">Limpar</string>
-    <string name="app_list_more_options_content_description">Mais</string>
-    <string name="app_list_hide_system_apps">Ocultar apps do sistema</string>
-    <string name="app_list_show_system_apps">Mostrar apps do sistema</string>
-    <string name="app_list_no_apps_found">Nenhum app encontrado</string>
-    <string name="app_list_no_apps_found_matching">Nenhum app encontrado para \"%1$s\"</string>
-
+    <string name="app_about_description">Inspecione as impressões digitais de certificados de assinatura e os detalhes X.509 de qualquer app instalado no seu dispositivo. Todo o processamento é feito localmente — nenhum dado sai do seu dispositivo.</string>
+    <string name="app_about_developer">Desenvolvedor</string>
+    <string name="app_about_version">Versão</string>
+    <string name="app_about_website">Site</string>
     <string name="app_detail_close">Fechar</string>
-    <string name="app_detail_tap_to_copy">Toque em qualquer campo para copiar</string>
-    <string name="app_detail_no_signature_found">Nenhuma assinatura encontrada ou não foi possível analisar.</string>
-    <string name="app_detail_label_package_name">Nome do pacote</string>
-    <string name="app_detail_label_system_app">App do sistema</string>
-    <string name="app_detail_system_app_yes">Sim</string>
-    <string name="app_detail_system_app_no">Não</string>
-    <string name="app_detail_label_sha256">SHA-256</string>
-    <string name="app_detail_label_sha1">SHA-1</string>
-    <string name="app_detail_label_owner">Proprietário</string>
+    <string name="app_detail_copied_toast">%1$s copiado</string>
     <string name="app_detail_label_issuer">Emissor</string>
+    <string name="app_detail_label_owner">Proprietário</string>
+    <string name="app_detail_label_package_name">Nome do pacote</string>
     <string name="app_detail_label_serial">Número de série</string>
+    <string name="app_detail_label_sha1">SHA-1</string>
+    <string name="app_detail_label_sha256">SHA-256</string>
+    <string name="app_detail_label_system_app">App do sistema</string>
     <string name="app_detail_label_valid_from">Válido a partir de</string>
     <string name="app_detail_label_valid_until">Válido até</string>
-    <string name="app_detail_copied_toast">%1$s copiado</string>
+    <string name="app_detail_no_signature_found">Nenhuma assinatura encontrada ou não foi possível analisar.</string>
+    <string name="app_detail_system_app_no">Não</string>
+    <string name="app_detail_system_app_yes">Sim</string>
+    <string name="app_detail_tap_to_copy">Toque em qualquer campo para copiar</string>
+    <string name="app_list_about">Sobre</string>
+    <string name="app_list_hide_system_apps">Ocultar apps do sistema</string>
+    <string name="app_list_more_options_content_description">Mais</string>
+    <string name="app_list_no_apps_found">Nenhum app encontrado</string>
+    <string name="app_list_no_apps_found_matching">Nenhum app encontrado para \"%1$s\"</string>
+    <string name="app_list_search_clear_content_description">Limpar</string>
+    <string name="app_list_search_placeholder">Pesquisar apps ou pacotes…</string>
+    <string name="app_list_show_system_apps">Mostrar apps do sistema</string>
 </resources>

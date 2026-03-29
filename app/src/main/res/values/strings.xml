@@ -1,27 +1,32 @@
 <resources>
     <string name="app_name" translatable="false">CertHunter</string>
-
-    <string name="app_list_search_placeholder">Search apps or packages…</string>
-    <string name="app_list_search_clear_content_description">Clear</string>
-    <string name="app_list_more_options_content_description">More</string>
-    <string name="app_list_hide_system_apps">Hide system apps</string>
-    <string name="app_list_show_system_apps">Show system apps</string>
-    <string name="app_list_no_apps_found">No apps found</string>
-    <string name="app_list_no_apps_found_matching">No apps found matching \"%1$s\"</string>
-
+    <string name="app_about_description">Inspect signing certificate fingerprints and X.509 details of any app installed on your device. All processing is done locally — no data leaves your device.</string>
+    <string name="app_about_developer">Developer</string>
+    <string name="app_about_developer_name" translatable="false">Mohsen Mirhoseini</string>
+    <string name="app_about_version">Version</string>
+    <string name="app_about_website">Website</string>
+    <string name="app_about_website_url" translatable="false">https://mohsenoid.com</string>
     <string name="app_detail_close">Close</string>
-    <string name="app_detail_tap_to_copy">Tap any field to copy</string>
-    <string name="app_detail_no_signature_found">No signature found or unable to parse.</string>
-    <string name="app_detail_label_package_name">Package Name</string>
-    <string name="app_detail_label_system_app">System App</string>
-    <string name="app_detail_system_app_yes">Yes</string>
-    <string name="app_detail_system_app_no">No</string>
-    <string name="app_detail_label_sha256">SHA-256</string>
-    <string name="app_detail_label_sha1">SHA-1</string>
-    <string name="app_detail_label_owner">Owner</string>
+    <string name="app_detail_copied_toast">%1$s copied</string>
     <string name="app_detail_label_issuer">Issuer</string>
+    <string name="app_detail_label_owner">Owner</string>
+    <string name="app_detail_label_package_name">Package Name</string>
     <string name="app_detail_label_serial">Serial</string>
+    <string name="app_detail_label_sha1">SHA-1</string>
+    <string name="app_detail_label_sha256">SHA-256</string>
+    <string name="app_detail_label_system_app">System App</string>
     <string name="app_detail_label_valid_from">Valid From</string>
     <string name="app_detail_label_valid_until">Valid Until</string>
-    <string name="app_detail_copied_toast">%1$s copied</string>
+    <string name="app_detail_no_signature_found">No signature found or unable to parse.</string>
+    <string name="app_detail_system_app_no">No</string>
+    <string name="app_detail_system_app_yes">Yes</string>
+    <string name="app_detail_tap_to_copy">Tap any field to copy</string>
+    <string name="app_list_about">About</string>
+    <string name="app_list_hide_system_apps">Hide system apps</string>
+    <string name="app_list_more_options_content_description">More</string>
+    <string name="app_list_no_apps_found">No apps found</string>
+    <string name="app_list_no_apps_found_matching">No apps found matching \"%1$s\"</string>
+    <string name="app_list_search_clear_content_description">Clear</string>
+    <string name="app_list_search_placeholder">Search apps or packages…</string>
+    <string name="app_list_show_system_apps">Show system apps</string>
 </resources>

@@ -1,25 +1,29 @@
 <resources>
-    <string name="app_list_search_placeholder">Поиск приложений или пакетов…</string>
-    <string name="app_list_search_clear_content_description">Очистить</string>
-    <string name="app_list_more_options_content_description">Ещё</string>
-    <string name="app_list_hide_system_apps">Скрыть системные приложения</string>
-    <string name="app_list_show_system_apps">Показать системные приложения</string>
-    <string name="app_list_no_apps_found">Приложения не найдены</string>
-    <string name="app_list_no_apps_found_matching">Приложения по запросу «%1$s» не найдены</string>
-
+    <string name="app_about_description">Проверяйте отпечатки сертификатов подписи и данные X.509 любого приложения, установленного на устройстве. Вся обработка выполняется локально — данные не покидают ваше устройство.</string>
+    <string name="app_about_developer">Разработчик</string>
+    <string name="app_about_version">Версия</string>
+    <string name="app_about_website">Сайт</string>
     <string name="app_detail_close">Закрыть</string>
-    <string name="app_detail_tap_to_copy">Нажмите на поле для копирования</string>
-    <string name="app_detail_no_signature_found">Подпись не найдена или не удалось выполнить анализ.</string>
-    <string name="app_detail_label_package_name">Имя пакета</string>
-    <string name="app_detail_label_system_app">Системное приложение</string>
-    <string name="app_detail_system_app_yes">Да</string>
-    <string name="app_detail_system_app_no">Нет</string>
-    <string name="app_detail_label_sha256">SHA-256</string>
-    <string name="app_detail_label_sha1">SHA-1</string>
-    <string name="app_detail_label_owner">Владелец</string>
+    <string name="app_detail_copied_toast">%1$s скопировано</string>
     <string name="app_detail_label_issuer">Издатель</string>
+    <string name="app_detail_label_owner">Владелец</string>
+    <string name="app_detail_label_package_name">Имя пакета</string>
     <string name="app_detail_label_serial">Серийный номер</string>
+    <string name="app_detail_label_sha1">SHA-1</string>
+    <string name="app_detail_label_sha256">SHA-256</string>
+    <string name="app_detail_label_system_app">Системное приложение</string>
     <string name="app_detail_label_valid_from">Действителен с</string>
     <string name="app_detail_label_valid_until">Действителен до</string>
-    <string name="app_detail_copied_toast">%1$s скопировано</string>
+    <string name="app_detail_no_signature_found">Подпись не найдена или не удалось выполнить анализ.</string>
+    <string name="app_detail_system_app_no">Нет</string>
+    <string name="app_detail_system_app_yes">Да</string>
+    <string name="app_detail_tap_to_copy">Нажмите на поле для копирования</string>
+    <string name="app_list_about">О приложении</string>
+    <string name="app_list_hide_system_apps">Скрыть системные приложения</string>
+    <string name="app_list_more_options_content_description">Ещё</string>
+    <string name="app_list_no_apps_found">Приложения не найдены</string>
+    <string name="app_list_no_apps_found_matching">Приложения по запросу «%1$s» не найдены</string>
+    <string name="app_list_search_clear_content_description">Очистить</string>
+    <string name="app_list_search_placeholder">Поиск приложений или пакетов…</string>
+    <string name="app_list_show_system_apps">Показать системные приложения</string>
 </resources>
