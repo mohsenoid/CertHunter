@@ -2,9 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!--
+        Required to enumerate all installed packages on Android 11+ (API 30+).
+        This is the core function of CertHunter — inspecting certificates of any
+        installed app. A <queries> element cannot be used as a substitute because
+        the app must enumerate all packages, not a predefined set.
+    -->
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
-        tools:ignore="QueryAllPackagesPermission" />
+        tools:ignore="PackageVisibilityPolicy,QueryAllPackagesPermission" />
 
     <application
         android:name=".App"
