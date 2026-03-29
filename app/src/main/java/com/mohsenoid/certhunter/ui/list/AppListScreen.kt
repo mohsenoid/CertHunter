@@ -31,7 +31,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.mohsenoid.certhunter.R
 import com.mohsenoid.certhunter.domain.model.AppItem
 import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
 import com.mohsenoid.certhunter.ui.util.ComponentPreviews
@@ -49,7 +51,7 @@ fun AppListScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("CertHunter") },
+                title = { Text(stringResource(R.string.app_name)) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onPrimary,
@@ -77,19 +79,22 @@ fun AppListScreen(
                                 onSearch = {},
                                 expanded = false,
                                 onExpandedChange = {},
-                                placeholder = { Text("Search apps or packages...") },
+                                placeholder = { Text(stringResource(R.string.app_list_search_placeholder)) },
                                 leadingIcon = {
                                     Icon(Icons.Default.Search, contentDescription = null)
                                 },
                                 trailingIcon = {
                                     if (uiState.searchQuery.isNotEmpty()) {
                                         IconButton(onClick = { onSearchQueryChanged("") }) {
-                                            Icon(Icons.Default.Close, contentDescription = "Clear")
+                                            Icon(Icons.Default.Close, contentDescription = stringResource(R.string.app_list_search_clear_content_description))
                                         }
                                     } else {
                                         Box {
                                             IconButton(onClick = { showMenu = !showMenu }) {
-                                                Icon(Icons.Default.MoreVert, contentDescription = "More")
+                                                Icon(
+                                                    Icons.Default.MoreVert,
+                                                    contentDescription = stringResource(R.string.app_list_more_options_content_description)
+                                                )
                                             }
                                             DropdownMenu(
                                                 expanded = showMenu,
@@ -98,8 +103,8 @@ fun AppListScreen(
                                                 DropdownMenuItem(
                                                     text = {
                                                         Text(
-                                                            if (uiState.showSystemApps) "Hide system apps"
-                                                            else "Show system apps"
+                                                            if (uiState.showSystemApps) stringResource(R.string.app_list_hide_system_apps)
+                                                            else stringResource(R.string.app_list_show_system_apps)
                                                         )
                                                     },
                                                     onClick = {
@@ -136,9 +141,9 @@ fun AppListScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             val message = if (uiState.searchQuery.isBlank()) {
-                                "No apps found"
+                                stringResource(R.string.app_list_no_apps_found)
                             } else {
-                                "No apps found matching \"${uiState.searchQuery}\""
+                                stringResource(R.string.app_list_no_apps_found_matching, uiState.searchQuery)
                             }
                             Text(message, color = MaterialTheme.colorScheme.secondary)
                         }

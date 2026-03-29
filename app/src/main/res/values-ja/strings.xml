@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_list_search_placeholder">アプリまたはパッケージを検索…</string>
+    <string name="app_list_search_clear_content_description">クリア</string>
+    <string name="app_list_more_options_content_description">その他</string>
+    <string name="app_list_hide_system_apps">システムアプリを非表示</string>
+    <string name="app_list_show_system_apps">システムアプリを表示</string>
+    <string name="app_list_no_apps_found">アプリが見つかりません</string>
+    <string name="app_list_no_apps_found_matching">「%1$s」に一致するアプリが見つかりません</string>
+
+    <string name="app_detail_close">閉じる</string>
+    <string name="app_detail_tap_to_copy">フィールドをタップしてコピー</string>
+    <string name="app_detail_no_signature_found">署名が見つからないか、解析できませんでした。</string>
+    <string name="app_detail_label_package_name">パッケージ名</string>
+    <string name="app_detail_label_system_app">システムアプリ</string>
+    <string name="app_detail_system_app_yes">はい</string>
+    <string name="app_detail_system_app_no">いいえ</string>
+    <string name="app_detail_label_sha256">SHA-256</string>
+    <string name="app_detail_label_sha1">SHA-1</string>
+    <string name="app_detail_label_owner">所有者</string>
+    <string name="app_detail_label_issuer">発行者</string>
+    <string name="app_detail_label_serial">シリアル番号</string>
+    <string name="app_detail_label_valid_from">有効開始日</string>
+    <string name="app_detail_label_valid_until">有効期限</string>
+    <string name="app_detail_copied_toast">%1$s をコピーしました</string>
+</resources>

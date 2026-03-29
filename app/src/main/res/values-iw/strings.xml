@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_list_search_placeholder">חיפוש אפליקציות או חבילות…</string>
+    <string name="app_list_search_clear_content_description">נקה</string>
+    <string name="app_list_more_options_content_description">עוד</string>
+    <string name="app_list_hide_system_apps">הסתר אפליקציות מערכת</string>
+    <string name="app_list_show_system_apps">הצג אפליקציות מערכת</string>
+    <string name="app_list_no_apps_found">לא נמצאו אפליקציות</string>
+    <string name="app_list_no_apps_found_matching">לא נמצאו אפליקציות התואמות לـ\"%1$s\"</string>
+
+    <string name="app_detail_close">סגור</string>
+    <string name="app_detail_tap_to_copy">הקש על שדה כלשהו כדי להעתיק</string>
+    <string name="app_detail_no_signature_found">לא נמצאה חתימה או שלא ניתן לנתח אותה.</string>
+    <string name="app_detail_label_package_name">שם החבילה</string>
+    <string name="app_detail_label_system_app">אפליקציית מערכת</string>
+    <string name="app_detail_system_app_yes">כן</string>
+    <string name="app_detail_system_app_no">לא</string>
+    <string name="app_detail_label_sha256">SHA-256</string>
+    <string name="app_detail_label_sha1">SHA-1</string>
+    <string name="app_detail_label_owner">בעלים</string>
+    <string name="app_detail_label_issuer">מנפיק</string>
+    <string name="app_detail_label_serial">מספר סידורי</string>
+    <string name="app_detail_label_valid_from">בתוקף מ־</string>
+    <string name="app_detail_label_valid_until">בתוקף עד</string>
+    <string name="app_detail_copied_toast">%1$s הועתק</string>
+</resources>

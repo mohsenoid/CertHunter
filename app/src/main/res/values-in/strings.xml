@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_list_search_placeholder">Cari aplikasi atau paket…</string>
+    <string name="app_list_search_clear_content_description">Hapus</string>
+    <string name="app_list_more_options_content_description">Lainnya</string>
+    <string name="app_list_hide_system_apps">Sembunyikan aplikasi sistem</string>
+    <string name="app_list_show_system_apps">Tampilkan aplikasi sistem</string>
+    <string name="app_list_no_apps_found">Tidak ada aplikasi ditemukan</string>
+    <string name="app_list_no_apps_found_matching">Tidak ada aplikasi ditemukan untuk \"%1$s\"</string>
+
+    <string name="app_detail_close">Tutup</string>
+    <string name="app_detail_tap_to_copy">Ketuk bidang mana pun untuk menyalin</string>
+    <string name="app_detail_no_signature_found">Tidak ada tanda tangan ditemukan atau tidak dapat diurai.</string>
+    <string name="app_detail_label_package_name">Nama paket</string>
+    <string name="app_detail_label_system_app">Aplikasi sistem</string>
+    <string name="app_detail_system_app_yes">Ya</string>
+    <string name="app_detail_system_app_no">Tidak</string>
+    <string name="app_detail_label_sha256">SHA-256</string>
+    <string name="app_detail_label_sha1">SHA-1</string>
+    <string name="app_detail_label_owner">Pemilik</string>
+    <string name="app_detail_label_issuer">Penerbit</string>
+    <string name="app_detail_label_serial">Nomor seri</string>
+    <string name="app_detail_label_valid_from">Berlaku dari</string>
+    <string name="app_detail_label_valid_until">Berlaku hingga</string>
+    <string name="app_detail_copied_toast">%1$s disalin</string>
+</resources>

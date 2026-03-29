@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_list_search_placeholder">搜索应用或包名…</string>
+    <string name="app_list_search_clear_content_description">清除</string>
+    <string name="app_list_more_options_content_description">更多</string>
+    <string name="app_list_hide_system_apps">隐藏系统应用</string>
+    <string name="app_list_show_system_apps">显示系统应用</string>
+    <string name="app_list_no_apps_found">未找到应用</string>
+    <string name="app_list_no_apps_found_matching">未找到匹配"%1$s"的应用</string>
+
+    <string name="app_detail_close">关闭</string>
+    <string name="app_detail_tap_to_copy">点击任意字段以复制</string>
+    <string name="app_detail_no_signature_found">未找到签名或无法解析。</string>
+    <string name="app_detail_label_package_name">包名</string>
+    <string name="app_detail_label_system_app">系统应用</string>
+    <string name="app_detail_system_app_yes">是</string>
+    <string name="app_detail_system_app_no">否</string>
+    <string name="app_detail_label_sha256">SHA-256</string>
+    <string name="app_detail_label_sha1">SHA-1</string>
+    <string name="app_detail_label_owner">所有者</string>
+    <string name="app_detail_label_issuer">颁发者</string>
+    <string name="app_detail_label_serial">序列号</string>
+    <string name="app_detail_label_valid_from">有效期自</string>
+    <string name="app_detail_label_valid_until">有效期至</string>
+    <string name="app_detail_copied_toast">已复制 %1$s</string>
+</resources>

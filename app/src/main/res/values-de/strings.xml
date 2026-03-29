@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_list_search_placeholder">Apps oder Pakete suchen…</string>
+    <string name="app_list_search_clear_content_description">Löschen</string>
+    <string name="app_list_more_options_content_description">Mehr</string>
+    <string name="app_list_hide_system_apps">Systemapps ausblenden</string>
+    <string name="app_list_show_system_apps">Systemapps anzeigen</string>
+    <string name="app_list_no_apps_found">Keine Apps gefunden</string>
+    <string name="app_list_no_apps_found_matching">Keine Apps gefunden für \"%1$s\"</string>
+
+    <string name="app_detail_close">Schließen</string>
+    <string name="app_detail_tap_to_copy">Feld antippen zum Kopieren</string>
+    <string name="app_detail_no_signature_found">Keine Signatur gefunden oder nicht lesbar.</string>
+    <string name="app_detail_label_package_name">Paketname</string>
+    <string name="app_detail_label_system_app">System-App</string>
+    <string name="app_detail_system_app_yes">Ja</string>
+    <string name="app_detail_system_app_no">Nein</string>
+    <string name="app_detail_label_sha256">SHA-256</string>
+    <string name="app_detail_label_sha1">SHA-1</string>
+    <string name="app_detail_label_owner">Inhaber</string>
+    <string name="app_detail_label_issuer">Aussteller</string>
+    <string name="app_detail_label_serial">Seriennummer</string>
+    <string name="app_detail_label_valid_from">Gültig ab</string>
+    <string name="app_detail_label_valid_until">Gültig bis</string>
+    <string name="app_detail_copied_toast">%1$s kopiert</string>
+</resources>

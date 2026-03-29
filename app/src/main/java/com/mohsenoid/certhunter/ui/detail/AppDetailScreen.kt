@@ -15,9 +15,11 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.mohsenoid.certhunter.R
 import com.mohsenoid.certhunter.domain.model.AppCertificateDetails
 import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
 import com.mohsenoid.certhunter.ui.util.ComponentPreviews
@@ -30,14 +32,14 @@ fun AppDetailScreen(
     AlertDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
-            TextButton(onClick = onDismiss) { Text("Close") }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.app_detail_close)) }
         },
         title = {
             Column {
                 Text(text = uiState.appName, fontWeight = FontWeight.Bold)
                 if (!uiState.isLoading) {
                     Text(
-                        text = "Tap any field to copy",
+                        text = stringResource(R.string.app_detail_tap_to_copy),
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Normal,
                         color = MaterialTheme.colorScheme.secondary,
@@ -51,24 +53,27 @@ fun AppDetailScreen(
                     CircularProgressIndicator()
                 }
             } else if (uiState.details == null) {
-                Text("No signature found or unable to parse.")
+                Text(stringResource(R.string.app_detail_no_signature_found))
             } else {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .verticalScroll(rememberScrollState())
                 ) {
-                    AppDetailRowWidget("Package Name", uiState.packageName)
-                    AppDetailRowWidget("System App", if (uiState.isSystemApp) "Yes" else "No")
+                    AppDetailRowWidget(stringResource(R.string.app_detail_label_package_name), uiState.packageName)
+                    AppDetailRowWidget(
+                        stringResource(R.string.app_detail_label_system_app),
+                        if (uiState.isSystemApp) stringResource(R.string.app_detail_system_app_yes) else stringResource(R.string.app_detail_system_app_no)
+                    )
                     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                    AppDetailRowWidget("SHA-256", uiState.details.sha256)
-                    AppDetailRowWidget("SHA-1", uiState.details.sha1)
+                    AppDetailRowWidget(stringResource(R.string.app_detail_label_sha256), uiState.details.sha256)
+                    AppDetailRowWidget(stringResource(R.string.app_detail_label_sha1), uiState.details.sha1)
                     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                    AppDetailRowWidget("Owner", uiState.details.owner)
-                    AppDetailRowWidget("Issuer", uiState.details.issuer)
-                    AppDetailRowWidget("Serial", uiState.details.serialNumber)
-                    AppDetailRowWidget("Valid From", uiState.details.validFrom)
-                    AppDetailRowWidget("Valid Until", uiState.details.validUntil)
+                    AppDetailRowWidget(stringResource(R.string.app_detail_label_owner), uiState.details.owner)
+                    AppDetailRowWidget(stringResource(R.string.app_detail_label_issuer), uiState.details.issuer)
+                    AppDetailRowWidget(stringResource(R.string.app_detail_label_serial), uiState.details.serialNumber)
+                    AppDetailRowWidget(stringResource(R.string.app_detail_label_valid_from), uiState.details.validFrom)
+                    AppDetailRowWidget(stringResource(R.string.app_detail_label_valid_until), uiState.details.validUntil)
                 }
             }
         }

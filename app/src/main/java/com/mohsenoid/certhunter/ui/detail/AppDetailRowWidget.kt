@@ -14,15 +14,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.mohsenoid.certhunter.R
 import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
 import com.mohsenoid.certhunter.ui.util.ComponentPreviews
 
 @Composable
 fun AppDetailRowWidget(label: String, value: String) {
     val context = LocalContext.current
+    val copiedMessage = stringResource(R.string.app_detail_copied_toast, label)
 
     Column(
         modifier = Modifier
@@ -32,7 +35,7 @@ fun AppDetailRowWidget(label: String, value: String) {
                 val clip = ClipData.newPlainText(label, value)
                 clipboard.setPrimaryClip(clip)
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-                    Toast.makeText(context, "$label copied", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, copiedMessage, Toast.LENGTH_SHORT).show()
                 }
             }
             .padding(vertical = 8.dp, horizontal = 4.dp)

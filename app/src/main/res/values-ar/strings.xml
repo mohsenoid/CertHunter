@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_list_search_placeholder">ابحث عن تطبيقات أو حزم…</string>
+    <string name="app_list_search_clear_content_description">مسح</string>
+    <string name="app_list_more_options_content_description">المزيد</string>
+    <string name="app_list_hide_system_apps">إخفاء تطبيقات النظام</string>
+    <string name="app_list_show_system_apps">إظهار تطبيقات النظام</string>
+    <string name="app_list_no_apps_found">لم يتم العثور على تطبيقات</string>
+    <string name="app_list_no_apps_found_matching">لم يتم العثور على تطبيقات مطابقة لـ \"%1$s\"</string>
+
+    <string name="app_detail_close">إغلاق</string>
+    <string name="app_detail_tap_to_copy">اضغط على أي حقل للنسخ</string>
+    <string name="app_detail_no_signature_found">لم يتم العثور على توقيع أو تعذّر تحليله.</string>
+    <string name="app_detail_label_package_name">اسم الحزمة</string>
+    <string name="app_detail_label_system_app">تطبيق نظام</string>
+    <string name="app_detail_system_app_yes">نعم</string>
+    <string name="app_detail_system_app_no">لا</string>
+    <string name="app_detail_label_sha256">SHA-256</string>
+    <string name="app_detail_label_sha1">SHA-1</string>
+    <string name="app_detail_label_owner">المالك</string>
+    <string name="app_detail_label_issuer">الجهة المصدِرة</string>
+    <string name="app_detail_label_serial">الرقم التسلسلي</string>
+    <string name="app_detail_label_valid_from">صالح من</string>
+    <string name="app_detail_label_valid_until">صالح حتى</string>
+    <string name="app_detail_copied_toast">تم نسخ %1$s</string>
+</resources>
