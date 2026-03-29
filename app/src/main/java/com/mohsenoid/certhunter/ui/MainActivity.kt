@@ -1,9 +1,8 @@
-package com.mohsenoid.certhunter
+package com.mohsenoid.certhunter.ui
 
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
@@ -44,12 +43,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -59,17 +54,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.createBitmap
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.mohsenoid.certhunter.domain.model.AppItem
+import com.mohsenoid.certhunter.domain.model.CertificateDetails
 import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.ByteArrayInputStream
-import java.security.MessageDigest
-import java.security.cert.CertificateFactory
-import java.security.cert.X509Certificate
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,92 +72,26 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// --- Data Models ---
-
-data class AppItem(
-    val name: String,
-    val packageName: String,
-    val icon: Drawable?
-)
-
-data class CertificateDetails(
-    val sha256: String,
-    val sha1: String,
-    val owner: String,
-    val issuer: String,
-    val serialNumber: String,
-    val validFrom: String,
-    val validUntil: String
-)
-
-// --- UI Composables ---
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppListScreen() {
-    val context = LocalContext.current
-
-    // Master list of all apps
-    var allApps by remember { mutableStateOf<List<AppItem>>(emptyList()) }
-    // Loading state
-    var isLoading by remember { mutableStateOf(true) }
-    // Search query state
-    var searchQuery by remember { mutableStateOf("") }
-
-    val coroutineScope = rememberCoroutineScope()
-
-    // Selected app for dialog
-    var selectedApp by remember { mutableStateOf<AppItem?>(null) }
-    var selectedAppCert by remember { mutableStateOf<CertificateDetails?>(null) }
-    var isLoadingCert by remember { mutableStateOf(false) }
-
-    // Load apps asynchronously
-    LaunchedEffect(Unit) {
-        withContext(Dispatchers.IO) {
-            val pm = context.packageManager
-            val packages = pm.getInstalledPackages(PackageManager.GET_META_DATA)
-
-            val apps = packages.map {
-                AppItem(
-                    name = it.applicationInfo?.loadLabel(pm).toString(),
-                    packageName = it.packageName,
-                    icon = it.applicationInfo?.loadIcon(pm)
-                )
-            }.sortedBy { it.name.lowercase() }
-
-            allApps = apps
-            isLoading = false
-        }
-    }
-
-    // Dynamic filtering based on search query
-    val filteredList = remember(searchQuery, allApps) {
-        if (searchQuery.isBlank()) {
-            allApps
-        } else {
-            allApps.filter {
-                it.name.contains(searchQuery, ignoreCase = true) ||
-                        it.packageName.contains(searchQuery, ignoreCase = true)
-            }
-        }
-    }
+fun AppListScreen(viewModel: AppViewModel = viewModel()) {
+    val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = {
             Column {
                 TopAppBar(title = { Text("CertHunter") })
-                // Search Bar Area
                 OutlinedTextField(
-                    value = searchQuery,
-                    onValueChange = { searchQuery = it },
+                    value = uiState.searchQuery,
+                    onValueChange = viewModel::onSearchQueryChanged,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp),
                     placeholder = { Text("Search apps or packages...") },
                     leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
                     trailingIcon = {
-                        if (searchQuery.isNotEmpty()) {
-                            IconButton(onClick = { searchQuery = "" }) {
+                        if (uiState.searchQuery.isNotEmpty()) {
+                            IconButton(onClick = { viewModel.onSearchQueryChanged("") }) {
                                 Icon(Icons.Default.Close, contentDescription = "Clear")
                             }
                         }
@@ -180,7 +102,7 @@ fun AppListScreen() {
             }
         }
     ) { padding ->
-        if (isLoading) {
+        if (uiState.isLoadingApps) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
@@ -190,21 +112,11 @@ fun AppListScreen() {
                     .fillMaxSize()
                     .padding(padding)
             ) {
-                items(filteredList) { app ->
-                    AppRow(app = app) {
-                        selectedApp = app
-                        selectedAppCert = null
-                        isLoadingCert = true
-                        coroutineScope.launch(Dispatchers.IO) {
-                            val cert = getAppCertificateDetails(context.packageManager, app.packageName)
-                            isLoadingCert = false
-                            selectedAppCert = cert
-                        }
-                    }
+                items(uiState.filteredApps) { app ->
+                    AppRow(app = app, onClick = { viewModel.onAppSelected(app) })
                 }
 
-                // Show a helpful message if search returns nothing
-                if (filteredList.isEmpty() && !isLoading) {
+                if (uiState.filteredApps.isEmpty()) {
                     item {
                         Box(
                             modifier = Modifier
@@ -213,7 +125,7 @@ fun AppListScreen() {
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                "No apps found matching \"$searchQuery\"",
+                                "No apps found matching \"${uiState.searchQuery}\"",
                                 color = MaterialTheme.colorScheme.secondary
                             )
                         }
@@ -223,13 +135,12 @@ fun AppListScreen() {
         }
     }
 
-    // Show Dialog
-    selectedApp?.let { app ->
+    uiState.selectedApp?.let { app ->
         CertificateDialog(
             app = app,
-            details = selectedAppCert,
-            isLoading = isLoadingCert,
-            onDismiss = { selectedApp = null }
+            details = uiState.selectedAppCert,
+            isLoading = uiState.isLoadingCert,
+            onDismiss = viewModel::onDialogDismissed
         )
     }
 }
@@ -243,7 +154,6 @@ fun AppRow(app: AppItem, onClick: () -> Unit) {
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Render the app icon
         if (app.icon != null) {
             Image(
                 painter = BitmapPainter(drawableToBitmap(app.icon).asImageBitmap()),
@@ -287,7 +197,6 @@ fun CertificateDialog(app: AppItem, details: CertificateDetails?, isLoading: Boo
             } else if (details == null) {
                 Text("No signature found or unable to parse.")
             } else {
-                // Make the content scrollable in case strings are very long
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -297,9 +206,7 @@ fun CertificateDialog(app: AppItem, details: CertificateDetails?, isLoading: Boo
                     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
                     DetailRow("SHA-256", details.sha256)
                     DetailRow("SHA-1", details.sha1)
-
                     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-
                     DetailRow("Owner", details.owner)
                     DetailRow("Issuer", details.issuer)
                     DetailRow("Serial", details.serialNumber)
@@ -319,23 +226,14 @@ fun DetailRow(label: String, value: String) {
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                // 1. Get Clipboard Manager
                 val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-
-                // 2. Create ClipData with the label as the tag and value as the text
                 val clip = ClipData.newPlainText(label, value)
-
-                // 3. Set the clip
                 clipboard.setPrimaryClip(clip)
-
-                // 4. Show Feedback
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-                    // Only show Toast on Android 12 and below.
-                    // Android 13+ shows a system UI confirmation automatically.
                     Toast.makeText(context, "$label copied", Toast.LENGTH_SHORT).show()
                 }
             }
-            .padding(vertical = 8.dp, horizontal = 4.dp) // Add padding for touch target
+            .padding(vertical = 8.dp, horizontal = 4.dp)
     ) {
         Text(
             text = label,
@@ -351,60 +249,6 @@ fun DetailRow(label: String, value: String) {
     }
 }
 
-// --- Helper Functions ---
-
-fun getAppCertificateDetails(pm: PackageManager, packageName: String): CertificateDetails? {
-    try {
-        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            PackageManager.GET_SIGNING_CERTIFICATES
-        } else {
-            @Suppress("DEPRECATION")
-            PackageManager.GET_SIGNATURES
-        }
-
-        val pkgInfo = pm.getPackageInfo(packageName, flags)
-
-        // Extract raw signature bytes
-        val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            pkgInfo.signingInfo?.apkContentsSigners ?: pkgInfo.signingInfo?.signingCertificateHistory
-        } else {
-            @Suppress("DEPRECATION")
-            pkgInfo.signatures
-        }
-
-        if (signatures.isNullOrEmpty()) return null
-
-        // Parse the first signature into an X509Certificate object
-        val rawBytes = signatures[0].toByteArray()
-        val certFactory = CertificateFactory.getInstance("X509")
-        val x509Cert = certFactory.generateCertificate(ByteArrayInputStream(rawBytes)) as X509Certificate
-
-        // Format Dates
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-
-        return CertificateDetails(
-            sha256 = hashBytes(rawBytes, "SHA-256"),
-            sha1 = hashBytes(rawBytes, "SHA-1"),
-            owner = x509Cert.subjectDN.name,
-            issuer = x509Cert.issuerDN.name,
-            serialNumber = x509Cert.serialNumber.toString(16).uppercase(),
-            validFrom = dateFormat.format(x509Cert.notBefore),
-            validUntil = dateFormat.format(x509Cert.notAfter)
-        )
-
-    } catch (e: Exception) {
-        e.printStackTrace()
-        return null
-    }
-}
-
-fun hashBytes(bytes: ByteArray, algorithm: String): String {
-    val md = MessageDigest.getInstance(algorithm)
-    val digest = md.digest(bytes)
-    return digest.joinToString(":") { "%02X".format(it) }
-}
-
-// Helper to convert Drawable to Bitmap for Compose
 fun drawableToBitmap(drawable: Drawable): Bitmap {
     if (drawable is android.graphics.drawable.BitmapDrawable) {
         return drawable.bitmap
