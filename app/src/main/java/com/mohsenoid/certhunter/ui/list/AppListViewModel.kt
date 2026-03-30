@@ -30,6 +30,14 @@ class AppListViewModel(
         }
     }
 
+    fun onRefresh() {
+        viewModelScope.launch(dispatcherProvider.io) {
+            _uiState.update { it.copy(isRefreshing = true) }
+            val apps = repository.getInstalledApps()
+            _uiState.update { it.copy(allApps = apps, isRefreshing = false) }
+        }
+    }
+
     fun onSearchQueryChanged(query: String) {
         _uiState.update { it.copy(searchQuery = query) }
     }

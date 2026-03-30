@@ -6,6 +6,7 @@ import com.mohsenoid.certhunter.domain.model.AppSortOrder
 data class AppListUiModel(
     val allApps: List<AppItem> = emptyList(),
     val isLoadingApps: Boolean = true,
+    val isRefreshing: Boolean = false,
     val searchQuery: String = "",
     val showSystemApps: Boolean = true,
     val sortOrder: AppSortOrder = AppSortOrder.NameAscending,

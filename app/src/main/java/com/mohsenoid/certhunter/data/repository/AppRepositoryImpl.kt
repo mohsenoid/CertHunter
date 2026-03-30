@@ -39,6 +39,7 @@ class AppRepositoryImpl(
     private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
     override suspend fun getInstalledApps(): List<AppItem> = withContext(dispatcherProvider.io) {
+        logger.d("Getting installed apps")
         val packages = packageManager.getInstalledPackages(PackageManager.GET_META_DATA)
         packages
             .mapNotNull { pkgInfo -> pkgInfo.applicationInfo?.toAppItem(pkgInfo.packageName, pkgInfo.firstInstallTime) }
@@ -47,6 +48,7 @@ class AppRepositoryImpl(
 
     override suspend fun getAppDetails(packageName: String): Result<AppDetails, AppDetailsError> =
         withContext(dispatcherProvider.io) {
+            logger.d("Getting app details for $packageName")
             runCatching {
                 val firstInstallTime = packageManager.getPackageInfo(packageName, 0).firstInstallTime
                 packageManager.getApplicationInfo(packageName, 0).toAppItem(packageName, firstInstallTime)
@@ -65,6 +67,7 @@ class AppRepositoryImpl(
 
     private fun getCertificateDetails(packageName: String): Result<AppCertificateDetails, CertificateError> =
         runCatching {
+            logger.d("Getting certificate details for $packageName")
             val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 PackageManager.GET_SIGNING_CERTIFICATES
             } else {

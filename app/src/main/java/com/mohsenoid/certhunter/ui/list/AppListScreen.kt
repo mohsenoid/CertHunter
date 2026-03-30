@@ -27,6 +27,7 @@ import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,6 +52,7 @@ fun AppListScreen(
     onAppClick: (AppItem) -> Unit,
     onToggleSystemApps: () -> Unit,
     onSortOrderChanged: (AppSortOrder) -> Unit,
+    onRefresh: () -> Unit,
     onAboutClick: () -> Unit,
 ) {
     var showMenu by remember { mutableStateOf(false) }
@@ -77,113 +79,120 @@ fun AppListScreen(
                 CircularProgressIndicator()
             }
         } else {
-            LazyColumn(
+            PullToRefreshBox(
+                isRefreshing = uiState.isRefreshing,
+                onRefresh = onRefresh,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(padding)
+                    .padding(padding),
             ) {
-                stickyHeader {
-                    SearchBar(
-                        inputField = {
-                            SearchBarDefaults.InputField(
-                                query = uiState.searchQuery,
-                                onQueryChange = onSearchQueryChanged,
-                                onSearch = {},
-                                expanded = false,
-                                onExpandedChange = {},
-                                placeholder = { Text(stringResource(R.string.app_list_search_placeholder)) },
-                                leadingIcon = {
-                                    Icon(Icons.Default.Search, contentDescription = null)
-                                },
-                                trailingIcon = {
-                                    if (uiState.searchQuery.isNotEmpty()) {
-                                        IconButton(onClick = { onSearchQueryChanged("") }) {
-                                            Icon(Icons.Default.Close, contentDescription = stringResource(R.string.app_list_search_clear_content_description))
-                                        }
-                                    } else {
-                                        Box {
-                                            IconButton(onClick = { showMenu = !showMenu }) {
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    stickyHeader {
+                        SearchBar(
+                            inputField = {
+                                SearchBarDefaults.InputField(
+                                    query = uiState.searchQuery,
+                                    onQueryChange = onSearchQueryChanged,
+                                    onSearch = {},
+                                    expanded = false,
+                                    onExpandedChange = {},
+                                    placeholder = { Text(stringResource(R.string.app_list_search_placeholder)) },
+                                    leadingIcon = {
+                                        Icon(Icons.Default.Search, contentDescription = null)
+                                    },
+                                    trailingIcon = {
+                                        if (uiState.searchQuery.isNotEmpty()) {
+                                            IconButton(onClick = { onSearchQueryChanged("") }) {
                                                 Icon(
-                                                    Icons.Default.MoreVert,
-                                                    contentDescription = stringResource(R.string.app_list_more_options_content_description)
+                                                    Icons.Default.Close,
+                                                    contentDescription = stringResource(R.string.app_list_search_clear_content_description)
                                                 )
                                             }
-                                            DropdownMenu(
-                                                expanded = showMenu,
-                                                onDismissRequest = { showMenu = false }
-                                            ) {
-                                                DropdownMenuItem(
-                                                    text = {
-                                                        Text(
-                                                            if (uiState.showSystemApps) stringResource(R.string.app_list_hide_system_apps)
-                                                            else stringResource(R.string.app_list_show_system_apps)
-                                                        )
-                                                    },
-                                                    onClick = {
-                                                        onToggleSystemApps()
-                                                        showMenu = false
-                                                    }
-                                                )
-                                                HorizontalDivider()
-                                                AppSortOrder.entries.forEach { order ->
+                                        } else {
+                                            Box {
+                                                IconButton(onClick = { showMenu = !showMenu }) {
+                                                    Icon(
+                                                        Icons.Default.MoreVert,
+                                                        contentDescription = stringResource(R.string.app_list_more_options_content_description)
+                                                    )
+                                                }
+                                                DropdownMenu(
+                                                    expanded = showMenu,
+                                                    onDismissRequest = { showMenu = false }
+                                                ) {
                                                     DropdownMenuItem(
                                                         text = {
                                                             Text(
-                                                                stringResource(
-                                                                    when (order) {
-                                                                        AppSortOrder.NameAscending -> R.string.app_list_sort_name_asc
-                                                                        AppSortOrder.NameDescending -> R.string.app_list_sort_name_desc
-                                                                        AppSortOrder.InstallDateNewest -> R.string.app_list_sort_install_newest
-                                                                        AppSortOrder.InstallDateOldest -> R.string.app_list_sort_install_oldest
-                                                                    }
-                                                                )
+                                                                if (uiState.showSystemApps) stringResource(R.string.app_list_hide_system_apps)
+                                                                else stringResource(R.string.app_list_show_system_apps)
                                                             )
                                                         },
-                                                        trailingIcon = {
-                                                            if (uiState.sortOrder == order) {
-                                                                Icon(Icons.Default.Check, contentDescription = null)
-                                                            }
-                                                        },
                                                         onClick = {
-                                                            onSortOrderChanged(order)
+                                                            onToggleSystemApps()
                                                             showMenu = false
                                                         }
                                                     )
+                                                    HorizontalDivider()
+                                                    AppSortOrder.entries.forEach { order ->
+                                                        DropdownMenuItem(
+                                                            text = {
+                                                                Text(
+                                                                    stringResource(
+                                                                        when (order) {
+                                                                            AppSortOrder.NameAscending -> R.string.app_list_sort_name_asc
+                                                                            AppSortOrder.NameDescending -> R.string.app_list_sort_name_desc
+                                                                            AppSortOrder.InstallDateNewest -> R.string.app_list_sort_install_newest
+                                                                            AppSortOrder.InstallDateOldest -> R.string.app_list_sort_install_oldest
+                                                                        }
+                                                                    )
+                                                                )
+                                                            },
+                                                            trailingIcon = {
+                                                                if (uiState.sortOrder == order) {
+                                                                    Icon(Icons.Default.Check, contentDescription = null)
+                                                                }
+                                                            },
+                                                            onClick = {
+                                                                onSortOrderChanged(order)
+                                                                showMenu = false
+                                                            }
+                                                        )
+                                                    }
                                                 }
                                             }
                                         }
                                     }
-                                }
-                            )
-                        },
-                        expanded = false,
-                        onExpandedChange = {},
-                        shape = MaterialTheme.shapes.extraLarge,
-                        windowInsets = WindowInsets(0),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 8.dp)
-                    ) {}
-                }
-
-                items(uiState.filteredApps) { app ->
-                    AppListRow(app = app, onClick = { onAppClick(app) })
-                }
-
-                if (uiState.filteredApps.isEmpty()) {
-                    item {
-                        Box(
+                                )
+                            },
+                            expanded = false,
+                            onExpandedChange = {},
+                            shape = MaterialTheme.shapes.extraLarge,
+                            windowInsets = WindowInsets(0),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(32.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            val message = if (uiState.searchQuery.isBlank()) {
-                                stringResource(R.string.app_list_no_apps_found)
-                            } else {
-                                stringResource(R.string.app_list_no_apps_found_matching, uiState.searchQuery)
+                                .padding(horizontal = 16.dp, vertical = 8.dp)
+                        ) {}
+                    }
+
+                    items(uiState.filteredApps) { app ->
+                        AppListRow(app = app, onClick = { onAppClick(app) })
+                    }
+
+                    if (uiState.filteredApps.isEmpty()) {
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(32.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                val message = if (uiState.searchQuery.isBlank()) {
+                                    stringResource(R.string.app_list_no_apps_found)
+                                } else {
+                                    stringResource(R.string.app_list_no_apps_found_matching, uiState.searchQuery)
+                                }
+                                Text(message, color = MaterialTheme.colorScheme.secondary)
                             }
-                            Text(message, color = MaterialTheme.colorScheme.secondary)
                         }
                     }
                 }
@@ -208,6 +217,7 @@ private fun AppListScreenPreview() {
             onAppClick = {},
             onToggleSystemApps = {},
             onSortOrderChanged = {},
+            onRefresh = {},
             onAboutClick = {},
         )
     }
@@ -223,6 +233,7 @@ private fun AppListScreenLoadingPreview() {
             onAppClick = {},
             onToggleSystemApps = {},
             onSortOrderChanged = {},
+            onRefresh = {},
             onAboutClick = {},
         )
     }
@@ -242,6 +253,7 @@ private fun AppListScreenEmptyPreview() {
             onAppClick = {},
             onToggleSystemApps = {},
             onSortOrderChanged = {},
+            onRefresh = {},
             onAboutClick = {},
         )
     }
