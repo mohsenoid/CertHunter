@@ -49,7 +49,7 @@ android {
     signingConfigs {
         create("release") {
             if (!releaseStoreFile.isNullOrBlank()) {
-                storeFile = file(releaseStoreFile)
+                storeFile = rootProject.file(releaseStoreFile)
             }
             storePassword = releaseStorePassword
             keyAlias = releaseKeyAlias
