@@ -42,6 +42,10 @@ jobs:
             echo "is_tag=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+          if [[ ! "$TAG" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Invalid version format '$TAG'. Expected vMAJOR.MINOR.PATCH (e.g. v1.3.0)."
+            exit 1
+          fi
           VERSION="${TAG#v}"
           MAJOR=$(echo "$VERSION" | cut -d. -f1)
           MINOR=$(echo "$VERSION" | cut -d. -f2)
