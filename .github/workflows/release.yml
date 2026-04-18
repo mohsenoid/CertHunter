@@ -60,18 +60,6 @@ jobs:
           sed -i "s/versionCode = [0-9]*/versionCode = $VERSION_CODE/" app/build.gradle.kts
           sed -i "s/versionName = \"[^\"]*\"/versionName = \"$VERSION_NAME\"/" app/build.gradle.kts
 
-      - name: Commit version bump back to main
-        if: steps.version.outputs.is_tag == 'true'
-        env:
-          VERSION_NAME: ${{ steps.version.outputs.version_name }}
-          VERSION_CODE: ${{ steps.version.outputs.version_code }}
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add app/build.gradle.kts
-          git diff --cached --quiet || git commit -m "chore: bump version to $VERSION_NAME (versionCode $VERSION_CODE) [skip ci]"
-          git push origin HEAD:main
-
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -129,3 +117,15 @@ jobs:
           files: |
             app/build/outputs/bundle/release/*.aab
             app/build/outputs/apk/release/*.apk
+
+      - name: Commit version bump back to main
+        if: steps.version.outputs.is_tag == 'true'
+        env:
+          VERSION_NAME: ${{ steps.version.outputs.version_name }}
+          VERSION_CODE: ${{ steps.version.outputs.version_code }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add app/build.gradle.kts
+          git diff --cached --quiet || git commit -m "chore: bump version to $VERSION_NAME (versionCode $VERSION_CODE) [skip ci]"
+          git push origin HEAD:main
