@@ -2,6 +2,26 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.detekt)
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    config.setFrom("$rootDir/config/detekt/detekt.yml")
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    jvmTarget = "11"
+    autoCorrect = true
+    reports {
+        html.required = true
+        xml.required = false
+        txt.required = false
+    }
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
+    jvmTarget = "11"
 }
 
 android {
@@ -64,6 +84,7 @@ dependencies {
     coreLibraryDesugaring(libs.android.tools.desugar.jdk.libs)
     implementation(libs.kotlin.result)
     implementation(libs.coil.compose)
+    detektPlugins(libs.detekt.formatting)
     testImplementation(libs.junit)
     testImplementation(libs.junit5.api)
     testRuntimeOnly(libs.junit5.engine)

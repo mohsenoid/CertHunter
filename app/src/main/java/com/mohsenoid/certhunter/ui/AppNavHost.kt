@@ -32,7 +32,9 @@ fun AppNavHost() {
     )
 
     (backStack.lastOrNull() as? AppDetail)?.let { detail ->
-        val detailViewModel: AppDetailViewModel = koinViewModel(key = detail.packageName) { parametersOf(detail.packageName) }
+        val detailViewModel: AppDetailViewModel = koinViewModel(key = detail.packageName) {
+            parametersOf(detail.packageName)
+        }
         val detailUiState by detailViewModel.uiState.collectAsState()
         AppDetailScreen(
             uiState = detailUiState,

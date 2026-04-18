@@ -11,7 +11,7 @@ class FakeAppRepository : AppRepository {
     var shouldThrow: Boolean = false
 
     override suspend fun getInstalledApps(): List<AppItem> {
-        if (shouldThrow) throw RuntimeException("Failed to load apps")
+        if (shouldThrow) error("Failed to load apps")
         return appsResult
     }
 

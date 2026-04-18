@@ -55,57 +55,63 @@ fun AppDetailScreen(
                 }
             }
         },
-        text = {
-            if (uiState.isLoading) {
-                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-            } else if (uiState.error != null) {
-                Text(
-                    stringResource(
-                        when (uiState.error) {
-                            is AppDetailsError.ItemLoadFailed -> R.string.app_detail_package_load_error
-                            AppDetailsError.CertificateNotFound -> R.string.app_detail_no_signature_found
-                            is AppDetailsError.CertificateParseFailed -> R.string.app_detail_certificate_error
-                        }
-                    )
-                )
-            } else if (uiState.certificates.isEmpty()) {
-                Text(stringResource(R.string.app_detail_no_signature_found))
-            } else {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    AppDetailRow(stringResource(R.string.app_detail_label_package_name), uiState.packageName)
-                    AppDetailRow(
-                        stringResource(R.string.app_detail_label_system_app),
-                        if (uiState.isSystemApp) stringResource(R.string.app_detail_system_app_yes)
-                        else stringResource(R.string.app_detail_system_app_no),
-                    )
+        text = { AppDetailContent(uiState) },
+    )
+}
 
-                    uiState.certificates.forEachIndexed { index, cert ->
-                        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                        if (uiState.certificates.size > 1) {
-                            Text(
-                                text = stringResource(R.string.app_detail_signer_label, index + 1),
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 12.sp,
-                                color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(bottom = 4.dp),
-                            )
-                        }
-                        CertificateBlock(cert)
-                    }
-
-                    if (uiState.historicalCertificates.isNotEmpty()) {
-                        HistoricalCertificatesSection(uiState.historicalCertificates)
-                    }
+@Composable
+private fun AppDetailContent(uiState: AppDetailUiModel) {
+    if (uiState.isLoading) {
+        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+    } else if (uiState.error != null) {
+        Text(
+            stringResource(
+                when (uiState.error) {
+                    is AppDetailsError.ItemLoadFailed -> R.string.app_detail_package_load_error
+                    AppDetailsError.CertificateNotFound -> R.string.app_detail_no_signature_found
+                    is AppDetailsError.CertificateParseFailed -> R.string.app_detail_certificate_error
                 }
+            )
+        )
+    } else if (uiState.certificates.isEmpty()) {
+        Text(stringResource(R.string.app_detail_no_signature_found))
+    } else {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+        ) {
+            AppDetailRow(stringResource(R.string.app_detail_label_package_name), uiState.packageName)
+            AppDetailRow(
+                stringResource(R.string.app_detail_label_system_app),
+                if (uiState.isSystemApp) {
+                    stringResource(R.string.app_detail_system_app_yes)
+                } else {
+                    stringResource(R.string.app_detail_system_app_no)
+                },
+            )
+
+            uiState.certificates.forEachIndexed { index, cert ->
+                HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                if (uiState.certificates.size > 1) {
+                    Text(
+                        text = stringResource(R.string.app_detail_signer_label, index + 1),
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(bottom = 4.dp),
+                    )
+                }
+                CertificateBlock(cert)
+            }
+
+            if (uiState.historicalCertificates.isNotEmpty()) {
+                HistoricalCertificatesSection(uiState.historicalCertificates)
             }
         }
-    )
+    }
 }
 
 @Composable
@@ -147,7 +153,9 @@ private fun HistoricalCertificatesSection(certs: List<AppCertificateDetails>) {
                 modifier = Modifier.padding(bottom = 4.dp),
             )
             CertificateBlock(cert)
-            if (index < certs.lastIndex) HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+            if (index < certs.lastIndex) {
+                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+            }
         }
     }
 }

@@ -1,0 +1,50 @@
+build:
+  maxIssues: 0
+
+config:
+  validation: true
+  warningsAsErrors: false
+
+formatting:
+  active: true
+  android: true
+  autoCorrect: true
+
+  MaximumLineLength:
+    active: true
+    maxLineLength: 160
+
+naming:
+  FunctionNaming:
+    # Jetpack Compose requires @Composable functions to use PascalCase.
+    ignoreAnnotated:
+      - 'Composable'
+
+style:
+  MaxLineLength:
+    active: true
+    maxLineLength: 160
+
+  MagicNumber:
+    # Hex color literals in property declarations are self-documenting (e.g. Color(0xFF006493)).
+    ignorePropertyDeclaration: true
+    ignoreAnnotation: true
+    ignoreEnums: true
+    ignoreRanges: true
+
+  UnusedPrivateMember:
+    # @Preview-annotated functions are used by the IDE Compose Preview tool,
+    # not by the compiler, so they appear unused to static analysis.
+    ignoreAnnotated:
+      - 'Preview'
+      - 'ComponentPreviews'
+      - 'DarkLightPreviews'
+      - 'ScreenPreviews'
+      - 'ScreenMinimalPreviews'
+
+complexity:
+  LongParameterList:
+    # Composable screen functions must receive all callbacks as parameters;
+    # a wrapper object would obscure intent without reducing complexity.
+    ignoreAnnotated:
+      - 'Composable'

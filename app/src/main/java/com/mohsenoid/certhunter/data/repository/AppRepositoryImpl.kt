@@ -32,6 +32,11 @@ class AppRepositoryImpl(
     private val dispatcherProvider: DispatcherProvider,
 ) : AppRepository {
 
+    companion object {
+        private const val EXPIRY_WARNING_DAYS = 30
+        private const val HEX_RADIX = 16
+    }
+
     private val logger = object : DefaultKLogWriter {
         override val tag: String = "AppRepositoryImpl"
     }
@@ -93,6 +98,7 @@ class AppRepositoryImpl(
                     logger.w("No certificate found for $packageName", throwable = e)
                     CertificateError.NotFound
                 }
+
                 else -> {
                     logger.e("Failed to get certificate for $packageName", throwable = e)
                     CertificateError.ParseError(e)
@@ -117,6 +123,7 @@ class AppRepositoryImpl(
         } else {
             @Suppress("DEPRECATION")
             val pkgInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+
             @Suppress("DEPRECATION")
             val bytes = pkgInfo.signatures?.map { it.toByteArray() } ?: emptyList()
             Pair(bytes, emptyList())
@@ -130,7 +137,7 @@ class AppRepositoryImpl(
         val daysLeft = ChronoUnit.DAYS.between(LocalDate.now(), expiryDate)
         val validity = when {
             daysLeft < 0 -> CertificateValidity.Expired
-            daysLeft <= 30 -> CertificateValidity.ExpiringSoon(daysLeft)
+            daysLeft <= EXPIRY_WARNING_DAYS -> CertificateValidity.ExpiringSoon(daysLeft)
             else -> CertificateValidity.Valid
         }
         return AppCertificateDetails(
@@ -138,8 +145,11 @@ class AppRepositoryImpl(
             sha1 = hashBytes(rawBytes, "SHA-1"),
             owner = x509Cert.subjectX500Principal.name,
             issuer = x509Cert.issuerX500Principal.name,
-            serialNumber = x509Cert.serialNumber.toString(16).uppercase(),
-            validFrom = x509Cert.notBefore.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(dateFormatter),
+            serialNumber = x509Cert.serialNumber.toString(HEX_RADIX).uppercase(),
+            validFrom = x509Cert.notBefore.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate()
+                .format(dateFormatter),
             validUntil = expiryDate.format(dateFormatter),
             validity = validity,
         )

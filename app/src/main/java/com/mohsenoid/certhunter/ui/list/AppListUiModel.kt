@@ -17,8 +17,8 @@ data class AppListUiModel(
             .filter { showSystemApps || !it.isSystemApp }
             .filter {
                 searchQuery.isBlank() ||
-                        it.name.contains(searchQuery, ignoreCase = true) ||
-                        it.packageName.contains(searchQuery, ignoreCase = true)
+                    it.name.contains(searchQuery, ignoreCase = true) ||
+                    it.packageName.contains(searchQuery, ignoreCase = true)
             }
             .let { list ->
                 when (sortOrder) {

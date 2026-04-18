@@ -14,5 +14,11 @@ val appModule = module {
     single<DispatcherProvider> { DefaultDispatcherProvider() }
     single<AppRepository> { AppRepositoryImpl(androidContext().packageManager, get()) }
     viewModel { AppListViewModel(repository = get(), dispatcherProvider = get()) }
-    viewModel { (packageName: String) -> AppDetailViewModel(packageName = packageName, repository = get(), dispatcherProvider = get()) }
+    viewModel { (packageName: String) ->
+        AppDetailViewModel(
+            packageName = packageName,
+            repository = get(),
+            dispatcherProvider = get(),
+        )
+    }
 }
