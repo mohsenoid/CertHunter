@@ -38,119 +38,146 @@ class AppListViewModelTest {
         dispatcherProvider = TestDispatcherProvider(testDispatcher),
     )
 
-    // --- Initial load ---
+    @Test
+    fun `given repository throws on load when initial load then hasLoadError is true and loading is false`() =
+        runTest(testDispatcher) {
+            // given
+            fakeRepository.shouldThrow = true
+            val viewModel = createViewModel()
+
+            // when
+            advanceUntilIdle()
+
+            // then
+            assertFalse(viewModel.uiState.value.isLoadingApps)
+            assertTrue(viewModel.uiState.value.hasLoadError)
+        }
 
     @Test
-    fun `initial load failure sets hasLoadError and clears loading`() = runTest(testDispatcher) {
-        fakeRepository.shouldThrow = true
-        val viewModel = createViewModel()
-        advanceUntilIdle()
+    fun `given repository throws on load when initial load then hasRefreshError remains false`() =
+        runTest(testDispatcher) {
+            // given
+            fakeRepository.shouldThrow = true
+            val viewModel = createViewModel()
 
-        assertFalse(viewModel.uiState.value.isLoadingApps)
-        assertTrue(viewModel.uiState.value.hasLoadError)
-    }
+            // when
+            advanceUntilIdle()
 
-    @Test
-    fun `initial load failure does not set hasRefreshError`() = runTest(testDispatcher) {
-        fakeRepository.shouldThrow = true
-        val viewModel = createViewModel()
-        advanceUntilIdle()
-
-        assertFalse(viewModel.uiState.value.hasRefreshError)
-    }
+            // then
+            assertFalse(viewModel.uiState.value.hasRefreshError)
+        }
 
     @Test
-    fun `successful load clears loading and populates apps`() = runTest(testDispatcher) {
-        fakeRepository.appsResult = listOf(
-            AppItem("CertHunter", "com.mohsenoid.certhunter", false),
-            AppItem("Settings", "com.android.settings", true),
-        )
-        val viewModel = createViewModel()
-        advanceUntilIdle()
+    fun `given repository succeeds when initial load then loading is false and apps are populated`() =
+        runTest(testDispatcher) {
+            // given
+            fakeRepository.appsResult = listOf(
+                AppItem("CertHunter", "com.mohsenoid.certhunter", false),
+                AppItem("Settings", "com.android.settings", true),
+            )
+            val viewModel = createViewModel()
 
-        assertFalse(viewModel.uiState.value.isLoadingApps)
-        assertTrue(viewModel.uiState.value.allApps.isNotEmpty())
-        assertFalse(viewModel.uiState.value.hasLoadError)
-    }
+            // when
+            advanceUntilIdle()
 
-    // --- Refresh failure ---
-
-    @Test
-    fun `refresh failure sets hasRefreshError and clears refreshing`() = runTest(testDispatcher) {
-        fakeRepository.appsResult = listOf(AppItem("App", "com.app", false))
-        val viewModel = createViewModel()
-        advanceUntilIdle()
-
-        fakeRepository.shouldThrow = true
-        viewModel.onRefresh()
-        advanceUntilIdle()
-
-        assertFalse(viewModel.uiState.value.isRefreshing)
-        assertTrue(viewModel.uiState.value.hasRefreshError)
-    }
+            // then
+            assertFalse(viewModel.uiState.value.isLoadingApps)
+            assertTrue(viewModel.uiState.value.allApps.isNotEmpty())
+            assertFalse(viewModel.uiState.value.hasLoadError)
+        }
 
     @Test
-    fun `refresh failure does not set hasLoadError`() = runTest(testDispatcher) {
-        fakeRepository.appsResult = listOf(AppItem("App", "com.app", false))
-        val viewModel = createViewModel()
-        advanceUntilIdle()
+    fun `given loaded apps and repository throws on refresh when onRefresh then hasRefreshError is true and refreshing is false`() =
+        runTest(testDispatcher) {
+            // given
+            fakeRepository.appsResult = listOf(AppItem("App", "com.app", false))
+            val viewModel = createViewModel()
+            advanceUntilIdle()
 
-        fakeRepository.shouldThrow = true
-        viewModel.onRefresh()
-        advanceUntilIdle()
+            // when
+            fakeRepository.shouldThrow = true
+            viewModel.onRefresh()
+            advanceUntilIdle()
 
-        assertFalse(viewModel.uiState.value.hasLoadError)
-    }
-
-    @Test
-    fun `refresh failure keeps existing apps visible`() = runTest(testDispatcher) {
-        val existingApps = listOf(AppItem("App", "com.app", false))
-        fakeRepository.appsResult = existingApps
-        val viewModel = createViewModel()
-        advanceUntilIdle()
-
-        fakeRepository.shouldThrow = true
-        viewModel.onRefresh()
-        advanceUntilIdle()
-
-        assertTrue(viewModel.uiState.value.allApps.isNotEmpty())
-        assertTrue(viewModel.uiState.value.allApps == existingApps)
-    }
+            // then
+            assertFalse(viewModel.uiState.value.isRefreshing)
+            assertTrue(viewModel.uiState.value.hasRefreshError)
+        }
 
     @Test
-    fun `successful refresh clears hasRefreshError`() = runTest(testDispatcher) {
-        fakeRepository.appsResult = listOf(AppItem("App", "com.app", false))
-        val viewModel = createViewModel()
-        advanceUntilIdle()
+    fun `given loaded apps and refresh fails when onRefresh then hasLoadError remains false`() =
+        runTest(testDispatcher) {
+            // given
+            fakeRepository.appsResult = listOf(AppItem("App", "com.app", false))
+            val viewModel = createViewModel()
+            advanceUntilIdle()
 
-        fakeRepository.shouldThrow = true
-        viewModel.onRefresh()
-        advanceUntilIdle()
-        assertTrue(viewModel.uiState.value.hasRefreshError)
+            // when
+            fakeRepository.shouldThrow = true
+            viewModel.onRefresh()
+            advanceUntilIdle()
 
-        fakeRepository.shouldThrow = false
-        viewModel.onRefresh()
-        advanceUntilIdle()
-
-        assertFalse(viewModel.uiState.value.hasRefreshError)
-    }
-
-    // --- Retry ---
+            // then
+            assertFalse(viewModel.uiState.value.hasLoadError)
+        }
 
     @Test
-    fun `retry after initial load failure loads apps successfully`() = runTest(testDispatcher) {
-        fakeRepository.shouldThrow = true
-        val viewModel = createViewModel()
-        advanceUntilIdle()
+    fun `given loaded apps and refresh fails when onRefresh then existing apps remain visible`() =
+        runTest(testDispatcher) {
+            // given
+            val existingApps = listOf(AppItem("App", "com.app", false))
+            fakeRepository.appsResult = existingApps
+            val viewModel = createViewModel()
+            advanceUntilIdle()
 
-        assertTrue(viewModel.uiState.value.hasLoadError)
+            // when
+            fakeRepository.shouldThrow = true
+            viewModel.onRefresh()
+            advanceUntilIdle()
 
-        fakeRepository.shouldThrow = false
-        fakeRepository.appsResult = listOf(AppItem("App", "com.app", false))
-        viewModel.onRetry()
-        advanceUntilIdle()
+            // then
+            assertTrue(viewModel.uiState.value.allApps.isNotEmpty())
+            assertTrue(viewModel.uiState.value.allApps == existingApps)
+        }
 
-        assertFalse(viewModel.uiState.value.hasLoadError)
-        assertTrue(viewModel.uiState.value.allApps.isNotEmpty())
-    }
+    @Test
+    fun `given refresh error when successful refresh then hasRefreshError is cleared`() =
+        runTest(testDispatcher) {
+            // given
+            fakeRepository.appsResult = listOf(AppItem("App", "com.app", false))
+            val viewModel = createViewModel()
+            advanceUntilIdle()
+            fakeRepository.shouldThrow = true
+            viewModel.onRefresh()
+            advanceUntilIdle()
+            assertTrue(viewModel.uiState.value.hasRefreshError)
+
+            // when
+            fakeRepository.shouldThrow = false
+            viewModel.onRefresh()
+            advanceUntilIdle()
+
+            // then
+            assertFalse(viewModel.uiState.value.hasRefreshError)
+        }
+
+    @Test
+    fun `given initial load error when onRetry with working repository then apps are loaded and error is cleared`() =
+        runTest(testDispatcher) {
+            // given
+            fakeRepository.shouldThrow = true
+            val viewModel = createViewModel()
+            advanceUntilIdle()
+            assertTrue(viewModel.uiState.value.hasLoadError)
+
+            // when
+            fakeRepository.shouldThrow = false
+            fakeRepository.appsResult = listOf(AppItem("App", "com.app", false))
+            viewModel.onRetry()
+            advanceUntilIdle()
+
+            // then
+            assertFalse(viewModel.uiState.value.hasLoadError)
+            assertTrue(viewModel.uiState.value.allApps.isNotEmpty())
+        }
 }

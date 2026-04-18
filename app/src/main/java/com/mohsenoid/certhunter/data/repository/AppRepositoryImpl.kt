@@ -30,6 +30,7 @@ import java.time.temporal.ChronoUnit
 class AppRepositoryImpl(
     private val packageManager: PackageManager,
     private val dispatcherProvider: DispatcherProvider,
+    private val sdkVersion: Int = Build.VERSION.SDK_INT,
 ) : AppRepository {
 
     companion object {
@@ -107,7 +108,7 @@ class AppRepositoryImpl(
         }
 
     private fun getSignerBytes(packageName: String): Pair<List<ByteArray>, List<ByteArray>> {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        return if (sdkVersion >= Build.VERSION_CODES.P) {
             val pkgInfo = packageManager.getPackageInfo(
                 packageName,
                 PackageManager.GET_SIGNING_CERTIFICATES,
