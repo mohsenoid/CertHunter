@@ -130,7 +130,11 @@ jobs:
           VERSION_CODE: ${{ steps.version.outputs.version_code }}
         run: |
           git fetch origin main
-          git checkout -B version-bump origin/main
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "::error::Tag commit $GITHUB_SHA is not an ancestor of origin/main — skipping version bump to avoid patching main with code that isn't on it."
+            exit 1
+          fi
+          git checkout -f -B version-bump origin/main
           sed -i "s/versionCode = [0-9]*/versionCode = $VERSION_CODE/" app/build.gradle.kts
           sed -i "s/versionName = \"[^\"]*\"/versionName = \"$VERSION_NAME\"/" app/build.gradle.kts
           git config user.name "github-actions[bot]"
