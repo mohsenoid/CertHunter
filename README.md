@@ -25,7 +25,7 @@ signing certificate fingerprints (SHA-256, SHA-1) and X.509 details of any appli
 - **Concurrency:** Kotlin Coroutines (Dispatchers.IO for background loading)
 - **Security API:** `java.security.MessageDigest`, `java.security.cert.X509Certificate`
 - **Minimum SDK:** 24 (Android 7.0)
-- **Target SDK:** 34 (Android 14)
+- **Target SDK:** 37 (Android 15)
 
 ## 📸 Screenshots
 
@@ -57,7 +57,7 @@ this permission is mandatory.
    Bash
 
    ```
-   git clone https://github.com/your-username/CertHunter.git
+   git clone https://github.com/mohsenoid/CertHunter.git
    ```
 
 2. Open the project in **Android Studio** (Hedgehog or newer recommended).
@@ -81,6 +81,44 @@ val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
     packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
 }
 ```
+
+## 🚢 Release Flow
+
+Releases are triggered manually via GitHub Actions — no tags are pushed by hand. The workflow handles versioning, tagging, Play Store upload, and GitHub Release creation automatically.
+
+### Regular release (from `main`)
+
+1. Ensure `main` is in a releasable state.
+2. Go to **Actions → Release → Run workflow**.
+3. Select branch **`main`**, enter the version (e.g. `1.3.0`), choose **`release`**.
+4. The workflow will:
+   - Validate the version format and that the tag doesn't already exist.
+   - Patch `versionCode` / `versionName` in `app/build.gradle.kts`.
+   - Build a signed AAB and APK.
+   - Upload the AAB as a **draft** to the Play Store **internal testing** track.
+   - Commit the version bump, create tag `v1.3.0` at that commit, and push both.
+   - Create a GitHub Release with the AAB and APK attached.
+5. In **Google Play Console → Internal testing**, review and publish the draft to promote it to testers or production.
+
+### Hotfix release (from a branch)
+
+1. Create a branch from the last release tag: `git checkout -b hotfix/1.2.1 v1.2.0`.
+2. Cherry-pick or commit the fix onto that branch and push it.
+3. Go to **Actions → Release → Run workflow**.
+4. Select the **`hotfix/1.2.1`** branch, enter `1.2.1`, choose **`hotfix`**.
+5. The workflow runs the same steps as above, tagging the hotfix branch commit.
+
+### versionCode formula
+
+`versionCode = MAJOR × 1,000,000 + MINOR × 1,000 + PATCH`
+
+| Version | versionCode |
+|---------|------------|
+| 1.2.0   | 1002000    |
+| 1.3.0   | 1003000    |
+| 1.2.1   | 1002001    |
+
+Hotfix codes are always lower than the next minor release, preserving correct Play Store ordering.
 
 ## 🤝 Contributing
 
