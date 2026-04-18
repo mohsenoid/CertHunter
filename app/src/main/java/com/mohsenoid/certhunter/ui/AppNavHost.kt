@@ -28,6 +28,7 @@ fun AppNavHost() {
         onSortOrderChanged = listViewModel::onSortOrderChanged,
         onRefresh = listViewModel::onRefresh,
         onRetry = listViewModel::onRetry,
+        onDismissRefreshError = listViewModel::onDismissRefreshError,
         onAboutClick = { backStack.add(AppAbout) },
     )
 

@@ -8,6 +8,7 @@ data class AppListUiModel(
     val isLoadingApps: Boolean = true,
     val isRefreshing: Boolean = false,
     val hasLoadError: Boolean = false,
+    val hasRefreshError: Boolean = false,
     val searchQuery: String = "",
     val showSystemApps: Boolean = true,
     val sortOrder: AppSortOrder = AppSortOrder.NameAscending,

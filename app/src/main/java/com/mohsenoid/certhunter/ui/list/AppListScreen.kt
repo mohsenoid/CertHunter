@@ -2,12 +2,9 @@ package com.mohsenoid.certhunter.ui.list
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -17,7 +14,6 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -45,7 +41,9 @@ import androidx.compose.ui.unit.dp
 import com.mohsenoid.certhunter.R
 import com.mohsenoid.certhunter.domain.model.AppItem
 import com.mohsenoid.certhunter.domain.model.AppSortOrder
+import com.mohsenoid.certhunter.ui.list.widget.AppListLoadError
 import com.mohsenoid.certhunter.ui.list.widget.AppListRow
+import com.mohsenoid.certhunter.ui.list.widget.RefreshErrorBanner
 import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
 import com.mohsenoid.certhunter.ui.util.ComponentPreviews
 
@@ -59,6 +57,7 @@ fun AppListScreen(
     onSortOrderChanged: (AppSortOrder) -> Unit,
     onRefresh: () -> Unit,
     onRetry: () -> Unit,
+    onDismissRefreshError: () -> Unit,
     onAboutClick: () -> Unit,
 ) {
     Scaffold(
@@ -83,23 +82,10 @@ fun AppListScreen(
                 CircularProgressIndicator()
             }
         } else if (uiState.hasLoadError) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding),
-                contentAlignment = Alignment.Center,
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = stringResource(R.string.app_list_load_error),
-                        color = MaterialTheme.colorScheme.error,
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Button(onClick = onRetry) {
-                        Text(stringResource(R.string.app_list_retry))
-                    }
-                }
-            }
+            AppListLoadError(
+                onRetry = onRetry,
+                modifier = Modifier.fillMaxSize().padding(padding),
+            )
         } else {
             PullToRefreshBox(
                 isRefreshing = uiState.isRefreshing,
@@ -114,6 +100,7 @@ fun AppListScreen(
                     onAppClick = onAppClick,
                     onToggleSystemApps = onToggleSystemApps,
                     onSortOrderChanged = onSortOrderChanged,
+                    onDismissRefreshError = onDismissRefreshError,
                 )
             }
         }
@@ -128,6 +115,7 @@ private fun AppListContent(
     onAppClick: (AppItem) -> Unit,
     onToggleSystemApps: () -> Unit,
     onSortOrderChanged: (AppSortOrder) -> Unit,
+    onDismissRefreshError: () -> Unit,
 ) {
     var showMenu by remember { mutableStateOf(false) }
 
@@ -141,6 +129,12 @@ private fun AppListContent(
                 onToggleSystemApps = onToggleSystemApps,
                 onSortOrderChanged = onSortOrderChanged,
             )
+        }
+
+        if (uiState.hasRefreshError) {
+            item {
+                RefreshErrorBanner(onDismiss = onDismissRefreshError)
+            }
         }
 
         items(uiState.filteredApps) { app ->
@@ -298,6 +292,7 @@ private fun AppListScreenPreview() {
             onSortOrderChanged = {},
             onRefresh = {},
             onRetry = {},
+            onDismissRefreshError = {},
             onAboutClick = {},
         )
     }
@@ -315,6 +310,7 @@ private fun AppListScreenLoadingPreview() {
             onSortOrderChanged = {},
             onRefresh = {},
             onRetry = {},
+            onDismissRefreshError = {},
             onAboutClick = {},
         )
     }
@@ -332,6 +328,25 @@ private fun AppListScreenErrorPreview() {
             onSortOrderChanged = {},
             onRefresh = {},
             onRetry = {},
+            onDismissRefreshError = {},
+            onAboutClick = {},
+        )
+    }
+}
+
+@ComponentPreviews
+@Composable
+private fun AppListScreenRefreshErrorPreview() {
+    CertHunterTheme {
+        AppListScreen(
+            uiState = AppListUiModel(allApps = previewApps, isLoadingApps = false, hasRefreshError = true),
+            onSearchQueryChanged = {},
+            onAppClick = {},
+            onToggleSystemApps = {},
+            onSortOrderChanged = {},
+            onRefresh = {},
+            onRetry = {},
+            onDismissRefreshError = {},
             onAboutClick = {},
         )
     }
@@ -353,6 +368,7 @@ private fun AppListScreenEmptyPreview() {
             onSortOrderChanged = {},
             onRefresh = {},
             onRetry = {},
+            onDismissRefreshError = {},
             onAboutClick = {},
         )
     }

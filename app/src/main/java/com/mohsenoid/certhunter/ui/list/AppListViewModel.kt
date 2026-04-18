@@ -47,10 +47,10 @@ class AppListViewModel(
             @Suppress("TooGenericExceptionCaught") // PackageManager exposes no specific exception contract
             try {
                 val apps = repository.getInstalledApps()
-                _uiState.update { it.copy(allApps = apps, isRefreshing = false, hasLoadError = false) }
+                _uiState.update { it.copy(allApps = apps, isRefreshing = false, hasRefreshError = false) }
             } catch (e: Exception) {
                 logger.e("Failed to refresh installed apps", throwable = e)
-                _uiState.update { it.copy(isRefreshing = false, hasLoadError = true) }
+                _uiState.update { it.copy(isRefreshing = false, hasRefreshError = true) }
             }
         }
     }
@@ -58,6 +58,10 @@ class AppListViewModel(
     fun onRetry() {
         _uiState.update { it.copy(isLoadingApps = true, hasLoadError = false) }
         loadApps()
+    }
+
+    fun onDismissRefreshError() {
+        _uiState.update { it.copy(hasRefreshError = false) }
     }
 
     fun onSearchQueryChanged(query: String) {
