@@ -35,7 +35,7 @@ Tag v1.3.0 pushed
 1. Checkout (full history)
 2. Resolve version from tag → versionName="1.3.0", versionCode=1003000
 3. Patch app/build.gradle.kts
-4. Commit-back to main [skip ci]
+4. Commit-back to main (after all steps succeed)
 5. Set up JDK 21 + Gradle
 6. Decode keystore from secret
 7. ./gradlew bundleRelease assembleRelease  (signed)
@@ -60,7 +60,7 @@ Hotfixes always have a lower versionCode than their successor minor release, pre
 
 ### Version Commit-Back
 
-After patching `app/build.gradle.kts`, the workflow commits back to `main` using `GITHUB_TOKEN` with `contents: write` permission. Commit message includes `[skip ci]` to prevent CI re-triggering.
+After all build and release steps succeed, the workflow commits back to `main` using `GITHUB_TOKEN` with `contents: write` permission. The commit message includes `[skip ci]` as a conventional marker, but this has no functional effect: the CI workflow (`ci.yml`) only triggers on `pull_request` and `workflow_dispatch`, so a direct push to `main` never runs CI regardless.
 
 Guard: `git diff --cached --quiet || git commit ...` prevents an empty commit if the tag was pushed after a manual version bump.
 
