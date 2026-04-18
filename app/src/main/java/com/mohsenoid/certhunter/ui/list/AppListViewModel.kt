@@ -25,17 +25,30 @@ class AppListViewModel(
 
     private fun loadApps() {
         viewModelScope.launch(dispatcherProvider.io) {
-            val apps = repository.getInstalledApps()
-            _uiState.update { it.copy(allApps = apps, isLoadingApps = false) }
+            try {
+                val apps = repository.getInstalledApps()
+                _uiState.update { it.copy(allApps = apps, isLoadingApps = false, hasLoadError = false) }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(isLoadingApps = false, hasLoadError = true) }
+            }
         }
     }
 
     fun onRefresh() {
         viewModelScope.launch(dispatcherProvider.io) {
             _uiState.update { it.copy(isRefreshing = true) }
-            val apps = repository.getInstalledApps()
-            _uiState.update { it.copy(allApps = apps, isRefreshing = false) }
+            try {
+                val apps = repository.getInstalledApps()
+                _uiState.update { it.copy(allApps = apps, isRefreshing = false, hasLoadError = false) }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(isRefreshing = false, hasLoadError = true) }
+            }
         }
+    }
+
+    fun onRetry() {
+        _uiState.update { it.copy(isLoadingApps = true, hasLoadError = false) }
+        loadApps()
     }
 
     fun onSearchQueryChanged(query: String) {

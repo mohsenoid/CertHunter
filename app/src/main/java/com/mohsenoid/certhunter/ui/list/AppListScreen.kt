@@ -13,6 +13,10 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -53,6 +57,7 @@ fun AppListScreen(
     onToggleSystemApps: () -> Unit,
     onSortOrderChanged: (AppSortOrder) -> Unit,
     onRefresh: () -> Unit,
+    onRetry: () -> Unit,
     onAboutClick: () -> Unit,
 ) {
     var showMenu by remember { mutableStateOf(false) }
@@ -77,6 +82,24 @@ fun AppListScreen(
         if (uiState.isLoadingApps) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
+            }
+        } else if (uiState.hasLoadError) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                contentAlignment = Alignment.Center,
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = stringResource(R.string.app_list_load_error),
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(onClick = onRetry) {
+                        Text(stringResource(R.string.app_list_retry))
+                    }
+                }
             }
         } else {
             PullToRefreshBox(
@@ -218,6 +241,7 @@ private fun AppListScreenPreview() {
             onToggleSystemApps = {},
             onSortOrderChanged = {},
             onRefresh = {},
+            onRetry = {},
             onAboutClick = {},
         )
     }
@@ -234,6 +258,24 @@ private fun AppListScreenLoadingPreview() {
             onToggleSystemApps = {},
             onSortOrderChanged = {},
             onRefresh = {},
+            onRetry = {},
+            onAboutClick = {},
+        )
+    }
+}
+
+@ComponentPreviews
+@Composable
+private fun AppListScreenErrorPreview() {
+    CertHunterTheme {
+        AppListScreen(
+            uiState = AppListUiModel(isLoadingApps = false, hasLoadError = true),
+            onSearchQueryChanged = {},
+            onAppClick = {},
+            onToggleSystemApps = {},
+            onSortOrderChanged = {},
+            onRefresh = {},
+            onRetry = {},
             onAboutClick = {},
         )
     }
@@ -254,6 +296,7 @@ private fun AppListScreenEmptyPreview() {
             onToggleSystemApps = {},
             onSortOrderChanged = {},
             onRefresh = {},
+            onRetry = {},
             onAboutClick = {},
         )
     }

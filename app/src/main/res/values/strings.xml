@@ -40,4 +40,6 @@
     <string name="app_list_sort_name_asc">Name (A→Z)</string>
     <string name="app_list_sort_name_desc">Name (Z→A)</string>
     <string name="app_list_system_label">System</string>
+    <string name="app_list_load_error">Failed to load apps. Please try again.</string>
+    <string name="app_list_retry">Retry</string>
 </resources>

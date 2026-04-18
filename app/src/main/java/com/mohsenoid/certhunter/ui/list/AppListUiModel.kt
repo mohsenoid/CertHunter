@@ -7,6 +7,7 @@ data class AppListUiModel(
     val allApps: List<AppItem> = emptyList(),
     val isLoadingApps: Boolean = true,
     val isRefreshing: Boolean = false,
+    val hasLoadError: Boolean = false,
     val searchQuery: String = "",
     val showSystemApps: Boolean = true,
     val sortOrder: AppSortOrder = AppSortOrder.NameAscending,

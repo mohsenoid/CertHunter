@@ -27,6 +27,7 @@ fun AppNavHost() {
         onToggleSystemApps = listViewModel::onToggleSystemApps,
         onSortOrderChanged = listViewModel::onSortOrderChanged,
         onRefresh = listViewModel::onRefresh,
+        onRetry = listViewModel::onRetry,
         onAboutClick = { backStack.add(AppAbout) },
     )
 
