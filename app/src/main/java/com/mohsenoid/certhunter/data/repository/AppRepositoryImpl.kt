@@ -54,75 +54,96 @@ class AppRepositoryImpl(
                 packageManager.getApplicationInfo(packageName, 0).toAppItem(packageName, firstInstallTime)
             }.mapError { AppDetailsError.ItemLoadFailed(it) }
                 .andThen { item ->
-                    getCertificateDetails(packageName).mapError { error ->
+                    getAllCertificateDetails(packageName).mapError { error ->
                         when (error) {
                             is CertificateError.NotFound -> AppDetailsError.CertificateNotFound
                             is CertificateError.ParseError -> AppDetailsError.CertificateParseFailed(error.cause)
                         }
-                    }.map { certificate ->
-                        AppDetails(item = item, certificate = certificate)
+                    }.map { (certificates, historicalCertificates) ->
+                        AppDetails(
+                            item = item,
+                            certificates = certificates,
+                            historicalCertificates = historicalCertificates,
+                        )
                     }
                 }
         }
 
-    private fun getCertificateDetails(packageName: String): Result<AppCertificateDetails, CertificateError> =
+    /**
+     * Returns Pair(activeCerts, historicalCerts).
+     * On API 28+ this correctly distinguishes multi-signers from rotation history.
+     * On API < 28 all signatures are treated as active (no rotation API available).
+     */
+    private fun getAllCertificateDetails(
+        packageName: String,
+    ): Result<Pair<List<AppCertificateDetails>, List<AppCertificateDetails>>, CertificateError> =
         runCatching {
             logger.d("Getting certificate details for $packageName")
-            val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                PackageManager.GET_SIGNING_CERTIFICATES
-            } else {
-                @Suppress("DEPRECATION")
-                PackageManager.GET_SIGNATURES
-            }
 
-            val pkgInfo = packageManager.getPackageInfo(packageName, flags)
+            val (activeBytes, historicalBytes) = getSignerBytes(packageName)
 
-            val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                pkgInfo.signingInfo?.apkContentsSigners
-                    ?: pkgInfo.signingInfo?.signingCertificateHistory
-            } else {
-                @Suppress("DEPRECATION")
-                pkgInfo.signatures
-            }
+            if (activeBytes.isEmpty()) throw NoSuchElementException("No signatures for $packageName")
 
-            if (signatures.isNullOrEmpty()) throw NoSuchElementException("No signatures for $packageName")
-
-            val rawBytes = signatures[0].toByteArray()
-            val certFactory = CertificateFactory.getInstance("X509")
-            val x509Cert =
-                certFactory.generateCertificate(ByteArrayInputStream(rawBytes)) as X509Certificate
-
-            val expiryDate = x509Cert.notAfter.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-            val daysLeft = ChronoUnit.DAYS.between(LocalDate.now(), expiryDate)
-            val validity = when {
-                daysLeft < 0 -> CertificateValidity.Expired
-                daysLeft <= 30 -> CertificateValidity.ExpiringSoon(daysLeft)
-                else -> CertificateValidity.Valid
-            }
-
-            AppCertificateDetails(
-                sha256 = hashBytes(rawBytes, "SHA-256"),
-                sha1 = hashBytes(rawBytes, "SHA-1"),
-                owner = x509Cert.subjectX500Principal.name,
-                issuer = x509Cert.issuerX500Principal.name,
-                serialNumber = x509Cert.serialNumber.toString(16).uppercase(),
-                validFrom = x509Cert.notBefore.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(dateFormatter),
-                validUntil = expiryDate.format(dateFormatter),
-                validity = validity,
-            )
+            val active = activeBytes.map { parseCertificate(it) }
+            val historical = historicalBytes.map { parseCertificate(it) }
+            Pair(active, historical)
         }.mapError { e ->
             when (e) {
                 is NoSuchElementException -> {
                     logger.w("No certificate found for $packageName", throwable = e)
                     CertificateError.NotFound
                 }
-
                 else -> {
                     logger.e("Failed to get certificate for $packageName", throwable = e)
                     CertificateError.ParseError(e)
                 }
             }
         }
+
+    private fun getSignerBytes(packageName: String): Pair<List<ByteArray>, List<ByteArray>> {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val pkgInfo = packageManager.getPackageInfo(
+                packageName,
+                PackageManager.GET_SIGNING_CERTIFICATES,
+            )
+            val signingInfo = pkgInfo.signingInfo
+            val currentBytes = signingInfo?.apkContentsSigners?.map { it.toByteArray() } ?: emptyList()
+            val historyBytes = signingInfo?.signingCertificateHistory?.map { it.toByteArray() } ?: emptyList()
+            SignerSelector.select(
+                isMultiSigned = signingInfo?.hasMultipleSigners() == true,
+                currentSignerBytes = currentBytes,
+                historyBytes = historyBytes,
+            )
+        } else {
+            @Suppress("DEPRECATION")
+            val pkgInfo = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
+            @Suppress("DEPRECATION")
+            val bytes = pkgInfo.signatures?.map { it.toByteArray() } ?: emptyList()
+            Pair(bytes, emptyList())
+        }
+    }
+
+    private fun parseCertificate(rawBytes: ByteArray): AppCertificateDetails {
+        val certFactory = CertificateFactory.getInstance("X509")
+        val x509Cert = certFactory.generateCertificate(ByteArrayInputStream(rawBytes)) as X509Certificate
+        val expiryDate = x509Cert.notAfter.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+        val daysLeft = ChronoUnit.DAYS.between(LocalDate.now(), expiryDate)
+        val validity = when {
+            daysLeft < 0 -> CertificateValidity.Expired
+            daysLeft <= 30 -> CertificateValidity.ExpiringSoon(daysLeft)
+            else -> CertificateValidity.Valid
+        }
+        return AppCertificateDetails(
+            sha256 = hashBytes(rawBytes, "SHA-256"),
+            sha1 = hashBytes(rawBytes, "SHA-1"),
+            owner = x509Cert.subjectX500Principal.name,
+            issuer = x509Cert.issuerX500Principal.name,
+            serialNumber = x509Cert.serialNumber.toString(16).uppercase(),
+            validFrom = x509Cert.notBefore.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(dateFormatter),
+            validUntil = expiryDate.format(dateFormatter),
+            validity = validity,
+        )
+    }
 
     private fun ApplicationInfo.toAppItem(packageName: String, firstInstallTime: Long): AppItem = AppItem(
         name = loadLabel(packageManager).toString(),
@@ -133,7 +154,6 @@ class AppRepositoryImpl(
 
     private fun hashBytes(bytes: ByteArray, algorithm: String): String {
         val md = MessageDigest.getInstance(algorithm)
-        val digest = md.digest(bytes)
-        return digest.joinToString(":") { "%02X".format(it) }
+        return md.digest(bytes).joinToString(":") { "%02X".format(it) }
     }
 }

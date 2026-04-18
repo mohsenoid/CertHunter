@@ -42,4 +42,8 @@
     <string name="app_list_system_label">System</string>
     <string name="app_list_load_error">Failed to load apps. Please try again.</string>
     <string name="app_list_retry">Retry</string>
+    <string name="app_detail_signer_label">Signer %1$d</string>
+    <string name="app_detail_history_show">Show signing history (%1$d rotated)</string>
+    <string name="app_detail_history_hide">Hide signing history (%1$d rotated)</string>
+    <string name="app_detail_history_entry_label">Historical cert %1$d</string>
 </resources>

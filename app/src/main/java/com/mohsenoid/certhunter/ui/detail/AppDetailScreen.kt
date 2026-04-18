@@ -13,6 +13,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -66,7 +70,7 @@ fun AppDetailScreen(
                         }
                     )
                 )
-            } else if (uiState.details == null) {
+            } else if (uiState.certificates.isEmpty()) {
                 Text(stringResource(R.string.app_detail_no_signature_found))
             } else {
                 Column(
@@ -77,22 +81,75 @@ fun AppDetailScreen(
                     AppDetailRow(stringResource(R.string.app_detail_label_package_name), uiState.packageName)
                     AppDetailRow(
                         stringResource(R.string.app_detail_label_system_app),
-                        if (uiState.isSystemApp) stringResource(R.string.app_detail_system_app_yes) else stringResource(R.string.app_detail_system_app_no)
+                        if (uiState.isSystemApp) stringResource(R.string.app_detail_system_app_yes)
+                        else stringResource(R.string.app_detail_system_app_no),
                     )
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                    AppDetailRow(stringResource(R.string.app_detail_label_sha256), uiState.details.sha256)
-                    AppDetailRow(stringResource(R.string.app_detail_label_sha1), uiState.details.sha1)
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                    AppDetailRow(stringResource(R.string.app_detail_label_owner), uiState.details.owner)
-                    AppDetailRow(stringResource(R.string.app_detail_label_issuer), uiState.details.issuer)
-                    AppDetailRow(stringResource(R.string.app_detail_label_serial), uiState.details.serialNumber)
-                    AppDetailRow(stringResource(R.string.app_detail_label_valid_from), uiState.details.validFrom)
-                    AppDetailRow(stringResource(R.string.app_detail_label_valid_until), uiState.details.validUntil)
-                    CertificateValidityBadge(uiState.details.validity)
+
+                    uiState.certificates.forEachIndexed { index, cert ->
+                        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                        if (uiState.certificates.size > 1) {
+                            Text(
+                                text = stringResource(R.string.app_detail_signer_label, index + 1),
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 12.sp,
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.padding(bottom = 4.dp),
+                            )
+                        }
+                        CertificateBlock(cert)
+                    }
+
+                    if (uiState.historicalCertificates.isNotEmpty()) {
+                        HistoricalCertificatesSection(uiState.historicalCertificates)
+                    }
                 }
             }
         }
     )
+}
+
+@Composable
+private fun CertificateBlock(cert: AppCertificateDetails) {
+    AppDetailRow(stringResource(R.string.app_detail_label_sha256), cert.sha256)
+    AppDetailRow(stringResource(R.string.app_detail_label_sha1), cert.sha1)
+    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+    AppDetailRow(stringResource(R.string.app_detail_label_owner), cert.owner)
+    AppDetailRow(stringResource(R.string.app_detail_label_issuer), cert.issuer)
+    AppDetailRow(stringResource(R.string.app_detail_label_serial), cert.serialNumber)
+    AppDetailRow(stringResource(R.string.app_detail_label_valid_from), cert.validFrom)
+    AppDetailRow(stringResource(R.string.app_detail_label_valid_until), cert.validUntil)
+    CertificateValidityBadge(cert.validity)
+}
+
+@Composable
+private fun HistoricalCertificatesSection(certs: List<AppCertificateDetails>) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+    TextButton(
+        onClick = { expanded = !expanded },
+        modifier = Modifier.padding(horizontal = 0.dp),
+    ) {
+        Text(
+            text = stringResource(
+                if (expanded) R.string.app_detail_history_hide else R.string.app_detail_history_show,
+                certs.size,
+            ),
+            fontSize = 12.sp,
+        )
+    }
+    if (expanded) {
+        certs.forEachIndexed { index, cert ->
+            Text(
+                text = stringResource(R.string.app_detail_history_entry_label, index + 1),
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.padding(bottom = 4.dp),
+            )
+            CertificateBlock(cert)
+            if (index < certs.lastIndex) HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+        }
+    }
 }
 
 private val previewCert = AppCertificateDetails(
@@ -106,6 +163,15 @@ private val previewCert = AppCertificateDetails(
     validity = CertificateValidity.Valid,
 )
 
+private val previewOldCert = previewCert.copy(
+    sha256 = "B2:C3:D4:E5:F6:A1:B2:C3:D4:E5:F6:A1:B2:C3:D4:E5",
+    sha1 = "B2:C3:D4:E5:F6:A1:B2:C3:D4:E5",
+    owner = "CN=Old Cert, O=Example Corp, C=US",
+    validFrom = "2018-01-01",
+    validUntil = "2023-01-01",
+    validity = CertificateValidity.Expired,
+)
+
 @ComponentPreviews
 @Composable
 private fun AppDetailScreenPreview() {
@@ -116,7 +182,42 @@ private fun AppDetailScreenPreview() {
                 packageName = "com.mohsenoid.certhunter",
                 appName = "CertHunter",
                 isSystemApp = false,
-                details = previewCert,
+                certificates = listOf(previewCert),
+            ),
+            onDismiss = {},
+        )
+    }
+}
+
+@ComponentPreviews
+@Composable
+private fun AppDetailScreenMultiSignerPreview() {
+    CertHunterTheme {
+        AppDetailScreen(
+            uiState = AppDetailUiModel(
+                isLoading = false,
+                packageName = "com.mohsenoid.certhunter",
+                appName = "CertHunter",
+                isSystemApp = false,
+                certificates = listOf(previewCert, previewOldCert),
+            ),
+            onDismiss = {},
+        )
+    }
+}
+
+@ComponentPreviews
+@Composable
+private fun AppDetailScreenWithHistoryPreview() {
+    CertHunterTheme {
+        AppDetailScreen(
+            uiState = AppDetailUiModel(
+                isLoading = false,
+                packageName = "com.mohsenoid.certhunter",
+                appName = "CertHunter",
+                isSystemApp = false,
+                certificates = listOf(previewCert),
+                historicalCertificates = listOf(previewOldCert),
             ),
             onDismiss = {},
         )
@@ -139,7 +240,7 @@ private fun AppDetailScreenLoadingPreview() {
 private fun AppDetailScreenNoDetailsPreview() {
     CertHunterTheme {
         AppDetailScreen(
-            uiState = AppDetailUiModel(isLoading = false, appName = "CertHunter", details = null),
+            uiState = AppDetailUiModel(isLoading = false, appName = "CertHunter"),
             onDismiss = {},
         )
     }

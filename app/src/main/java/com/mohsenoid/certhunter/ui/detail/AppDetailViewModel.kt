@@ -32,7 +32,8 @@ class AppDetailViewModel(
                     isLoading = false,
                     appName = result.fold({ it.item.name }, { packageName }),
                     isSystemApp = result.fold({ it.item.isSystemApp }, { false }),
-                    details = result.fold({ it.certificate }, { null }),
+                    certificates = result.fold({ it.certificates }, { emptyList() }),
+                    historicalCertificates = result.fold({ it.historicalCertificates }, { emptyList() }),
                     error = result.fold({ null }, { it }),
                     packageName = packageName,
                 )

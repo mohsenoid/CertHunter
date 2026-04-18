@@ -8,6 +8,7 @@ data class AppDetailUiModel(
     val packageName: String = "",
     val appName: String = "",
     val isSystemApp: Boolean = false,
-    val details: AppCertificateDetails? = null,
+    val certificates: List<AppCertificateDetails> = emptyList(),
+    val historicalCertificates: List<AppCertificateDetails> = emptyList(),
     val error: AppDetailsError? = null,
 )
