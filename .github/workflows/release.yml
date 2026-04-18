@@ -3,16 +3,14 @@ name: Release
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: 'Version to release (e.g. 1.3.0)'
-        required: true
-      release_type:
-        description: 'Release type'
+      bump_type:
+        description: 'Version bump type'
         required: true
         type: choice
         options:
-          - release
-          - hotfix
+          - minor
+          - patch
+          - major
 
 jobs:
   release:
@@ -26,37 +24,38 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Validate inputs and branch
+      - name: Compute version and validate branch
         id: version
         env:
-          INPUT_VERSION: ${{ github.event.inputs.version }}
-          RELEASE_TYPE: ${{ github.event.inputs.release_type }}
+          BUMP_TYPE: ${{ github.event.inputs.bump_type }}
           BRANCH: ${{ github.ref_name }}
         run: |
-          VERSION="${INPUT_VERSION#v}"
-          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "::error::Invalid version '$INPUT_VERSION'. Expected MAJOR.MINOR.PATCH (e.g. 1.3.0)."
+          # major/minor releases must run from main; patch can run from any branch
+          if [[ "$BUMP_TYPE" != "patch" && "$BRANCH" != "main" ]]; then
+            echo "::error::$BUMP_TYPE release must be triggered from main (current branch: $BRANCH)."
             exit 1
           fi
 
-          if [[ "$RELEASE_TYPE" == "release" && "$BRANCH" != "main" ]]; then
-            echo "::error::Release type 'release' must be triggered from main (current branch: $BRANCH)."
-            exit 1
-          fi
-          if [[ "$RELEASE_TYPE" == "hotfix" && "$BRANCH" == "main" ]]; then
-            echo "::error::Release type 'hotfix' must be triggered from a hotfix branch, not main."
-            exit 1
-          fi
+          # Read current version from build.gradle.kts
+          CURRENT=$(grep 'versionName = ' app/build.gradle.kts | sed 's/.*versionName = "\([^"]*\)".*/\1/')
+          MAJOR=$(echo "$CURRENT" | cut -d. -f1)
+          MINOR=$(echo "$CURRENT" | cut -d. -f2)
+          PATCH=$(echo "$CURRENT" | cut -d. -f3)
 
+          case "$BUMP_TYPE" in
+            major) MAJOR=$(( MAJOR + 1 )); MINOR=0; PATCH=0 ;;
+            minor) MINOR=$(( MINOR + 1 )); PATCH=0 ;;
+            patch) PATCH=$(( PATCH + 1 )) ;;
+          esac
+
+          VERSION="$MAJOR.$MINOR.$PATCH"
           TAG="v$VERSION"
+
           if git fetch origin "refs/tags/$TAG" 2>/dev/null; then
-            echo "::error::Tag $TAG already exists. Bump the version."
+            echo "::error::Tag $TAG already exists."
             exit 1
           fi
 
-          MAJOR=$(echo "$VERSION" | cut -d. -f1)
-          MINOR=$(echo "$VERSION" | cut -d. -f2)
-          PATCH=$(echo "$VERSION" | cut -d. -f3)
           VERSION_CODE=$(( MAJOR * 1000000 + MINOR * 1000 + PATCH ))
           echo "version_name=$VERSION" >> "$GITHUB_OUTPUT"
           echo "version_code=$VERSION_CODE" >> "$GITHUB_OUTPUT"
