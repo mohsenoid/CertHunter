@@ -30,10 +30,16 @@ jobs:
           BUMP_TYPE: ${{ github.event.inputs.bump_type }}
           BRANCH: ${{ github.ref_name }}
         run: |
-          # major/minor releases must run from main; patch can run from any branch
-          if [[ "$BUMP_TYPE" != "patch" && "$BRANCH" != "main" ]]; then
-            echo "::error::$BUMP_TYPE release must be triggered from main (current branch: $BRANCH)."
-            exit 1
+          # major/minor must run from main; patch must run from main or a hotfix/* branch
+          if [[ "$BRANCH" != "main" ]]; then
+            if [[ "$BUMP_TYPE" != "patch" ]]; then
+              echo "::error::$BUMP_TYPE release must be triggered from main (current branch: $BRANCH)."
+              exit 1
+            fi
+            if [[ "$BRANCH" != hotfix/* ]]; then
+              echo "::error::Patch releases from non-main branches must use a hotfix/* branch (current branch: $BRANCH)."
+              exit 1
+            fi
           fi
 
           # Read current version from build.gradle.kts
@@ -109,15 +115,6 @@ jobs:
           path: app/build/outputs/apk/release/*.apk
           retention-days: 30
 
-      - name: Upload to Play Store internal track (draft)
-        uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJsonPlainText: ${{ secrets.PLAY_STORE_JSON_KEY }}
-          packageName: com.mohsenoid.certhunter
-          releaseFiles: app/build/outputs/bundle/release/*.aab
-          track: internal
-          status: draft
-
       - name: Commit version bump, create and push tag
         env:
           VERSION_NAME: ${{ steps.version.outputs.version_name }}
@@ -131,6 +128,15 @@ jobs:
           git tag "$TAG"
           git push origin HEAD
           git push origin "$TAG"
+
+      - name: Upload to Play Store internal track (draft)
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_STORE_JSON_KEY }}
+          packageName: com.mohsenoid.certhunter
+          releaseFiles: app/build/outputs/bundle/release/*.aab
+          track: internal
+          status: draft
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
