@@ -47,19 +47,19 @@ fun AppDetailRow(label: String, value: String) {
                     Toast.makeText(context, copiedMessage, Toast.LENGTH_SHORT).show()
                 }
             }
-            .padding(vertical = 8.dp, horizontal = 4.dp)
+            .padding(vertical = 8.dp, horizontal = 4.dp),
     ) {
         Text(
             text = label,
             fontWeight = FontWeight.SemiBold,
             fontSize = 11.sp,
-            color = MaterialTheme.colorScheme.secondary
+            color = MaterialTheme.colorScheme.secondary,
         )
         Text(
             text = value,
             fontSize = 12.sp,
             lineHeight = 14.sp,
-            color = MaterialTheme.colorScheme.secondary
+            color = MaterialTheme.colorScheme.secondary,
         )
     }
 }

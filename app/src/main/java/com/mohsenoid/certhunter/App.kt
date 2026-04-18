@@ -21,7 +21,7 @@ class App : Application() {
         Coil.setImageLoader(
             ImageLoader.Builder(this)
                 .components { add(AppIconFetcher.Factory()) }
-                .build()
+                .build(),
         )
     }
 }

@@ -42,7 +42,7 @@ fun AppAboutScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
-                .padding(bottom = 32.dp)
+                .padding(bottom = 32.dp),
         ) {
             Text(
                 text = stringResource(R.string.app_name),
@@ -86,7 +86,7 @@ private fun AppAboutRowWidget(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 4.dp)
+            .padding(vertical = 8.dp, horizontal = 4.dp),
     ) {
         Text(
             text = label,

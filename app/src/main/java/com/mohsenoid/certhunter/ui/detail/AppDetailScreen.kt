@@ -72,8 +72,8 @@ private fun AppDetailContent(uiState: AppDetailUiModel) {
                     is AppDetailsError.ItemLoadFailed -> R.string.app_detail_package_load_error
                     AppDetailsError.CertificateNotFound -> R.string.app_detail_no_signature_found
                     is AppDetailsError.CertificateParseFailed -> R.string.app_detail_certificate_error
-                }
-            )
+                },
+            ),
         )
     } else if (uiState.certificates.isEmpty()) {
         Text(stringResource(R.string.app_detail_no_signature_found))
@@ -81,7 +81,7 @@ private fun AppDetailContent(uiState: AppDetailUiModel) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
         ) {
             AppDetailRow(stringResource(R.string.app_detail_label_package_name), uiState.packageName)
             AppDetailRow(

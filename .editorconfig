@@ -1,0 +1,24 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 4
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{kt,kts}]
+max_line_length = 160
+# Align Android Studio's continuation indent with ktlint's expectation.
+# Android Studio defaults to 8 (double-indent); ktlint expects 4.
+ij_kotlin_continuation_indent_size = 4
+continuation_indent_size = 4
+# Require trailing commas on both declaration and call sites.
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+ktlint_standard_trailing-comma-on-declaration-site = always
+ktlint_standard_trailing-comma-on-call-site = always
+
+[*.md]
+trim_trailing_whitespace = false

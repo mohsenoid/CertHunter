@@ -50,7 +50,7 @@ fun CertificateValidityBadge(validity: CertificateValidity) {
             .clip(MaterialTheme.shapes.large)
             .background(backgroundColor)
             .border(1.dp, contentColor.copy(alpha = 0.3f), MaterialTheme.shapes.large)
-            .padding(horizontal = 10.dp, vertical = 4.dp)
+            .padding(horizontal = 10.dp, vertical = 4.dp),
     ) {
         Text(
             text = label,

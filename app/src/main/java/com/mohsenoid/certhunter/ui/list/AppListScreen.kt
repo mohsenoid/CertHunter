@@ -74,9 +74,9 @@ fun AppListScreen(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onPrimary,
                     actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
-                )
+                ),
             )
-        }
+        },
     ) { padding ->
         if (uiState.isLoadingApps) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -153,7 +153,7 @@ private fun AppListContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(32.dp),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     val message = if (uiState.searchQuery.isBlank()) {
                         stringResource(R.string.app_list_no_apps_found)
@@ -204,7 +204,7 @@ private fun AppListSearchBar(
                             onSortOrderChanged = onSortOrderChanged,
                         )
                     }
-                }
+                },
             )
         },
         expanded = false,
@@ -213,7 +213,7 @@ private fun AppListSearchBar(
         windowInsets = WindowInsets(0),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
     ) {}
 }
 
@@ -229,12 +229,12 @@ private fun AppListSortMenu(
         IconButton(onClick = { onShowMenuChange(!showMenu) }) {
             Icon(
                 Icons.Default.MoreVert,
-                contentDescription = stringResource(R.string.app_list_more_options_content_description)
+                contentDescription = stringResource(R.string.app_list_more_options_content_description),
             )
         }
         DropdownMenu(
             expanded = showMenu,
-            onDismissRequest = { onShowMenuChange(false) }
+            onDismissRequest = { onShowMenuChange(false) },
         ) {
             DropdownMenuItem(
                 text = {
@@ -244,14 +244,14 @@ private fun AppListSortMenu(
                                 R.string.app_list_hide_system_apps
                             } else {
                                 R.string.app_list_show_system_apps
-                            }
-                        )
+                            },
+                        ),
                     )
                 },
                 onClick = {
                     onToggleSystemApps()
                     onShowMenuChange(false)
-                }
+                },
             )
             HorizontalDivider()
             AppSortOrder.entries.forEach { order ->
@@ -265,7 +265,7 @@ private fun AppListSortMenu(
                     onClick = {
                         onSortOrderChanged(order)
                         onShowMenuChange(false)
-                    }
+                    },
                 )
             }
         }

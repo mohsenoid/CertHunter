@@ -61,7 +61,7 @@ fun AppListRow(app: AppItem, onClick: () -> Unit) {
                                 color = MaterialTheme.colorScheme.outline,
                                 shape = MaterialTheme.shapes.large,
                             )
-                            .padding(horizontal = 8.dp)
+                            .padding(horizontal = 8.dp),
                     ) {
                         Text(
                             text = stringResource(R.string.app_list_system_label),
