@@ -34,13 +34,13 @@ Tag v1.3.0 pushed
        ▼
 1. Checkout (full history)
 2. Resolve version from tag → versionName="1.3.0", versionCode=1003000
-3. Patch app/build.gradle.kts
-4. Commit-back to main (after all steps succeed)
-5. Set up JDK 21 + Gradle
-6. Decode keystore from secret
-7. ./gradlew bundleRelease assembleRelease  (signed)
-8. Upload to Play Store internal track (draft)
-9. Create GitHub Release with AAB + APK
+3. Patch app/build.gradle.kts (local only — build uses this)
+4. Set up JDK 21 + Gradle
+5. Decode keystore from secret
+6. ./gradlew bundleRelease assembleRelease  (signed)
+7. Upload to Play Store internal track (draft)
+8. Create GitHub Release with AAB + APK
+9. Commit-back to main (only if all prior steps succeed)
 ```
 
 ### versionCode Formula
