@@ -36,6 +36,12 @@ jobs:
             TAG="$INPUT_VERSION"
             IS_TAG=false
           fi
+          if [[ -z "$TAG" ]]; then
+            echo "version_name=" >> "$GITHUB_OUTPUT"
+            echo "version_code=" >> "$GITHUB_OUTPUT"
+            echo "is_tag=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           VERSION="${TAG#v}"
           MAJOR=$(echo "$VERSION" | cut -d. -f1)
           MINOR=$(echo "$VERSION" | cut -d. -f2)
