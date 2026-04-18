@@ -1,10 +1,5 @@
 package com.mohsenoid.certhunter.ui.list.widget
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -18,18 +13,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.createBitmap
+import coil.compose.AsyncImage
 import com.mohsenoid.certhunter.R
 import com.mohsenoid.certhunter.domain.model.AppItem
 import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
@@ -37,26 +28,18 @@ import com.mohsenoid.certhunter.ui.util.ComponentPreviews
 
 @Composable
 fun AppListRow(app: AppItem, onClick: () -> Unit) {
-    val context = LocalContext.current
-    val icon = remember(app.packageName) {
-        runCatching { context.packageManager.getApplicationIcon(app.packageName) }.getOrNull()
-    }
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClickLabel = stringResource(R.string.app_list_item_click_label), onClick = onClick)
             .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        if (icon != null) {
-            val bitmap = remember(app.packageName) { icon.toBitmap().asImageBitmap() }
-            Image(
-                painter = BitmapPainter(bitmap),
-                contentDescription = null,
-                modifier = Modifier.size(48.dp)
-            )
-        }
+        AsyncImage(
+            model = AppIconData(app.packageName),
+            contentDescription = null,
+            modifier = Modifier.size(48.dp),
+        )
         Spacer(modifier = Modifier.width(16.dp))
         Column(modifier = Modifier.weight(1f)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -67,7 +50,7 @@ fun AppListRow(app: AppItem, onClick: () -> Unit) {
                     fontSize = 16.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
                 )
                 if (app.isSystemApp) {
                     Spacer(modifier = Modifier.width(8.dp))
@@ -76,7 +59,7 @@ fun AppListRow(app: AppItem, onClick: () -> Unit) {
                             .border(
                                 width = 1.dp,
                                 color = MaterialTheme.colorScheme.outline,
-                                shape = MaterialTheme.shapes.large
+                                shape = MaterialTheme.shapes.large,
                             )
                             .padding(horizontal = 8.dp)
                     ) {
@@ -89,21 +72,15 @@ fun AppListRow(app: AppItem, onClick: () -> Unit) {
                     }
                 }
             }
-            Text(text = app.packageName, fontSize = 12.sp, color = MaterialTheme.colorScheme.secondary, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(
+                text = app.packageName,
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.secondary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
-
     }
-}
-
-private fun Drawable.toBitmap(): Bitmap {
-    if (this is BitmapDrawable) {
-        return bitmap
-    }
-    val bitmap = createBitmap(intrinsicWidth.coerceAtLeast(1), intrinsicHeight.coerceAtLeast(1))
-    val canvas = Canvas(bitmap)
-    setBounds(0, 0, canvas.width, canvas.height)
-    draw(canvas)
-    return bitmap
 }
 
 @ComponentPreviews
