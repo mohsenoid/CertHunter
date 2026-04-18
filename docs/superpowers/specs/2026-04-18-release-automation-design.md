@@ -5,15 +5,23 @@
 
 ## Problem
 
-CertHunter's release workflow builds a signed APK and creates a GitHub Release when a `v*` tag is pushed, but there is no automated distribution to the Google Play Store. Each release requires manual Play Store upload, version management, and GitHub Release creation.
+CertHunter's original release workflow triggered on `push: tags: v*`, which created a fundamental ordering problem: the developer pushed a tag at the pre-version-bump commit, the workflow patched `build.gradle.kts` and committed back to `main`, but the tag was left permanently pointing to the old commit where `versionName` still held the previous version. Tag ref and source were mismatched forever.
+
+## Solution
+
+Remove the tag trigger entirely. The workflow owns the full release sequence:
+patch version → build → commit → **create tag at the version-bumped commit** → push → publish.
+
+The tag is always created by CI and always points to the correct commit.
 
 ## Goals
 
-- Automate `versionCode` / `versionName` calculation from the semver tag (no manual edits before tagging)
+- Trigger releases manually via `workflow_dispatch` (version + release type as inputs)
 - Build both AAB (Play Store) and APK (sideloading)
-- Upload the AAB as a draft to the Play Store internal testing track automatically on tag push
+- Upload the AAB as a draft to the Play Store internal testing track
 - Attach both AAB and APK to the GitHub Release
-- Keep `main` in sync with the shipped version via a commit-back
+- Tag always points to the commit where `build.gradle.kts` matches the released version
+- Support both regular releases (from `main`) and hotfix releases (from a prepared hotfix branch)
 
 ## Non-Goals
 
@@ -24,24 +32,39 @@ CertHunter's release workflow builds a signed APK and creates a GitHub Release w
 
 ### Trigger
 
-Tag push matching `v*` (e.g., `v1.3.0`) triggers the workflow. A `workflow_dispatch` input allows manual test runs without side effects.
+`workflow_dispatch` only.
+
+| Input | Type | Required | Description |
+|-------|------|----------|-------------|
+| `version` | string | yes | Version to release, e.g. `1.3.0` or `v1.3.0` |
+| `release_type` | choice | yes | `release` (from `main`) or `hotfix` (from hotfix branch) |
+
+### Branch Rules
+
+| release_type | Required branch | Behaviour |
+|---|---|---|
+| `release` | `main` | Fails if triggered from any other branch |
+| `hotfix` | any branch except `main` | Developer prepares e.g. `hotfix/1.2.1` with the fix commits, then triggers from there |
 
 ### Pipeline Steps
 
 ```
-Tag v1.3.0 pushed
-       │
-       ▼
-1. Checkout (full history)
-2. Resolve version from tag → versionName="1.3.0", versionCode=1003000
-3. Patch app/build.gradle.kts (local only — build uses this)
-4. Set up JDK 21 + Gradle
-5. Decode keystore from secret
-6. ./gradlew bundleRelease assembleRelease  (signed)
-7. Upload to Play Store internal track (draft)
-8. Create GitHub Release with AAB + APK
-9. Commit-back to main (only if all prior steps succeed)
+workflow_dispatch (version=1.3.0, release_type=release, branch=main)
+        │
+        ▼
+1.  Checkout branch (fetch-depth: 0)
+2.  Validate: semver format, branch matches release_type rule, tag does not yet exist
+3.  Patch app/build.gradle.kts (local only — build uses this)
+4.  Set up JDK 21 + Gradle
+5.  Decode keystore
+6.  Build signed AAB + APK
+7.  Upload AAB to Play Store internal track (draft)
+8.  Commit version bump on current branch
+9.  Create git tag v{version} at that commit + push commit + push tag
+10. Create GitHub Release with AAB + APK
 ```
+
+If any step fails before step 8, the repo is left untouched — no commit, no tag, no published release.
 
 ### versionCode Formula
 
@@ -56,13 +79,7 @@ versionCode = MAJOR × 1,000,000 + MINOR × 1,000 + PATCH
 | v1.2.1 | 1.2.1 | 1002001 |
 | v2.0.0 | 2.0.0 | 2000000 |
 
-Hotfixes always have a lower versionCode than their successor minor release, preserving correct semantic ordering. Supports up to MAJOR=999, MINOR=999, PATCH=999.
-
-### Version Commit-Back
-
-After all build and release steps succeed, the workflow commits back to `main` using `GITHUB_TOKEN` with `contents: write` permission. The commit message includes `[skip ci]` as a conventional marker, but this has no functional effect: the CI workflow (`ci.yml`) only triggers on `pull_request` and `workflow_dispatch`, so a direct push to `main` never runs CI regardless.
-
-Guard: `git diff --cached --quiet || git commit ...` prevents an empty commit if the tag was pushed after a manual version bump.
+Hotfixes always have a lower versionCode than their successor minor release, preserving correct semantic ordering.
 
 ### Play Store Upload
 
@@ -71,13 +88,11 @@ Tool: `r0adkll/upload-google-play@v1`
 - Track: `internal`
 - Status: `draft` (requires human publish click in Play Console before testers see it)
 
-Only runs on real tag pushes (not `workflow_dispatch`).
-
 ### GitHub Release
 
-Uses `softprops/action-gh-release@v2`. Attaches both:
-- `app/build/outputs/bundle/release/*.aab` — for Play Store / reference
-- `app/build/outputs/apk/release/*.apk` — for sideloading
+Uses `softprops/action-gh-release@v2` with explicit `tag_name` (the tag pushed in step 9). Attaches both:
+- `app/build/outputs/bundle/release/*.aab`
+- `app/build/outputs/apk/release/*.apk`
 
 ## Secrets
 
@@ -98,6 +113,10 @@ Uses `softprops/action-gh-release@v2`. Attaches both:
 5. Create and download a JSON key file
 6. Add the full JSON content as `PLAY_STORE_JSON_KEY` in GitHub repo secrets
 
+## Notes on `[skip ci]`
+
+The commit message does not include `[skip ci]`. The CI workflow (`ci.yml`) only triggers on `pull_request` and `workflow_dispatch`, so a direct push to `main` never runs CI regardless.
+
 ## Files Changed
 
 | File | Action |
@@ -107,8 +126,13 @@ Uses `softprops/action-gh-release@v2`. Attaches both:
 ## Verification Checklist
 
 - [ ] `PLAY_STORE_JSON_KEY` secret added to GitHub repository
-- [ ] Push tag `v1.3.0` → Actions workflow completes without errors
-- [ ] `app/build.gradle.kts` on `main` shows `versionCode = 1003000`, `versionName = "1.3.0"`
-- [ ] GitHub Release `v1.3.0` has both `.aab` and `.apk` attached
-- [ ] Play Console → Internal testing → draft release visible with uploaded AAB
-- [ ] `workflow_dispatch` with `version: v1.3.0` builds successfully without commit-back or Play Store upload
+- [ ] Trigger from feature branch with `release_type=release` → fails (not main)
+- [ ] Trigger from `main` with invalid version → fails (format error)
+- [ ] Trigger from `main` with `release_type=hotfix` → fails (hotfix from main)
+- [ ] Trigger from `main` with `version=1.3.0`, `release_type=release` → succeeds:
+  - `app/build.gradle.kts` shows `versionCode = 1003000`, `versionName = "1.3.0"`
+  - Tag `v1.3.0` points to that exact commit
+  - GitHub Release `v1.3.0` has both `.aab` and `.apk`
+  - Play Console → Internal testing shows a draft release
+- [ ] Retrigger same version → fails (tag already exists)
+- [ ] Trigger from `hotfix/1.2.1` branch with `version=1.2.1`, `release_type=hotfix` → succeeds with tag on hotfix branch

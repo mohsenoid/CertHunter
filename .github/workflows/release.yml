@@ -1,14 +1,18 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - 'v*'
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version tag to simulate (e.g. v1.3.0) — skips commit-back and Play Store upload'
-        required: false
+        description: 'Version to release (e.g. 1.3.0)'
+        required: true
+      release_type:
+        description: 'Release type'
+        required: true
+        type: choice
+        options:
+          - release
+          - hotfix
 
 jobs:
   release:
@@ -22,41 +26,43 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Resolve version
+      - name: Validate inputs and branch
         id: version
         env:
-          GH_REF: ${{ github.ref }}
-          GH_REF_NAME: ${{ github.ref_name }}
           INPUT_VERSION: ${{ github.event.inputs.version }}
+          RELEASE_TYPE: ${{ github.event.inputs.release_type }}
+          BRANCH: ${{ github.ref_name }}
         run: |
-          if [[ "$GH_REF" == refs/tags/* ]]; then
-            TAG="$GH_REF_NAME"
-            IS_TAG=true
-          else
-            TAG="$INPUT_VERSION"
-            IS_TAG=false
-          fi
-          if [[ -z "$TAG" ]]; then
-            echo "version_name=" >> "$GITHUB_OUTPUT"
-            echo "version_code=" >> "$GITHUB_OUTPUT"
-            echo "is_tag=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          if [[ ! "$TAG" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "::error::Invalid version format '$TAG'. Expected vMAJOR.MINOR.PATCH (e.g. v1.3.0)."
+          VERSION="${INPUT_VERSION#v}"
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Invalid version '$INPUT_VERSION'. Expected MAJOR.MINOR.PATCH (e.g. 1.3.0)."
             exit 1
           fi
-          VERSION="${TAG#v}"
+
+          if [[ "$RELEASE_TYPE" == "release" && "$BRANCH" != "main" ]]; then
+            echo "::error::Release type 'release' must be triggered from main (current branch: $BRANCH)."
+            exit 1
+          fi
+          if [[ "$RELEASE_TYPE" == "hotfix" && "$BRANCH" == "main" ]]; then
+            echo "::error::Release type 'hotfix' must be triggered from a hotfix branch, not main."
+            exit 1
+          fi
+
+          TAG="v$VERSION"
+          if git fetch origin "refs/tags/$TAG" 2>/dev/null; then
+            echo "::error::Tag $TAG already exists. Bump the version."
+            exit 1
+          fi
+
           MAJOR=$(echo "$VERSION" | cut -d. -f1)
           MINOR=$(echo "$VERSION" | cut -d. -f2)
           PATCH=$(echo "$VERSION" | cut -d. -f3)
           VERSION_CODE=$(( MAJOR * 1000000 + MINOR * 1000 + PATCH ))
           echo "version_name=$VERSION" >> "$GITHUB_OUTPUT"
           echo "version_code=$VERSION_CODE" >> "$GITHUB_OUTPUT"
-          echo "is_tag=$IS_TAG" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
 
       - name: Patch versionCode and versionName in build.gradle.kts
-        if: steps.version.outputs.version_name != ''
         env:
           VERSION_NAME: ${{ steps.version.outputs.version_name }}
           VERSION_CODE: ${{ steps.version.outputs.version_code }}
@@ -105,7 +111,6 @@ jobs:
           retention-days: 30
 
       - name: Upload to Play Store internal track (draft)
-        if: startsWith(github.ref, 'refs/tags/')
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_STORE_JSON_KEY }}
@@ -114,31 +119,24 @@ jobs:
           track: internal
           status: draft
 
-      - name: Create GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            app/build/outputs/bundle/release/*.aab
-            app/build/outputs/apk/release/*.apk
-
-      - name: Commit version bump back to main
-        if: steps.version.outputs.is_tag == 'true'
-        continue-on-error: true
+      - name: Commit version bump, create and push tag
         env:
           VERSION_NAME: ${{ steps.version.outputs.version_name }}
           VERSION_CODE: ${{ steps.version.outputs.version_code }}
+          TAG: ${{ steps.version.outputs.tag }}
         run: |
-          git fetch origin main
-          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
-            echo "::error::Tag commit $GITHUB_SHA is not an ancestor of origin/main — skipping version bump to avoid patching main with code that isn't on it."
-            exit 1
-          fi
-          git checkout -f -B version-bump origin/main
-          sed -i "s/versionCode = [0-9]*/versionCode = $VERSION_CODE/" app/build.gradle.kts
-          sed -i "s/versionName = \"[^\"]*\"/versionName = \"$VERSION_NAME\"/" app/build.gradle.kts
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add app/build.gradle.kts
-          git diff --cached --quiet || git commit -m "chore: bump version to $VERSION_NAME (versionCode $VERSION_CODE) [skip ci]"
-          git push origin version-bump:main
+          git diff --cached --quiet || git commit -m "chore: release $VERSION_NAME (versionCode $VERSION_CODE)"
+          git tag "$TAG"
+          git push origin HEAD
+          git push origin "$TAG"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          files: |
+            app/build/outputs/bundle/release/*.aab
+            app/build/outputs/apk/release/*.apk
