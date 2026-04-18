@@ -1,6 +1,7 @@
 # Gradle files
 .gradle/
 build/
+.kotlin/
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -23,14 +24,17 @@ output-metadata.json
 .idea/libraries
 .idea/assetWizardSettings.xml
 .idea/deviceManager.xml
+.idea/deploymentTargetSelector.xml
 .idea/gradle.xml
 .idea/markdown.xml
 .idea/modules.xml
 .idea/navEditor.xml
 .idea/workspace.xml
 misc.xml
-deploymentTargetDropDown.xml
 render.experimental.xml
+
+# Local AI assistant workspace files
+.claude/
 
 # Keystore files
 *.jks
