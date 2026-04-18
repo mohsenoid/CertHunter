@@ -48,16 +48,20 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 ### Certificate API Compatibility
 
 The app handles two different `PackageManager` APIs:
+
 - **API 28+**: `PackageManager.GET_SIGNING_CERTIFICATES` + `SigningInfo`
 - **API 24–27**: `PackageManager.GET_SIGNATURES` (deprecated but required for older devices)
 
-Be careful on API 28+: `SigningInfo` can represent multiple current signers or certificate history after key rotation. Do not assume `signatures[0]` is the full answer when changing certificate display logic.
+Be careful on API 28+: `SigningInfo` can represent multiple current signers or certificate history after key rotation. Do not assume `signatures[0]` is the full
+answer when changing certificate display logic.
 
 ### Implementation Notes
 
 - The list screen currently computes filtering and sorting inside `AppListUiModel.filteredApps`; keep an eye on recomposition cost if the app list grows.
-- `AppListRow` currently loads and rasterizes package icons during composition. If touching list performance, prefer moving icon loading/caching out of the composable.
-- `AppListViewModel` and refresh flows should always reset loading indicators even when `PackageManager` calls fail; preserve recoverable error handling when refactoring.
+- `AppListRow` currently loads and rasterizes package icons during composition. If touching list performance, prefer moving icon loading/caching out of the
+  composable.
+- `AppListViewModel` and refresh flows should always reset loading indicators even when `PackageManager` calls fail; preserve recoverable error handling when
+  refactoring.
 - Certificate validity is derived from `X509Certificate.notAfter` relative to `LocalDate.now()` in the device time zone.
 
 ### Tech Stack
