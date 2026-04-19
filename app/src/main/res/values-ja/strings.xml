@@ -2,7 +2,7 @@
     <string name="app_about_description">デバイスにインストールされている任意のアプリの署名証明書のフィンガープリントと X.509 の詳細を確認できます。すべての処理はローカルで行われ、データがデバイスの外に出ることはありません。</string>
     <string name="app_about_developer">開発者</string>
     <string name="app_about_version">バージョン</string>
-    <string name="about_version_unknown">不明</string>
+    <string name="app_about_version_unknown">不明</string>
     <string name="app_about_website">ウェブサイト</string>
     <string name="app_detail_close">閉じる</string>
     <string name="app_detail_row_click_label">%1$s をコピー</string>

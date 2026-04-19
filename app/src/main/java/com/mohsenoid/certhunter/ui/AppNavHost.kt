@@ -1,5 +1,6 @@
 package com.mohsenoid.certhunter.ui
 
+import android.content.pm.PackageManager
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -47,10 +48,10 @@ fun AppNavHost() {
 
     if (backStack.lastOrNull() is AppAbout) {
         val context = LocalContext.current
-        val unknownVersion = stringResource(R.string.about_version_unknown)
+        val unknownVersion = stringResource(R.string.app_about_version_unknown)
         val versionName = try {
             context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: unknownVersion
-        } catch (_: android.content.pm.PackageManager.NameNotFoundException) {
+        } catch (_: PackageManager.NameNotFoundException) {
             unknownVersion
         }
         AppAboutScreen(
