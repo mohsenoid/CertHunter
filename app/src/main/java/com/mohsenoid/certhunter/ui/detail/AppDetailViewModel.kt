@@ -38,7 +38,7 @@ class AppDetailViewModel(
                 .onSuccess { logger.d("Loaded certificate details for $packageName") }
                 .onFailure { error ->
                     // CertificateNotFound and CertificateParseFailed are already logged
-                    // by AppRepositoryImpl; only ItemLoadFailed needs a log here.
+                    // by the repository layer; only ItemLoadFailed needs a log here.
                     if (error is AppDetailsError.ItemLoadFailed) {
                         logger.w("Failed to load package info for $packageName", throwable = error.cause)
                     }
