@@ -20,7 +20,7 @@ class AppIconFetcher(
     override suspend fun fetch(): FetchResult = DrawableResult(
         drawable = packageManager.getApplicationIcon(packageName),
         isSampled = false,
-        dataSource = DataSource.MEMORY_CACHE,
+        dataSource = DataSource.DISK,
     )
 
     class Factory : Fetcher.Factory<AppIconData> {
