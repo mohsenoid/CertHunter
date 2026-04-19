@@ -131,7 +131,7 @@ class AppListUiModelTest {
     }
 
     @Test
-    fun `given empty app list when filteredApps then empty list returned regardless of filters`() {
+    fun `given empty app list with all filters active when filteredApps then empty list returned`() {
         // given / when
         val filtered = modelWith(
             apps = emptyList(),
