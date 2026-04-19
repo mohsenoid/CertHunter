@@ -38,4 +38,12 @@
     <string name="app_list_sort_name_asc">名前（A→Z）</string>
     <string name="app_list_sort_name_desc">名前（Z→A）</string>
     <string name="app_list_system_label">システム</string>
+    <string name="app_list_load_error">アプリの読み込みに失敗しました。もう一度お試しください。</string>
+    <string name="app_list_retry">再試行</string>
+    <string name="app_list_refresh_error">更新に失敗しました。前回のデータを表示しています。</string>
+    <string name="app_list_refresh_error_dismiss">閉じる</string>
+    <string name="app_detail_signer_label">署名者 %1$d</string>
+    <string name="app_detail_history_show">署名履歴を表示（%1$d 件のローテーション）</string>
+    <string name="app_detail_history_hide">署名履歴を非表示（%1$d 件のローテーション）</string>
+    <string name="app_detail_history_entry_label">過去の証明書 %1$d</string>
 </resources>

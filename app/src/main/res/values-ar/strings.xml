@@ -38,4 +38,12 @@
     <string name="app_list_sort_name_asc">الاسم (أ→ي)</string>
     <string name="app_list_sort_name_desc">الاسم (ي→أ)</string>
     <string name="app_list_system_label">نظام</string>
+    <string name="app_list_load_error">فشل تحميل التطبيقات. يرجى المحاولة مجدداً.</string>
+    <string name="app_list_retry">إعادة المحاولة</string>
+    <string name="app_list_refresh_error">فشل التحديث. يتم عرض البيانات السابقة.</string>
+    <string name="app_list_refresh_error_dismiss">إغلاق</string>
+    <string name="app_detail_signer_label">الموقِّع %1$d</string>
+    <string name="app_detail_history_show">عرض سجل التوقيع (%1$d دوران)</string>
+    <string name="app_detail_history_hide">إخفاء سجل التوقيع (%1$d دوران)</string>
+    <string name="app_detail_history_entry_label">شهادة تاريخية %1$d</string>
 </resources>

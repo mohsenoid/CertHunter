@@ -38,4 +38,12 @@
     <string name="app_list_sort_name_asc">Nombre (A→Z)</string>
     <string name="app_list_sort_name_desc">Nombre (Z→A)</string>
     <string name="app_list_system_label">Sistema</string>
+    <string name="app_list_load_error">Error al cargar las apps. Por favor, inténtalo de nuevo.</string>
+    <string name="app_list_retry">Reintentar</string>
+    <string name="app_list_refresh_error">Error al actualizar. Mostrando datos anteriores.</string>
+    <string name="app_list_refresh_error_dismiss">Descartar</string>
+    <string name="app_detail_signer_label">Firmante %1$d</string>
+    <string name="app_detail_history_show">Mostrar historial de firma (%1$d rotados)</string>
+    <string name="app_detail_history_hide">Ocultar historial de firma (%1$d rotados)</string>
+    <string name="app_detail_history_entry_label">Certificado histórico %1$d</string>
 </resources>

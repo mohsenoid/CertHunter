@@ -38,4 +38,12 @@
     <string name="app_list_sort_name_asc">שם (א→ת)</string>
     <string name="app_list_sort_name_desc">שם (ת→א)</string>
     <string name="app_list_system_label">מערכת</string>
+    <string name="app_list_load_error">טעינת האפליקציות נכשלה. אנא נסה שוב.</string>
+    <string name="app_list_retry">נסה שוב</string>
+    <string name="app_list_refresh_error">הרענון נכשל. מוצגים הנתונים הקודמים.</string>
+    <string name="app_list_refresh_error_dismiss">סגור</string>
+    <string name="app_detail_signer_label">חותם %1$d</string>
+    <string name="app_detail_history_show">הצג היסטוריית חתימה (%1$d סיבובים)</string>
+    <string name="app_detail_history_hide">הסתר היסטוריית חתימה (%1$d סיבובים)</string>
+    <string name="app_detail_history_entry_label">אישור היסטורי %1$d</string>
 </resources>
