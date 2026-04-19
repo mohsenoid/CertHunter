@@ -2,7 +2,7 @@
     <string name="app_about_description">اثر انگشت گواهینامه‌های امضا و جزئیات X.509 هر برنامه‌ای که روی دستگاهتان نصب شده را بررسی کنید. تمام پردازش‌ها به صورت محلی انجام می‌شود — هیچ داده‌ای دستگاه شما را ترک نمی‌کند.</string>
     <string name="app_about_developer">توسعه‌دهنده</string>
     <string name="app_about_version">نسخه</string>
-    <string name="about_version_unknown">نامشخص</string>
+    <string name="app_about_version_unknown">نامشخص</string>
     <string name="app_about_website">وب‌سایت</string>
     <string name="app_detail_close">بستن</string>
     <string name="app_detail_row_click_label">کپی %1$s</string>
