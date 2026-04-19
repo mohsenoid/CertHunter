@@ -37,13 +37,10 @@ class AppDetailViewModel(
             val result = repository.getAppDetails(packageName)
                 .onSuccess { logger.d("Loaded certificate details for $packageName") }
                 .onFailure { error ->
-                    when (error) {
-                        is AppDetailsError.ItemLoadFailed ->
-                            logger.w("Failed to load package info for $packageName", throwable = error.cause)
-                        is AppDetailsError.CertificateParseFailed ->
-                            logger.w("Failed to parse certificate for $packageName", throwable = error.cause)
-                        AppDetailsError.CertificateNotFound ->
-                            logger.w("No certificate found for $packageName")
+                    // CertificateNotFound and CertificateParseFailed are already logged
+                    // by AppRepositoryImpl; only ItemLoadFailed needs a log here.
+                    if (error is AppDetailsError.ItemLoadFailed) {
+                        logger.w("Failed to load package info for $packageName", throwable = error.cause)
                     }
                 }
             _uiState.update {
