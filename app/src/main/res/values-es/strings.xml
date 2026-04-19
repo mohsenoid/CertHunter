@@ -2,6 +2,7 @@
     <string name="app_about_description">Inspecciona las huellas digitales de certificados de firma y los detalles X.509 de cualquier app instalada en tu dispositivo. Todo el procesamiento se realiza localmente — ningún dato abandona tu dispositivo.</string>
     <string name="app_about_developer">Desarrollador</string>
     <string name="app_about_version">Versión</string>
+    <string name="app_about_version_unknown">Desconocido</string>
     <string name="app_about_website">Sitio web</string>
     <string name="app_detail_close">Cerrar</string>
     <string name="app_detail_row_click_label">Copiar %1$s</string>

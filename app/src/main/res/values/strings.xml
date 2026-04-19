@@ -4,6 +4,7 @@
     <string name="app_about_developer">Developer</string>
     <string name="app_about_developer_name" translatable="false">Mohsen Mirhoseini</string>
     <string name="app_about_version">Version</string>
+    <string name="app_about_version_unknown">Unknown</string>
     <string name="app_about_website">Website</string>
     <string name="app_about_website_url" translatable="false">https://mohsenoid.com</string>
     <string name="app_detail_close">Close</string>

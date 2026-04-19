@@ -196,6 +196,7 @@ Use ASCII section dividers in files with many logical sections:
 - **God objects** — if a class does two things, split it.
 - **Unnecessary abstractions** — don't create an interface for something that will never have a second implementation (outside of testability requirements).
 - **Magic numbers** — extract to named constants.
+- **Hard-coded user-visible strings** — all text shown to the user must live in `res/values/strings.xml` and be translated into every supported locale. Never pass a string literal directly to a composable or user-facing API.
 - **Commented-out code** — delete it; git history preserves it.
 - **Abbreviations in names** — `packageName` not `pkgNm`, `certificateDetails` not `certDet`.
 - **Hard-coded `Dispatchers.*`** in production code — use `DispatcherProvider`.

@@ -2,6 +2,7 @@
     <string name="app_about_description">检查设备上已安装任意应用的签名证书指纹和 X.509 详情。所有处理均在本地完成，数据不会离开您的设备。</string>
     <string name="app_about_developer">开发者</string>
     <string name="app_about_version">版本</string>
+    <string name="app_about_version_unknown">未知</string>
     <string name="app_about_website">网站</string>
     <string name="app_detail_close">关闭</string>
     <string name="app_detail_row_click_label">复制 %1$s</string>

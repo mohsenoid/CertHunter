@@ -2,6 +2,7 @@
     <string name="app_about_description">Проверяйте отпечатки сертификатов подписи и данные X.509 любого приложения, установленного на устройстве. Вся обработка выполняется локально — данные не покидают ваше устройство.</string>
     <string name="app_about_developer">Разработчик</string>
     <string name="app_about_version">Версия</string>
+    <string name="app_about_version_unknown">Неизвестно</string>
     <string name="app_about_website">Сайт</string>
     <string name="app_detail_close">Закрыть</string>
     <string name="app_detail_row_click_label">Копировать %1$s</string>

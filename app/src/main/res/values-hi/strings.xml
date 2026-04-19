@@ -2,6 +2,7 @@
     <string name="app_about_description">अपने डिवाइस पर इंस्टॉल किसी भी ऐप के साइनिंग सर्टिफिकेट फिंगरप्रिंट और X.509 विवरण जांचें। सभी प्रोसेसिंग स्थानीय रूप से होती है — कोई डेटा आपके डिवाइस से बाहर नहीं जाता।</string>
     <string name="app_about_developer">डेवलपर</string>
     <string name="app_about_version">संस्करण</string>
+    <string name="app_about_version_unknown">अज्ञात</string>
     <string name="app_about_website">वेबसाइट</string>
     <string name="app_detail_close">बंद करें</string>
     <string name="app_detail_row_click_label">%1$s कॉपी करें</string>

@@ -2,6 +2,7 @@
     <string name="app_about_description">בדוק טביעות אצבע של אישורי חתימה ופרטי X.509 של כל אפליקציה המותקנת במכשיר שלך. כל העיבוד מתבצע באופן מקומי — אין נתונים היוצאים מהמכשיר שלך.</string>
     <string name="app_about_developer">מפתח</string>
     <string name="app_about_version">גרסה</string>
+    <string name="app_about_version_unknown">לא ידוע</string>
     <string name="app_about_website">אתר אינטרנט</string>
     <string name="app_detail_close">סגור</string>
     <string name="app_detail_row_click_label">העתק %1$s</string>
