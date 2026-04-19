@@ -34,6 +34,8 @@ class AppRepositoryImpl(
 ) : AppRepository {
 
     companion object {
+        // 30 days matches the typical certificate renewal lead-time recommended by major CAs
+        // and gives developers enough runway to rotate before services (Google Pay, Firebase, etc.) reject the cert.
         private const val EXPIRY_WARNING_DAYS = 30
         private const val HEX_RADIX = 16
     }
