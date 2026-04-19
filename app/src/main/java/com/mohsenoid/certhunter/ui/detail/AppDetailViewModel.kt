@@ -3,8 +3,12 @@ package com.mohsenoid.certhunter.ui.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.michaelbull.result.fold
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.onSuccess
 import com.mohsenoid.certhunter.coroutine.DispatcherProvider
+import com.mohsenoid.certhunter.domain.model.AppDetailsError
 import com.mohsenoid.certhunter.domain.repository.AppRepository
+import com.mohsenoid.klogx.DefaultKLogWriter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,6 +21,10 @@ class AppDetailViewModel(
     private val dispatcherProvider: DispatcherProvider,
 ) : ViewModel() {
 
+    private val logger = object : DefaultKLogWriter {
+        override val tag: String = "AppDetailViewModel"
+    }
+
     private val _uiState = MutableStateFlow(AppDetailUiModel(packageName = packageName))
     val uiState: StateFlow<AppDetailUiModel> = _uiState.asStateFlow()
 
@@ -27,6 +35,14 @@ class AppDetailViewModel(
     private fun load() {
         viewModelScope.launch(dispatcherProvider.io) {
             val result = repository.getAppDetails(packageName)
+                .onSuccess { logger.d("Loaded certificate details for $packageName") }
+                .onFailure { error ->
+                    // CertificateNotFound and CertificateParseFailed are already logged
+                    // by the repository layer; only ItemLoadFailed needs a log here.
+                    if (error is AppDetailsError.ItemLoadFailed) {
+                        logger.w("Failed to load package info for $packageName", throwable = error.cause)
+                    }
+                }
             _uiState.update {
                 it.copy(
                     isLoading = false,
