@@ -2,6 +2,7 @@
     <string name="app_about_description">افحص بصمات شهادات التوقيع وتفاصيل X.509 لأي تطبيق مثبّت على جهازك. تتم جميع عمليات المعالجة محليًا — لا تغادر أي بيانات جهازك.</string>
     <string name="app_about_developer">المطوِّر</string>
     <string name="app_about_version">الإصدار</string>
+    <string name="about_version_unknown">غير معروف</string>
     <string name="app_about_website">الموقع الإلكتروني</string>
     <string name="app_detail_close">إغلاق</string>
     <string name="app_detail_row_click_label">نسخ %1$s</string>

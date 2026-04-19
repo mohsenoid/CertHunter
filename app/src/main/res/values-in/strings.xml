@@ -2,6 +2,7 @@
     <string name="app_about_description">Periksa sidik jari sertifikat penandatanganan dan detail X.509 dari aplikasi mana pun yang terinstal di perangkat Anda. Semua pemrosesan dilakukan secara lokal — tidak ada data yang meninggalkan perangkat Anda.</string>
     <string name="app_about_developer">Pengembang</string>
     <string name="app_about_version">Versi</string>
+    <string name="about_version_unknown">Tidak diketahui</string>
     <string name="app_about_website">Situs web</string>
     <string name="app_detail_close">Tutup</string>
     <string name="app_detail_row_click_label">Salin %1$s</string>

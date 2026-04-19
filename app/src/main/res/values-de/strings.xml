@@ -2,6 +2,7 @@
     <string name="app_about_description">Prüfe Signatur-Zertifikats-Fingerabdrücke und X.509-Details jeder auf deinem Gerät installierten App. Die gesamte Verarbeitung erfolgt lokal – keine Daten verlassen dein Gerät.</string>
     <string name="app_about_developer">Entwickler</string>
     <string name="app_about_version">Version</string>
+    <string name="about_version_unknown">Unbekannt</string>
     <string name="app_about_website">Website</string>
     <string name="app_detail_close">Schließen</string>
     <string name="app_detail_row_click_label">%1$s kopieren</string>

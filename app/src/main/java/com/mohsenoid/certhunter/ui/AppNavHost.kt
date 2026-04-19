@@ -4,7 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.rememberNavBackStack
+import com.mohsenoid.certhunter.R
 import com.mohsenoid.certhunter.ui.about.AppAboutScreen
 import com.mohsenoid.certhunter.ui.detail.AppDetailScreen
 import com.mohsenoid.certhunter.ui.detail.AppDetailViewModel
@@ -45,10 +47,11 @@ fun AppNavHost() {
 
     if (backStack.lastOrNull() is AppAbout) {
         val context = LocalContext.current
+        val unknownVersion = stringResource(R.string.about_version_unknown)
         val versionName = try {
-            context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: ""
+            context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: unknownVersion
         } catch (_: android.content.pm.PackageManager.NameNotFoundException) {
-            "unknown"
+            unknownVersion
         }
         AppAboutScreen(
             versionName = versionName,

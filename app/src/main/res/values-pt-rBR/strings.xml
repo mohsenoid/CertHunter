@@ -2,6 +2,7 @@
     <string name="app_about_description">Inspecione as impressões digitais de certificados de assinatura e os detalhes X.509 de qualquer app instalado no seu dispositivo. Todo o processamento é feito localmente — nenhum dado sai do seu dispositivo.</string>
     <string name="app_about_developer">Desenvolvedor</string>
     <string name="app_about_version">Versão</string>
+    <string name="about_version_unknown">Desconhecido</string>
     <string name="app_about_website">Site</string>
     <string name="app_detail_close">Fechar</string>
     <string name="app_detail_row_click_label">Copiar %1$s</string>

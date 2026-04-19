@@ -2,6 +2,7 @@
     <string name="app_about_description">Inspectez les empreintes de certificats de signature et les détails X.509 de n\'importe quelle application installée sur votre appareil. Tout le traitement est effectué localement — aucune donnée ne quitte votre appareil.</string>
     <string name="app_about_developer">Développeur</string>
     <string name="app_about_version">Version</string>
+    <string name="about_version_unknown">Inconnu</string>
     <string name="app_about_website">Site web</string>
     <string name="app_detail_close">Fermer</string>
     <string name="app_detail_row_click_label">Copier %1$s</string>
