@@ -25,7 +25,7 @@ When you work across multiple flavors like dev, nightly, staging, and production
 - **Navigation:** Navigation3
 - **Concurrency:** Kotlin Coroutines + `DispatcherProvider`
 - **Image loading:** Coil 2.x (custom `AppIconFetcher`)
-- **Error handling:** kotlin-result (`Result<T, E>`)
+- **Error handling:** [michael-bull/kotlin-result](https://github.com/michaelbull/kotlin-result) — two-parameter `Result<V, E>` (not `kotlin.Result`)
 - **Security API:** `PackageManager`, `java.security.cert.X509Certificate`
 - **Min SDK:** 24 (Android 7.0) · **Target SDK:** 37 (Android 15)
 

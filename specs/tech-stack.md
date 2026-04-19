@@ -71,9 +71,9 @@ App icons are loaded off the main thread via a custom `AppIconFetcher` that wrap
 
 | Library | Version | Notes |
 |---------|---------|-------|
-| kotlin-result | 2.3.1 | `Result<V, E>` typed errors |
+| kotlin-result (`com.michael-bull.kotlin-result`) | 2.3.1 | Two-parameter `Result<V, E>` typed errors |
 
-`AppRepository.getAppDetails()` returns `Result<AppDetails, AppDetailsError>` instead of throwing. Call sites use `.fold()`, `.map()`, `.mapError()`, and `.andThen()` from the kotlin-result DSL.
+Not to be confused with Kotlin's built-in `kotlin.Result`. `com.michael-bull.kotlin-result` provides a two-parameter `Result<V, E>` type where both the success and error types are explicit. `AppRepository.getAppDetails()` returns `Result<AppDetails, AppDetailsError>`. Call sites use `.fold()`, `.map()`, `.mapError()`, and `.andThen()` from its DSL.
 
 ## Serialization
 

@@ -73,7 +73,7 @@ interface AppRepository {
 }
 ```
 
-`getInstalledApps()` throws on failure (caught at ViewModel level). `getAppDetails()` returns a typed `Result` (kotlin-result).
+`getInstalledApps()` throws on failure (caught at ViewModel level). `getAppDetails()` returns a typed `Result` (`com.michael-bull.kotlin-result`, not `kotlin.Result`).
 
 ---
 

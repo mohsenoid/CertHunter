@@ -66,7 +66,7 @@ All domain models are `data class`. No mutable state in models.
 
 ### Result for typed errors
 
-Use `Result<V, E>` (kotlin-result) at repository boundaries where callers need to distinguish error types. Throw (and catch at ViewModel level) for unrecoverable infrastructure errors.
+Use `Result<V, E>` (`com.michael-bull.kotlin-result`, not `kotlin.Result`) at repository boundaries where callers need to distinguish error types. Its two-parameter signature makes both the success and error types explicit. Throw (and catch at ViewModel level) for unrecoverable infrastructure errors.
 
 ### Scope functions
 

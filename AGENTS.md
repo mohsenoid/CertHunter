@@ -71,7 +71,7 @@ answer when changing certificate display logic.
 - Android Gradle Plugin 9.1.0
 - Koin 4.2.0 for DI
 - AndroidX Navigation 3
-- `kotlin-result` for result-style error handling
+- `com.michael-bull.kotlin-result` for result-style error handling (`Result<V, E>`, not `kotlin.Result`)
 - `klogx` for logging
 - Min SDK 24 / Compile & Target SDK 36 (Android 15)
 - Dependencies managed via Gradle version catalog (`gradle/libs.versions.toml`)

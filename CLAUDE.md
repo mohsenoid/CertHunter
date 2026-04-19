@@ -89,7 +89,7 @@ Every class lives in its own file.
 ### Error Handling
 
 - `AppListViewModel` wraps `getInstalledApps()` in try/catch for both initial load and pull-to-refresh; exposes `hasLoadError` + `onRetry()`.
-- `AppRepository.getAppDetails()` returns `Result<AppDetails, AppDetailsError>` (kotlin-result).
+- `AppRepository.getAppDetails()` returns `Result<AppDetails, AppDetailsError>` (`com.michael-bull.kotlin-result`).
 
 ### Icon Loading
 
@@ -102,7 +102,7 @@ App icons are loaded off the main thread via Coil 2.x:
 - Kotlin 2.3.20 + Coroutines 1.10.2
 - Jetpack Compose BOM 2026.03.01, Material 3
 - Android Gradle Plugin 9.1.1
-- Koin 4.2.1, Navigation3 1.1.0, Coil 2.7.0, kotlin-result 2.3.1
+- Koin 4.2.1, Navigation3 1.1.0, Coil 2.7.0, michael-bull/kotlin-result 2.3.1
 - Min SDK 24 / Compile & Target SDK 37 (Android 15)
 - Dependencies managed via Gradle version catalog (`gradle/libs.versions.toml`)
 
