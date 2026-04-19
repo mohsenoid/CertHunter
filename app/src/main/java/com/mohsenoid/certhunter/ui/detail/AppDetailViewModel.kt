@@ -6,6 +6,7 @@ import com.github.michaelbull.result.fold
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.onSuccess
 import com.mohsenoid.certhunter.coroutine.DispatcherProvider
+import com.mohsenoid.certhunter.domain.model.AppDetailsError
 import com.mohsenoid.certhunter.domain.repository.AppRepository
 import com.mohsenoid.klogx.DefaultKLogWriter
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,7 +36,16 @@ class AppDetailViewModel(
         viewModelScope.launch(dispatcherProvider.io) {
             val result = repository.getAppDetails(packageName)
                 .onSuccess { logger.d("Loaded certificate details for $packageName") }
-                .onFailure { logger.w("Failed to load certificate details for $packageName: $it") }
+                .onFailure { error ->
+                    when (error) {
+                        is AppDetailsError.ItemLoadFailed ->
+                            logger.w("Failed to load package info for $packageName", throwable = error.cause)
+                        is AppDetailsError.CertificateParseFailed ->
+                            logger.w("Failed to parse certificate for $packageName", throwable = error.cause)
+                        AppDetailsError.CertificateNotFound ->
+                            logger.w("No certificate found for $packageName")
+                    }
+                }
             _uiState.update {
                 it.copy(
                     isLoading = false,
