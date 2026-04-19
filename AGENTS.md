@@ -2,6 +2,18 @@
 
 This file provides guidance to Codex (Codex.ai/code) when working with code in this repository.
 
+## Project Constitution
+
+All architectural decisions, coding conventions, and technical standards are documented in the `specs/` directory. Read these before making non-trivial changes:
+
+| Document | Read when… |
+|----------|-----------|
+| [specs/MISSION.md](specs/MISSION.md) | You need to understand what the app is for and who it serves |
+| [specs/architecture.md](specs/architecture.md) | You are adding a feature, new screen, or touching the data layer |
+| [specs/tech-stack.md](specs/tech-stack.md) | You are adding a dependency or working with an unfamiliar library |
+| [specs/testing.md](specs/testing.md) | You are writing or reviewing tests |
+| [specs/code-style.md](specs/code-style.md) | You are unsure about naming, file layout, or Compose conventions |
+
 ## Build & Run Commands
 
 ```bash
