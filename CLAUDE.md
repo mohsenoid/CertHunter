@@ -2,6 +2,18 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Project Constitution
+
+All architectural decisions, coding conventions, and technical standards are documented in the `specs/` directory. Read these before making non-trivial changes:
+
+| Document | Read when… |
+|----------|-----------|
+| [specs/MISSION.md](specs/MISSION.md) | You need to understand what the app is for and who it serves |
+| [specs/architecture.md](specs/architecture.md) | You are adding a feature, new screen, or touching the data layer |
+| [specs/tech-stack.md](specs/tech-stack.md) | You are adding a dependency or working with an unfamiliar library |
+| [specs/testing.md](specs/testing.md) | You are writing or reviewing tests |
+| [specs/code-style.md](specs/code-style.md) | You are unsure about naming, file layout, or Compose conventions |
+
 ## Build & Run Commands
 
 ```bash
@@ -12,9 +24,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ./gradlew clean                  # Clean build outputs
 ```
 
+## Pre-Commit Checks
+
+Always run these before committing:
+
+```bash
+./gradlew :app:detekt            # Lint (auto-corrects formatting)
+./gradlew :app:testDebugUnitTest # Unit tests
+```
+
 ## Architecture
 
-**CertHunter** is a single-Activity Android app (Jetpack Compose + Material 3) that lets users inspect signing certificates of installed apps.
+**CertHunter** is a single-Activity Android app (Jetpack Compose + Material 3) that lets users inspect signing certificates of installed apps. Full details in [specs/architecture.md](specs/architecture.md).
 
 ### Module / Package Structure
 
@@ -34,7 +55,7 @@ app/src/main/java/com/mohsenoid/certhunter/
     ├── about/
     ├── detail/                     — AppDetailScreen, AppDetailViewModel, AppDetailUiModel
     ├── list/                       — AppListScreen, AppListViewModel, AppListUiModel
-    │   └── widget/AppListRow.kt    — Uses Coil AsyncImage + AppIconFetcher
+    │   └── widget/                 — AppListRow, AppIconFetcher, error widgets
     └── theme/
 ```
 
@@ -78,20 +99,24 @@ App icons are loaded off the main thread via Coil 2.x:
 
 ### Tech Stack
 
-- Kotlin 2.3.20 + Coroutines 1.9.0
+- Kotlin 2.3.20 + Coroutines 1.10.2
 - Jetpack Compose BOM 2026.03.01, Material 3
-- Android Gradle Plugin 9.1.0
-- Koin 4.2.0, Navigation3 1.0.1, Coil 2.7.0, kotlin-result 2.3.1
-- Min SDK 24 / Compile & Target SDK 36 (Android 15)
+- Android Gradle Plugin 9.1.1
+- Koin 4.2.1, Navigation3 1.1.0, Coil 2.7.0, kotlin-result 2.3.1
+- Min SDK 24 / Compile & Target SDK 37 (Android 15)
 - Dependencies managed via Gradle version catalog (`gradle/libs.versions.toml`)
+
+Full dependency list with versions in [specs/tech-stack.md](specs/tech-stack.md).
 
 ### Testing Stack
 
 - JUnit 5 (`junit-jupiter`) + `kotlin-test-junit5`
 - `kotlinx-coroutines-test` with `StandardTestDispatcher` + `advanceUntilIdle()`
-- Turbine 1.2.0 (available; use `StandardTestDispatcher` to avoid virtual-time timeout issues)
-- Mockk 1.13.17 (available for Android class mocking)
+- Turbine 1.2.1 (use `StandardTestDispatcher` to avoid virtual-time timeout issues)
+- Mockk 1.14.9 (available for Android class mocking)
 - `FakeAppRepository` + `TestDispatcherProvider` in `src/test/.../fake/`
+
+Full testing conventions in [specs/testing.md](specs/testing.md).
 
 ### Required Permission
 
