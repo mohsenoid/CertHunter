@@ -129,4 +129,32 @@ class AppListUiModelTest {
         // then
         assertEquals(listOf(appA, appB), filtered)
     }
+
+    @Test
+    fun `given empty app list when filteredApps then empty list returned regardless of filters`() {
+        // given / when
+        val filtered = modelWith(
+            apps = emptyList(),
+            query = "anything",
+            showSystemApps = false,
+            sortOrder = AppSortOrder.InstallDateNewest,
+        ).filteredApps
+
+        // then
+        assertTrue(filtered.isEmpty())
+    }
+
+    @Test
+    fun `given query and system apps hidden and install date sort when filteredApps then matching user apps returned newest first`() {
+        // given — appA(3000ms), appB(1000ms) match "App", sysC is excluded
+        // when
+        val filtered = modelWith(
+            query = "App",
+            showSystemApps = false,
+            sortOrder = AppSortOrder.InstallDateNewest,
+        ).filteredApps
+
+        // then — appA installed most recently
+        assertEquals(listOf(appA, appB), filtered)
+    }
 }
