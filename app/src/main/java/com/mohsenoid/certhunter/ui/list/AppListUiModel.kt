@@ -13,20 +13,19 @@ data class AppListUiModel(
     val showSystemApps: Boolean = true,
     val sortOrder: AppSortOrder = AppSortOrder.NameAscending,
 ) {
-    val filteredApps: List<AppItem>
-        get() = allApps
-            .filter { showSystemApps || !it.isSystemApp }
-            .filter {
-                searchQuery.isBlank() ||
-                    it.name.contains(searchQuery, ignoreCase = true) ||
-                    it.packageName.contains(searchQuery, ignoreCase = true)
+    val filteredApps: List<AppItem> = allApps
+        .filter { showSystemApps || !it.isSystemApp }
+        .filter {
+            searchQuery.isBlank() ||
+                it.name.contains(searchQuery, ignoreCase = true) ||
+                it.packageName.contains(searchQuery, ignoreCase = true)
+        }
+        .let { list ->
+            when (sortOrder) {
+                AppSortOrder.NameAscending -> list.sortedBy { it.name.lowercase() }
+                AppSortOrder.NameDescending -> list.sortedByDescending { it.name.lowercase() }
+                AppSortOrder.InstallDateNewest -> list.sortedByDescending { it.firstInstallTime }
+                AppSortOrder.InstallDateOldest -> list.sortedBy { it.firstInstallTime }
             }
-            .let { list ->
-                when (sortOrder) {
-                    AppSortOrder.NameAscending -> list.sortedBy { it.name.lowercase() }
-                    AppSortOrder.NameDescending -> list.sortedByDescending { it.name.lowercase() }
-                    AppSortOrder.InstallDateNewest -> list.sortedByDescending { it.firstInstallTime }
-                    AppSortOrder.InstallDateOldest -> list.sortedBy { it.firstInstallTime }
-                }
-            }
+        }
 }
