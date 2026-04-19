@@ -182,6 +182,11 @@ jobs:
           git push origin HEAD
           git push origin "$TAG"
 
+  # Recovery note: if this job fails after 'finalize' has already pushed the tag,
+  # the Play Store upload is done and the tag points at the correct commit.
+  # Manually create the missing GitHub release with:
+  #   gh release create <tag> <artifacts...> --title "<tag>"
+  # Do NOT re-run the full workflow — validate will fail because the tag already exists.
   github-release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
