@@ -38,4 +38,12 @@
     <string name="app_list_sort_name_asc">名称（A→Z）</string>
     <string name="app_list_sort_name_desc">名称（Z→A）</string>
     <string name="app_list_system_label">系统</string>
+    <string name="app_list_load_error">加载应用失败，请重试。</string>
+    <string name="app_list_retry">重试</string>
+    <string name="app_list_refresh_error">刷新失败，正在显示之前的数据。</string>
+    <string name="app_list_refresh_error_dismiss">关闭</string>
+    <string name="app_detail_signer_label">签名者 %1$d</string>
+    <string name="app_detail_history_show">显示签名历史（%1$d 次轮换）</string>
+    <string name="app_detail_history_hide">隐藏签名历史（%1$d 次轮换）</string>
+    <string name="app_detail_history_entry_label">历史证书 %1$d</string>
 </resources>

@@ -38,4 +38,12 @@
     <string name="app_list_sort_name_asc">Nom (A→Z)</string>
     <string name="app_list_sort_name_desc">Nom (Z→A)</string>
     <string name="app_list_system_label">Système</string>
+    <string name="app_list_load_error">Échec du chargement des applications. Veuillez réessayer.</string>
+    <string name="app_list_retry">Réessayer</string>
+    <string name="app_list_refresh_error">Échec de l\'actualisation. Affichage des données précédentes.</string>
+    <string name="app_list_refresh_error_dismiss">Ignorer</string>
+    <string name="app_detail_signer_label">Signataire %1$d</string>
+    <string name="app_detail_history_show">Afficher l\'historique de signature (%1$d rotation(s))</string>
+    <string name="app_detail_history_hide">Masquer l\'historique de signature (%1$d rotation(s))</string>
+    <string name="app_detail_history_entry_label">Certificat historique %1$d</string>
 </resources>

@@ -38,4 +38,12 @@
     <string name="app_list_sort_name_asc">이름 (A→Z)</string>
     <string name="app_list_sort_name_desc">이름 (Z→A)</string>
     <string name="app_list_system_label">시스템</string>
+    <string name="app_list_load_error">앱을 불러오지 못했습니다. 다시 시도해 주세요.</string>
+    <string name="app_list_retry">다시 시도</string>
+    <string name="app_list_refresh_error">새로고침 실패. 이전 데이터를 표시합니다.</string>
+    <string name="app_list_refresh_error_dismiss">닫기</string>
+    <string name="app_detail_signer_label">서명자 %1$d</string>
+    <string name="app_detail_history_show">서명 기록 표시 (%1$d 회전)</string>
+    <string name="app_detail_history_hide">서명 기록 숨기기 (%1$d 회전)</string>
+    <string name="app_detail_history_entry_label">과거 인증서 %1$d</string>
 </resources>

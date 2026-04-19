@@ -38,4 +38,12 @@
     <string name="app_list_sort_name_asc">नाम (अ→ज्ञ)</string>
     <string name="app_list_sort_name_desc">नाम (ज्ञ→अ)</string>
     <string name="app_list_system_label">सिस्टम</string>
+    <string name="app_list_load_error">ऐप्स लोड नहीं हो सके। कृपया पुनः प्रयास करें।</string>
+    <string name="app_list_retry">पुनः प्रयास करें</string>
+    <string name="app_list_refresh_error">रिफ्रेश विफल। पिछला डेटा दिखाया जा रहा है।</string>
+    <string name="app_list_refresh_error_dismiss">खारिज करें</string>
+    <string name="app_detail_signer_label">हस्ताक्षरकर्ता %1$d</string>
+    <string name="app_detail_history_show">हस्ताक्षर इतिहास दिखाएं (%1$d रोटेशन)</string>
+    <string name="app_detail_history_hide">हस्ताक्षर इतिहास छुपाएं (%1$d रोटेशन)</string>
+    <string name="app_detail_history_entry_label">ऐतिहासिक प्रमाणपत्र %1$d</string>
 </resources>

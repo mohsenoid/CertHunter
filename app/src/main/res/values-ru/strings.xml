@@ -38,4 +38,12 @@
     <string name="app_list_sort_name_asc">Имя (А→Я)</string>
     <string name="app_list_sort_name_desc">Имя (Я→А)</string>
     <string name="app_list_system_label">Система</string>
+    <string name="app_list_load_error">Не удалось загрузить приложения. Попробуйте ещё раз.</string>
+    <string name="app_list_retry">Повторить</string>
+    <string name="app_list_refresh_error">Не удалось обновить. Отображаются предыдущие данные.</string>
+    <string name="app_list_refresh_error_dismiss">Закрыть</string>
+    <string name="app_detail_signer_label">Подписант %1$d</string>
+    <string name="app_detail_history_show">Показать историю подписи (%1$d ротаций)</string>
+    <string name="app_detail_history_hide">Скрыть историю подписи (%1$d ротаций)</string>
+    <string name="app_detail_history_entry_label">Исторический сертификат %1$d</string>
 </resources>
