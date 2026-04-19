@@ -45,7 +45,11 @@ fun AppNavHost() {
 
     if (backStack.lastOrNull() is AppAbout) {
         val context = LocalContext.current
-        val versionName = context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: ""
+        val versionName = try {
+            context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: ""
+        } catch (_: android.content.pm.PackageManager.NameNotFoundException) {
+            "unknown"
+        }
         AppAboutScreen(
             versionName = versionName,
             onDismiss = { backStack.removeLastOrNull() },
