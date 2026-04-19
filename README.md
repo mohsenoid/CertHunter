@@ -1,31 +1,39 @@
 # CertHunter 🛡️
 
-**CertHunter** is a lightweight, modern Android utility tool built with **Jetpack Compose**. It allows developers and security researchers to inspect the
-signing certificate fingerprints (SHA-256, SHA-1) and X.509 details of any application installed on their device.
+**CertHunter** is a developer utility for Android that reads the signing certificate directly from any app installed on the device — the only source that truly matters.
+
+When you work across multiple flavors like dev, nightly, staging, and production, the real certificate is the one already on the phone. CertHunter surfaces it instantly, without digging through CI secrets, keystores, or old docs.
+
+> See [MISSION.md](MISSION.md) for the full background on why this app exists.
 
 ## 🚀 Features
 
-- **App Inspection:** Lists all user and system applications installed on the device.
-- **Real-time Search:** Filter apps instantly by App Name or Package Name.
-- **Signature Extraction:** Retrieves valid signing fingerprints:
-    - SHA-256
-    - SHA-1
-- **X.509 Parsing:** Decodes the raw certificate to display:
-    - Owner (Subject DN)
-    - Issuer
-    - Serial Number
-    - Validity Period (Valid From / Valid Until)
-- **Clipboard Support:** Tap any field in the details dialog to copy the value to the clipboard.
-- **Modern UI:** Built entirely with Jetpack Compose and Material 3 design.
+- **Browse installed apps** — lists all user and system applications with real-time search and sort by name, package, or install date.
+- **SHA-256 & SHA-1 fingerprints** — copy in one tap for use with Google Pay, Firebase, Google Sign-In, Maps, or any service that requires certificate verification.
+- **Full X.509 details** — owner (Subject DN), issuer, serial number, valid from / valid until.
+- **Certificate validity state** — flags certificates as valid, expiring soon, or expired.
+- **Key rotation history** — shows active and historical signers for apps that have rotated keys (Android 9+, API 28+).
+- **Clipboard support** — tap any field to copy it instantly.
+- **Modern UI** — Jetpack Compose + Material 3.
 
 ## 🛠️ Tech Stack
 
 - **Language:** Kotlin
-- **UI Framework:** Jetpack Compose (Material 3)
-- **Concurrency:** Kotlin Coroutines (Dispatchers.IO for background loading)
-- **Security API:** `java.security.MessageDigest`, `java.security.cert.X509Certificate`
-- **Minimum SDK:** 24 (Android 7.0)
-- **Target SDK:** 37 (Android 15)
+- **UI:** Jetpack Compose (Material 3)
+- **Architecture:** MVI — ViewModel, State, Action, Event per screen
+- **DI:** Koin 4.x
+- **Navigation:** Navigation3
+- **Concurrency:** Kotlin Coroutines + `DispatcherProvider`
+- **Image loading:** Coil 2.x (custom `AppIconFetcher`)
+- **Error handling:** kotlin-result (`Result<T, E>`)
+- **Security API:** `PackageManager`, `java.security.cert.X509Certificate`
+- **Min SDK:** 24 (Android 7.0) · **Target SDK:** 37 (Android 15)
+
+### Testing
+
+- JUnit 5 + Mockk + Turbine
+- `FakeAppRepository` + `TestDispatcherProvider` for hermetic ViewModel tests
+- Coroutine tests with `StandardTestDispatcher` + `advanceUntilIdle()`
 
 ## 📸 Screenshots
 
@@ -35,49 +43,42 @@ signing certificate fingerprints (SHA-256, SHA-1) and X.509 details of any appli
 
 ## 🔑 Permissions & Privacy
 
-This application requires the following specific permission to function on Android 11 (API 30) and above:
-
-XML
-
-```
+```xml
 <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 ```
 
-**Why?**
+`QUERY_ALL_PACKAGES` is required on Android 11+ because discovering installed apps *is* the core function — without broad package visibility the app cannot operate at all.
 
-Due to Android's *Package Visibility* changes, apps cannot see other installed apps by default. Since the core purpose of CertHunter is to inspect *other* apps,
-this permission is mandatory.
-
-*Note: No data leaves the device. All processing is done locally.*
+All processing is done locally on the device. No data leaves the phone. The app has no Internet permission.
 
 ## 💻 Installation
 
 1. Clone the repository:
 
-   Bash
-
-   ```
+   ```bash
    git clone https://github.com/mohsenoid/CertHunter.git
    ```
 
-2. Open the project in **Android Studio** (Hedgehog or newer recommended).
+2. Open in **Android Studio** (Ladybug or newer recommended).
 
-3. Sync Gradle files.
+3. Sync Gradle and run on an emulator or physical device (Android 7.0+).
 
-4. Run on an emulator or physical device (Android 7.0+).
+## 🔄 CI / CD
+
+Every pull request runs **unit tests**, **Detekt lint**, and a **debug build** as parallel jobs. All three must pass before merging.
+
+Releases are triggered manually — see the [Release Flow](#-release-flow) section below.
 
 ## 🧩 Code Highlight
 
-How we extract signatures across different Android versions (Legacy vs Modern API):
+CertHunter handles two `PackageManager` APIs to support Android 7–15:
 
-Kotlin
-
-```
+```kotlin
 val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-    // Android 9+ (API 28+)
+    // Android 9+ (API 28+): active signers + full rotation history
     packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES)
 } else {
-    // Legacy (API 24-27)
+    // Android 7–8 (API 24–27): legacy API, no history
     packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
 }
 ```
@@ -128,19 +129,17 @@ Hotfix codes are always lower than the next minor release, preserving correct Pl
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 1. Fork the project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
 ## 📄 License
 
 Copyright 2026 Mohsen Mirhoseini
 
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the
-License at
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
 http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
