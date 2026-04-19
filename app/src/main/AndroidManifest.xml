@@ -3,10 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!--
-        Required to enumerate all installed packages on Android 11+ (API 30+).
-        This is the core function of CertHunter — inspecting certificates of any
-        installed app. A <queries> element cannot be used as a substitute because
-        the app must enumerate all packages, not a predefined set.
+        QUERY_ALL_PACKAGES — required for CertHunter's core function.
+
+        CertHunter is a developer utility that reads signing-certificate
+        fingerprints and X.509 details from ANY app installed on the device.
+        Enumerating the full installed-app list is the app's only purpose;
+        the user selects an app from that list to inspect its certificate.
+
+        A <queries> element cannot substitute: it only makes a predefined set
+        of packages visible, making full enumeration impossible.
+
+        Google Play permission disclosure: declared in the Play Store console
+        with the justification that this is a developer-tool app whose sole
+        function is certificate inspection across all installed packages.
     -->
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"

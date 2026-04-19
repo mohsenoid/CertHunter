@@ -9,6 +9,7 @@ CertHunter follows a **Now / Next / Later** model. There are no fixed dates — 
 **Play Store submission and first public release**
 
 - Complete Google Play review and permission declaration approval (`QUERY_ALL_PACKAGES`)
+  - ⚠️ Known risk: `QUERY_ALL_PACKAGES` is one of Play's most restricted permissions. CertHunter's developer-tool use case does not map to Google's typical approved categories (device search, antivirus, file manager, browser). There is no code-level workaround — the permission is fundamental to the app's purpose and cannot be replaced with `<queries>`. Mitigation: maintain a detailed Play Store disclosure; be prepared to appeal or respond to a rejection.
 - First public release live on the Play Store
 - Monitor early feedback and crash reports
 
