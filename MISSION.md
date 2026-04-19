@@ -29,6 +29,8 @@ Developers, release engineers, QA, and mobile teams who need to:
 
 CertHunter is a read-only, local inspection tool. It does not install, modify, or intercept anything. Everything is processed on the device. No data leaves the phone.
 
+The `QUERY_ALL_PACKAGES` permission is required because discovering installed apps *is* the core function — without broad package visibility the app cannot operate at all. The permission is not used for any secondary purpose: no package list is uploaded, shared, or stored outside the device.
+
 ## Design principles
 
 - **The device is the source of truth.** If the app is installed, its certificate is there. CertHunter surfaces it directly from `PackageManager` — no build system, no secrets, no guesswork.
