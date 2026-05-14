@@ -13,9 +13,6 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -32,16 +29,18 @@ class AppListViewModel(
     }
 
     private val _uiState = MutableStateFlow(AppListUiModel())
-    val uiState: StateFlow<AppListUiModel> = _uiState.asStateFlow()
 
-    val displayedApps: StateFlow<List<AppItem>> = combine(
-        _uiState.map { it.allApps }.distinctUntilChanged(),
-        _uiState.map { it.searchQuery }.distinctUntilChanged(),
-        _uiState.map { it.showSystemApps }.distinctUntilChanged(),
-        _uiState.map { it.sortOrder }.distinctUntilChanged(),
-    ) { apps, query, showSystem, sortOrder ->
-        filterAndSort(apps, query, showSystem, sortOrder)
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+    // Screen-facing state is a single flow so the raw inputs and the derived list
+    // are always read as one atomic snapshot — observers can never see a state that
+    // declares one searchQuery while the displayed list still reflects another.
+    val screenState: StateFlow<AppListScreenState> = _uiState
+        .map { state ->
+            AppListScreenState(
+                uiState = state,
+                displayedApps = filterAndSort(state),
+            )
+        }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, AppListScreenState())
 
     private var currentLoadJob: Job? = null
 
@@ -124,20 +123,15 @@ class AppListViewModel(
     }
 }
 
-private fun filterAndSort(
-    apps: List<AppItem>,
-    query: String,
-    showSystem: Boolean,
-    sortOrder: AppSortOrder,
-): List<AppItem> = apps
-    .filter { showSystem || !it.isSystemApp }
+private fun filterAndSort(state: AppListUiModel): List<AppItem> = state.allApps
+    .filter { state.showSystemApps || !it.isSystemApp }
     .filter {
-        query.isBlank() ||
-            it.name.contains(query, ignoreCase = true) ||
-            it.packageName.contains(query, ignoreCase = true)
+        state.searchQuery.isBlank() ||
+            it.name.contains(state.searchQuery, ignoreCase = true) ||
+            it.packageName.contains(state.searchQuery, ignoreCase = true)
     }
     .let { list ->
-        when (sortOrder) {
+        when (state.sortOrder) {
             AppSortOrder.NameAscending -> list.sortedBy { it.name.lowercase() }
             AppSortOrder.NameDescending -> list.sortedByDescending { it.name.lowercase() }
             AppSortOrder.InstallDateNewest -> list.sortedByDescending { it.firstInstallTime }

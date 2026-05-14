@@ -25,12 +25,10 @@ fun AppNavHost() {
     val backStack = rememberNavBackStack(AppList)
 
     val listViewModel: AppListViewModel = koinViewModel()
-    val listUiState by listViewModel.uiState.collectAsState()
-    val displayedApps by listViewModel.displayedApps.collectAsState()
+    val listScreenState by listViewModel.screenState.collectAsState()
 
     AppListScreen(
-        uiState = listUiState,
-        displayedApps = displayedApps,
+        screenState = listScreenState,
         onSearchQueryChanged = listViewModel::onSearchQueryChanged,
         onAppClick = { app -> backStack.add(AppDetail(app.packageName)) },
         onToggleSystemApps = listViewModel::onToggleSystemApps,
