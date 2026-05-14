@@ -8,7 +8,7 @@ The platform-support capability defines the Android API surface CertHunter targe
 
 ### Requirement: Supported Android versions
 
-The system SHALL run on Android 7.0 (API 24) through Android 15 (API 37). `minSdk` SHALL be 24, `targetSdk` SHALL be 37, `compileSdk` SHALL be 37. Lowering `minSdk` below 24 is out of scope; raising `minSdk` requires a separate change proposal.
+The system SHALL run on Android 7.0 (API 24) through the current target SDK (API 37). `minSdk` SHALL be 24, `targetSdk` SHALL be 37, `compileSdk` SHALL be 37. Lowering `minSdk` below 24 is out of scope; raising `minSdk` requires a separate change proposal.
 
 #### Scenario: Install on Android 7
 
@@ -16,7 +16,7 @@ The system SHALL run on Android 7.0 (API 24) through Android 15 (API 37). `minSd
 - **THEN** the app launches and all core flows (list, search, detail, copy) function
 - **AND** API 28+ specific behaviour (signer rotation history) is gracefully unavailable
 
-#### Scenario: Install on Android 15
+#### Scenario: Install on the latest supported Android
 
 - **WHEN** CertHunter is installed on a device running API 37
 - **THEN** the app launches and renders Material You dynamic color

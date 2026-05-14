@@ -27,7 +27,7 @@ When you work across multiple flavors like dev, nightly, staging, and production
 - **Image loading:** Coil 2.x (custom `AppIconFetcher`)
 - **Error handling:** [michael-bull/kotlin-result](https://github.com/michaelbull/kotlin-result) — two-parameter `Result<V, E>` (not `kotlin.Result`)
 - **Security API:** `PackageManager`, `java.security.cert.X509Certificate`
-- **Min SDK:** 24 (Android 7.0) · **Target SDK:** 37 (Android 15)
+- **Min SDK:** 24 (Android 7.0) · **Target SDK:** 37
 
 ### Testing
 
@@ -81,7 +81,7 @@ Releases are triggered manually — see the [Release Flow](#-release-flow) secti
 
 ## 🧩 Code Highlight
 
-CertHunter handles two `PackageManager` APIs to support Android 7–15:
+CertHunter handles two `PackageManager` APIs across the full supported API range (24 → 37):
 
 ```kotlin
 val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
