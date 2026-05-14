@@ -63,6 +63,16 @@ All processing is done locally on the device. No data leaves the phone. The app 
 
 3. Sync Gradle and run on an emulator or physical device (Android 7.0+).
 
+## 🧰 OpenSpec CLI
+
+CertHunter uses [OpenSpec](https://github.com/Fission-AI/OpenSpec) for spec-driven changes. Install the CLI globally to scaffold and validate change proposals locally:
+
+```bash
+npm install -g @fission-ai/openspec
+```
+
+See [AGENTS.md](AGENTS.md) and [openspec/project.md](openspec/project.md) for the full workflow.
+
 ## 🔄 CI / CD
 
 Every pull request runs **unit tests**, **Detekt lint**, and a **debug build** as parallel jobs. All three must pass before merging.
