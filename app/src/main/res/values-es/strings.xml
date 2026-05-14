@@ -46,4 +46,12 @@
     <string name="app_detail_history_show">Mostrar historial de firma (%1$d rotados)</string>
     <string name="app_detail_history_hide">Ocultar historial de firma (%1$d rotados)</string>
     <string name="app_detail_history_entry_label">Certificado histórico %1$d</string>
+    <string name="share_certificate_button">Compartir certificado</string>
+    <string name="share_certificate_chooser_title">Compartir certificado vía</string>
+    <string name="share_certificate_label_status">Estado</string>
+    <string name="share_certificate_label_valid_range">Válido</string>
+    <string name="share_certificate_marker_expired">VENCIDO</string>
+    <string name="share_certificate_marker_expiring">VENCE EN %1$d DÍAS</string>
+    <string name="share_certificate_marker_valid">VÁLIDO</string>
+    <string name="share_certificate_signer_header">--- Firmante %1$d ---</string>
 </resources>

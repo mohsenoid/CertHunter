@@ -49,4 +49,12 @@
     <string name="app_detail_history_show">Show signing history (%1$d rotated)</string>
     <string name="app_detail_history_hide">Hide signing history (%1$d rotated)</string>
     <string name="app_detail_history_entry_label">Historical cert %1$d</string>
+    <string name="share_certificate_button">Share certificate</string>
+    <string name="share_certificate_chooser_title">Share certificate via</string>
+    <string name="share_certificate_label_status">Status</string>
+    <string name="share_certificate_label_valid_range">Valid</string>
+    <string name="share_certificate_marker_expired">EXPIRED</string>
+    <string name="share_certificate_marker_expiring">EXPIRES IN %1$d DAYS</string>
+    <string name="share_certificate_marker_valid">VALID</string>
+    <string name="share_certificate_signer_header">--- Signer %1$d ---</string>
 </resources>

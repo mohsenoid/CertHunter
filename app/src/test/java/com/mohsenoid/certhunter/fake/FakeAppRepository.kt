@@ -9,6 +9,7 @@ import com.mohsenoid.certhunter.domain.repository.AppRepository
 class FakeAppRepository : AppRepository {
     var appsResult: List<AppItem> = emptyList()
     var shouldThrow: Boolean = false
+    var detailsResult: Result<AppDetails, AppDetailsError>? = null
 
     override suspend fun getInstalledApps(): List<AppItem> {
         if (shouldThrow) error("Failed to load apps")
@@ -16,6 +17,6 @@ class FakeAppRepository : AppRepository {
     }
 
     override suspend fun getAppDetails(packageName: String): Result<AppDetails, AppDetailsError> {
-        throw UnsupportedOperationException("Not needed for list tests")
+        return detailsResult ?: error("FakeAppRepository.detailsResult not configured")
     }
 }

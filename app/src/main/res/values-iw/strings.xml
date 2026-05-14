@@ -46,4 +46,12 @@
     <string name="app_detail_history_show">הצג היסטוריית חתימה (%1$d סיבובים)</string>
     <string name="app_detail_history_hide">הסתר היסטוריית חתימה (%1$d סיבובים)</string>
     <string name="app_detail_history_entry_label">אישור היסטורי %1$d</string>
+    <string name="share_certificate_button">שיתוף תעודה</string>
+    <string name="share_certificate_chooser_title">שיתוף תעודה דרך</string>
+    <string name="share_certificate_label_status">סטטוס</string>
+    <string name="share_certificate_label_valid_range">תקף</string>
+    <string name="share_certificate_marker_expired">פג תוקף</string>
+    <string name="share_certificate_marker_expiring">פג תוקף בעוד %1$d ימים</string>
+    <string name="share_certificate_marker_valid">תקף</string>
+    <string name="share_certificate_signer_header">--- חותם %1$d ---</string>
 </resources>

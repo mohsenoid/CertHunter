@@ -46,4 +46,12 @@
     <string name="app_detail_history_show">서명 기록 표시 (%1$d 회전)</string>
     <string name="app_detail_history_hide">서명 기록 숨기기 (%1$d 회전)</string>
     <string name="app_detail_history_entry_label">과거 인증서 %1$d</string>
+    <string name="share_certificate_button">인증서 공유</string>
+    <string name="share_certificate_chooser_title">인증서를 다음으로 공유</string>
+    <string name="share_certificate_label_status">상태</string>
+    <string name="share_certificate_label_valid_range">유효 기간</string>
+    <string name="share_certificate_marker_expired">만료됨</string>
+    <string name="share_certificate_marker_expiring">%1$d일 후 만료</string>
+    <string name="share_certificate_marker_valid">유효</string>
+    <string name="share_certificate_signer_header">--- 서명자 %1$d ---</string>
 </resources>
