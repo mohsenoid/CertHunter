@@ -97,7 +97,7 @@ The 30-day threshold is a project-wide constant.
 
 ### Requirement: Copy field to clipboard
 
-The system SHALL copy a certificate field to the system clipboard when the user taps that field. On Android API ≤ 12 (where the system does not show a clipboard notification), the system SHALL show a toast confirming the copy. On Android API ≥ 13 (where the system provides its own clipboard feedback) no toast is shown to avoid duplicate confirmation.
+The system SHALL copy a certificate field to the system clipboard when the user taps that field. On Android 12L and lower (API ≤ 32), where the system does not show a clipboard notification, the system SHALL show a toast confirming the copy. On Android 13 and higher (API ≥ 33), where the system provides its own clipboard feedback, no toast is shown to avoid duplicate confirmation.
 
 #### Scenario: Copy on Android 12
 

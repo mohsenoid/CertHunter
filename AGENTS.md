@@ -15,7 +15,6 @@ The project constitution lives under `openspec/`. Read the relevant document bef
 | [openspec/specs/code-conventions/spec.md](openspec/specs/code-conventions/spec.md) | You are unsure about naming, file layout, or Compose conventions |
 | [openspec/specs/testing-conventions/spec.md](openspec/specs/testing-conventions/spec.md) | You are writing or reviewing tests |
 | [openspec/changes/](openspec/changes/) | Before starting work — check for an active proposal |
-| [docs/roadmap.md](docs/roadmap.md) | You want to see Now / Next / Later priorities |
 
 ## OpenSpec Workflow
 

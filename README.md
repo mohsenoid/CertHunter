@@ -27,7 +27,7 @@ When you work across multiple flavors like dev, nightly, staging, and production
 - **Image loading:** Coil 2.x (custom `AppIconFetcher`)
 - **Error handling:** [michael-bull/kotlin-result](https://github.com/michaelbull/kotlin-result) — two-parameter `Result<V, E>` (not `kotlin.Result`)
 - **Security API:** `PackageManager`, `java.security.cert.X509Certificate`
-- **Min SDK:** 24 (Android 7.0) · **Target SDK:** 37 (Android 15)
+- **Min SDK:** 24 (Android 7.0) · **Target SDK:** 37
 
 ### Testing
 
@@ -63,6 +63,16 @@ All processing is done locally on the device. No data leaves the phone. The app 
 
 3. Sync Gradle and run on an emulator or physical device (Android 7.0+).
 
+## 🧰 OpenSpec CLI
+
+CertHunter uses [OpenSpec](https://github.com/Fission-AI/OpenSpec) for spec-driven changes. Install the CLI globally to scaffold and validate change proposals locally:
+
+```bash
+npm install -g @fission-ai/openspec
+```
+
+See [AGENTS.md](AGENTS.md) and [openspec/project.md](openspec/project.md) for the full workflow.
+
 ## 🔄 CI / CD
 
 Every pull request runs **unit tests**, **Detekt lint**, and a **debug build** as parallel jobs. All three must pass before merging.
@@ -71,7 +81,7 @@ Releases are triggered manually — see the [Release Flow](#-release-flow) secti
 
 ## 🧩 Code Highlight
 
-CertHunter handles two `PackageManager` APIs to support Android 7–15:
+CertHunter handles two `PackageManager` APIs across the full supported API range (24 → 37):
 
 ```kotlin
 val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
