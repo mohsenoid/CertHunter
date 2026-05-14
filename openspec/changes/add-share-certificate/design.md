@@ -45,9 +45,11 @@ The share `IconButton` lives in the `AlertDialog` title row (or as part of the c
 
 ### D2. Helper lives on `AppDetails`, not `AppCertificateDetails`
 
-Signature: `fun AppDetails.toShareText(): String` (extension function in `domain/model/`).
+Signature: `fun AppDetails.toShareText(labels: ShareCertificateLabels): String` (extension function in `domain/model/`, where `ShareCertificateLabels` is a framework-free carrier for every user-visible label — field labels, signer header template, status markers).
 
 `AppCertificateDetails` does not know its own app name or package — those are on `AppItem`. Since the shared text needs both identity and (one or more) certificates, the natural carrier is `AppDetails`. Keeping the helper at the `AppDetails` level also means we own multi-signer composition in one place rather than re-implementing it at the call site.
+
+Labels are injected through `ShareCertificateLabels` rather than read from resources inside the helper so the function stays pure and Android-framework-free for unit testing; the call site resolves `stringResource(...)` values and hands them in.
 
 **Alternatives considered:**
 - `AppCertificateDetails.toShareText()` taking `appName: String, packageName: String` parameters — works, but the caller has to loop and concatenate for multi-signer apps; the multi-signer formatting logic ends up split between the helper and the ViewModel.
@@ -114,7 +116,7 @@ Locking these decisions in means the existing artifacts need narrow updates. Non
 **`proposal.md`:**
 - "The summary text MUST include..." → keep the field list, but add app name and package name as required header fields
 - "the displayed certificate" → "all active signers visible in the detail dialog, with app identity in the header"
-- Impact section: helper signature is `AppDetails.toShareText()`, not `AppCertificateDetails.toShareText()`
+- Impact section: helper signature is `AppDetails.toShareText(labels: ShareCertificateLabels)`, not `AppCertificateDetails.toShareText()`
 
 **`specs/certificate-inspection/spec.md`:**
 - Requirement body: add app name and package name to the required content list; clarify that the text covers all active signers (not history)
@@ -122,7 +124,7 @@ Locking these decisions in means the existing artifacts need narrow updates. Non
 - Add a fourth scenario for the multi-signer case (e.g., "When the active signer list contains 2 entries, the shared text contains both, separated by a signer-N marker")
 
 **`tasks.md`:**
-- 1.1: helper is `AppDetails.toShareText()`, not on `AppCertificateDetails`
+- 1.1: helper is `AppDetails.toShareText(labels: ShareCertificateLabels)`, not on `AppCertificateDetails`
 - 1.2: include app name + package in the format spec
 - Add a `R.string.share_certificate_marker_valid` resource to 2.1
 - Add a multi-signer test to section 3 alongside the validity-state tests
