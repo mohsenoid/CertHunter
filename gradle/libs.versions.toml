@@ -1,64 +1,140 @@
 [versions]
+# ─── Build tooling ───────────────────────────────────────────────────────
 agp = "9.2.1"
+kotlin = "2.3.21"
 detekt = "1.23.8"
 desugarJdkLibs = "2.1.5"
-kotlinResult = "2.3.1"
+
+# ─── AndroidX core ───────────────────────────────────────────────────────
 coreKtx = "1.18.0"
-junit = "4.13.2"
-junit5 = "6.0.3"
-junitVersion = "1.3.0"
-espressoCore = "3.7.0"
-coil = "2.7.0"
-turbine = "1.2.1"
-kotlinxCoroutines = "1.11.0"
-mockk = "1.14.9"
 lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.13.0"
-kotlin = "2.3.21"
+
+# ─── Compose ─────────────────────────────────────────────────────────────
 composeBom = "2026.05.00"
-koin = "4.2.1"
-klogx = "2024.09.29"
+
+# ─── Navigation ──────────────────────────────────────────────────────────
 navigation3 = "1.1.1"
+
+# ─── Dependency injection ────────────────────────────────────────────────
+koin = "4.2.1"
+
+# ─── Image loading ───────────────────────────────────────────────────────
+coil = "2.7.0"
+
+# ─── Serialization ───────────────────────────────────────────────────────
 kotlinxSerializationJson = "1.11.0"
 
+# ─── Logging ─────────────────────────────────────────────────────────────
+klogx = "2024.09.29"
+
+# ─── Utilities ───────────────────────────────────────────────────────────
+kotlinResult = "2.3.1"
+kotlinxCoroutines = "1.11.0"
+
+# ─── Testing ─────────────────────────────────────────────────────────────
+junit5 = "6.0.3"
+turbine = "1.2.1"
+mockk = "1.14.9"
+
+# ─── Instrumented testing ────────────────────────────────────────────────
+androidxTestExt = "1.3.0"
+espressoCore = "3.7.0"
+
 [libraries]
-android-tools-desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
-detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
-kotlin-result = { group = "com.michael-bull.kotlin-result", name = "kotlin-result", version.ref = "kotlinResult" }
+# ─── AndroidX core ───────────────────────────────────────────────────────
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-junit5-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit5" }
-junit5-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit5" }
-coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
-turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
-kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+android-tools-desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugarJdkLibs" }
+
+# ─── Compose (BOM-managed) ───────────────────────────────────────────────
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core" }
 androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
+# Debug-only Compose tooling (BOM-managed)
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+# Instrumented-test Compose dep (BOM-managed)
+androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+
+# ─── Navigation ──────────────────────────────────────────────────────────
+navigation3-runtime = { group = "androidx.navigation3", name = "navigation3-runtime", version.ref = "navigation3" }
+navigation3-ui = { group = "androidx.navigation3", name = "navigation3-ui", version.ref = "navigation3" }
+
+# ─── Dependency injection ────────────────────────────────────────────────
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
+
+# ─── Image loading ───────────────────────────────────────────────────────
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+
+# ─── Serialization ───────────────────────────────────────────────────────
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+
+# ─── Logging (klogx-bom + BOM-managed members) ───────────────────────────
 klogx-bom = { group = "com.mohsenoid.klogx", name = "klogx-bom", version.ref = "klogx" }
 klogx-core = { group = "com.mohsenoid.klogx", name = "core" }
 klogx-android-logcat = { group = "com.mohsenoid.klogx.android", name = "logcat" }
-navigation3-runtime = { group = "androidx.navigation3", name = "navigation3-runtime", version.ref = "navigation3" }
-navigation3-ui = { group = "androidx.navigation3", name = "navigation3-ui", version.ref = "navigation3" }
-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+
+# ─── Utilities ───────────────────────────────────────────────────────────
+kotlin-result = { group = "com.michael-bull.kotlin-result", name = "kotlin-result", version.ref = "kotlinResult" }
+
+# ─── Static analysis ─────────────────────────────────────────────────────
+detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
+
+# ─── Unit tests ──────────────────────────────────────────────────────────
+junit5-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit5" }
+junit5-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit5" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+
+# ─── Instrumented tests ──────────────────────────────────────────────────
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxTestExt" }
+androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+
+[bundles]
+compose = [
+    "androidx-compose-ui",
+    "androidx-compose-ui-graphics",
+    "androidx-compose-ui-tooling-preview",
+    "androidx-compose-material3",
+    "androidx-compose-material-icons-core",
+    "androidx-compose-material-icons-extended",
+]
+compose-debug = [
+    "androidx-compose-ui-tooling",
+    "androidx-compose-ui-test-manifest",
+]
+compose-android-test = [
+    "androidx-compose-ui-test-junit4",
+]
+navigation3 = [
+    "navigation3-runtime",
+    "navigation3-ui",
+]
+koin = [
+    "koin-android",
+    "koin-androidx-compose",
+]
+klogx = [
+    "klogx-core",
+    "klogx-android-logcat",
+]
+unit-test = [
+    "junit5-api",
+    "kotlinx-coroutines-test",
+    "turbine",
+    "mockk",
+]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-

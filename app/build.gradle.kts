@@ -93,20 +93,13 @@ dependencies {
 
     // ─── Jetpack Compose ─────────────────────────────────────────────────────
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.material.icons.core)
-    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.bundles.compose)
 
     // ─── Navigation ──────────────────────────────────────────────────────────
-    implementation(libs.navigation3.runtime)
-    implementation(libs.navigation3.ui)
+    implementation(libs.bundles.navigation3)
 
     // ─── Dependency injection ─────────────────────────────────────────────────
-    implementation(libs.koin.android)
-    implementation(libs.koin.androidx.compose)
+    implementation(libs.bundles.koin)
 
     // ─── Networking / image loading ───────────────────────────────────────────
     implementation(libs.coil.compose)
@@ -116,8 +109,7 @@ dependencies {
 
     // ─── Logging ─────────────────────────────────────────────────────────────
     implementation(platform(libs.klogx.bom))
-    implementation(libs.klogx.core)
-    implementation(libs.klogx.android.logcat)
+    implementation(libs.bundles.klogx)
 
     // ─── Utilities ────────────────────────────────────────────────────────────
     implementation(libs.kotlin.result)
@@ -126,21 +118,16 @@ dependencies {
     detektPlugins(libs.detekt.formatting)
 
     // ─── Unit tests ───────────────────────────────────────────────────────────
-    testImplementation(libs.junit)
-    testImplementation(libs.junit5.api)
+    testImplementation(libs.bundles.unit.test)
     testImplementation(kotlin("test-junit5"))
     testRuntimeOnly(libs.junit5.engine)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.turbine)
-    testImplementation(libs.mockk)
 
     // ─── Instrumented tests ───────────────────────────────────────────────────
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.bundles.compose.android.test)
 
     // ─── Debug only ───────────────────────────────────────────────────────────
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    debugImplementation(libs.bundles.compose.debug)
 }
