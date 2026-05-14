@@ -51,6 +51,7 @@ import com.mohsenoid.certhunter.ui.util.ComponentPreviews
 @Composable
 fun AppListScreen(
     uiState: AppListUiModel,
+    displayedApps: List<AppItem>,
     onSearchQueryChanged: (String) -> Unit,
     onAppClick: (AppItem) -> Unit,
     onToggleSystemApps: () -> Unit,
@@ -96,6 +97,7 @@ fun AppListScreen(
             ) {
                 AppListContent(
                     uiState = uiState,
+                    displayedApps = displayedApps,
                     onSearchQueryChanged = onSearchQueryChanged,
                     onAppClick = onAppClick,
                     onToggleSystemApps = onToggleSystemApps,
@@ -111,6 +113,7 @@ fun AppListScreen(
 @Composable
 private fun AppListContent(
     uiState: AppListUiModel,
+    displayedApps: List<AppItem>,
     onSearchQueryChanged: (String) -> Unit,
     onAppClick: (AppItem) -> Unit,
     onToggleSystemApps: () -> Unit,
@@ -137,11 +140,11 @@ private fun AppListContent(
             }
         }
 
-        items(uiState.filteredApps) { app ->
+        items(displayedApps) { app ->
             AppListRow(app = app, onClick = { onAppClick(app) })
         }
 
-        if (uiState.filteredApps.isEmpty()) {
+        if (displayedApps.isEmpty()) {
             item {
                 Box(
                     modifier = Modifier
@@ -286,6 +289,7 @@ private fun AppListScreenPreview() {
     CertHunterTheme {
         AppListScreen(
             uiState = AppListUiModel(allApps = previewApps, isLoadingApps = false),
+            displayedApps = previewApps,
             onSearchQueryChanged = {},
             onAppClick = {},
             onToggleSystemApps = {},
@@ -304,6 +308,7 @@ private fun AppListScreenLoadingPreview() {
     CertHunterTheme {
         AppListScreen(
             uiState = AppListUiModel(isLoadingApps = true),
+            displayedApps = emptyList(),
             onSearchQueryChanged = {},
             onAppClick = {},
             onToggleSystemApps = {},
@@ -322,6 +327,7 @@ private fun AppListScreenErrorPreview() {
     CertHunterTheme {
         AppListScreen(
             uiState = AppListUiModel(isLoadingApps = false, hasLoadError = true),
+            displayedApps = emptyList(),
             onSearchQueryChanged = {},
             onAppClick = {},
             onToggleSystemApps = {},
@@ -340,6 +346,7 @@ private fun AppListScreenRefreshErrorPreview() {
     CertHunterTheme {
         AppListScreen(
             uiState = AppListUiModel(allApps = previewApps, isLoadingApps = false, hasRefreshError = true),
+            displayedApps = previewApps,
             onSearchQueryChanged = {},
             onAppClick = {},
             onToggleSystemApps = {},
@@ -362,6 +369,7 @@ private fun AppListScreenEmptyPreview() {
                 isLoadingApps = false,
                 searchQuery = "nonexistent",
             ),
+            displayedApps = emptyList(),
             onSearchQueryChanged = {},
             onAppClick = {},
             onToggleSystemApps = {},

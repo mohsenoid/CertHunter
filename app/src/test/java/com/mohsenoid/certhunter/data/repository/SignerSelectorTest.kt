@@ -7,6 +7,23 @@ import kotlin.test.assertTrue
 class SignerSelectorTest {
 
     @Test
+    fun `given single signer with empty history when select then current cert and empty historical`() {
+        // given
+        val cert = byteArrayOf(1, 2, 3)
+
+        // when
+        val (current, historical) = SignerSelector.select(
+            isMultiSigned = false,
+            currentSignerBytes = listOf(cert),
+            historyBytes = emptyList(),
+        )
+
+        // then
+        assertEquals(1, current.size)
+        assertTrue(historical.isEmpty())
+    }
+
+    @Test
     fun `given single signer with no rotation when select then one current cert and empty history`() {
         // given
         val cert = byteArrayOf(1, 2, 3)
