@@ -4,7 +4,7 @@
 
 When you work across multiple flavors like dev, nightly, staging, and production, the real certificate is the one already on the phone. CertHunter surfaces it instantly, without digging through CI secrets, keystores, or old docs.
 
-> See [specs/MISSION.md](specs/MISSION.md) for the full background on why this app exists.
+> See [openspec/project.md](openspec/project.md) for the full background on why this app exists.
 
 ## 🚀 Features
 
