@@ -46,4 +46,12 @@
     <string name="app_detail_history_show">عرض سجل التوقيع (%1$d دوران)</string>
     <string name="app_detail_history_hide">إخفاء سجل التوقيع (%1$d دوران)</string>
     <string name="app_detail_history_entry_label">شهادة تاريخية %1$d</string>
+    <string name="share_certificate_button">مشاركة الشهادة</string>
+    <string name="share_certificate_chooser_title">مشاركة الشهادة عبر</string>
+    <string name="share_certificate_label_status">الحالة</string>
+    <string name="share_certificate_label_valid_range">صالحة</string>
+    <string name="share_certificate_marker_expired">منتهية الصلاحية</string>
+    <string name="share_certificate_marker_expiring">تنتهي خلال %1$d يوم</string>
+    <string name="share_certificate_marker_valid">صالحة</string>
+    <string name="share_certificate_signer_header">--- الموقِّع %1$d ---</string>
 </resources>

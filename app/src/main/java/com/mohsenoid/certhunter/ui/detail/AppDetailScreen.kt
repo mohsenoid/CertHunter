@@ -2,13 +2,18 @@ package com.mohsenoid.certhunter.ui.detail
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -27,6 +32,7 @@ import com.mohsenoid.certhunter.R
 import com.mohsenoid.certhunter.domain.model.AppCertificateDetails
 import com.mohsenoid.certhunter.domain.model.AppDetailsError
 import com.mohsenoid.certhunter.domain.model.CertificateValidity
+import com.mohsenoid.certhunter.domain.model.ShareCertificateLabels
 import com.mohsenoid.certhunter.ui.detail.widget.AppDetailRow
 import com.mohsenoid.certhunter.ui.detail.widget.CertificateValidityBadge
 import com.mohsenoid.certhunter.ui.theme.CertHunterTheme
@@ -35,8 +41,12 @@ import com.mohsenoid.certhunter.ui.util.ComponentPreviews
 @Composable
 fun AppDetailScreen(
     uiState: AppDetailUiModel,
+    onAction: (AppDetailAction) -> Unit,
     onDismiss: () -> Unit,
 ) {
+    val shareLabels = rememberShareCertificateLabels()
+    val canShare = !uiState.isLoading && uiState.error == null && uiState.certificates.isNotEmpty()
+
     AlertDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
@@ -46,18 +56,46 @@ fun AppDetailScreen(
             Column {
                 Text(text = uiState.appName, fontWeight = FontWeight.Bold)
                 if (!uiState.isLoading) {
-                    Text(
-                        text = stringResource(R.string.app_detail_tap_to_copy),
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Normal,
-                        color = MaterialTheme.colorScheme.secondary,
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = stringResource(R.string.app_detail_tap_to_copy),
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Normal,
+                            color = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.weight(1f),
+                        )
+                        if (canShare) {
+                            IconButton(
+                                onClick = { onAction(AppDetailAction.ShareCertificate(shareLabels)) },
+                            ) {
+                                Icon(
+                                    Icons.Default.Share,
+                                    contentDescription = stringResource(R.string.share_certificate_button),
+                                )
+                            }
+                        }
+                    }
                 }
             }
         },
         text = { AppDetailContent(uiState) },
     )
 }
+
+@Composable
+private fun rememberShareCertificateLabels(): ShareCertificateLabels = ShareCertificateLabels(
+    sha256 = stringResource(R.string.app_detail_label_sha256),
+    sha1 = stringResource(R.string.app_detail_label_sha1),
+    owner = stringResource(R.string.app_detail_label_owner),
+    issuer = stringResource(R.string.app_detail_label_issuer),
+    serial = stringResource(R.string.app_detail_label_serial),
+    validRange = stringResource(R.string.share_certificate_label_valid_range),
+    status = stringResource(R.string.share_certificate_label_status),
+    signerHeader = stringResource(R.string.share_certificate_signer_header),
+    markerValid = stringResource(R.string.share_certificate_marker_valid),
+    markerExpired = stringResource(R.string.share_certificate_marker_expired),
+    markerExpiringSoon = stringResource(R.string.share_certificate_marker_expiring),
+)
 
 @Composable
 private fun AppDetailContent(uiState: AppDetailUiModel) {
@@ -192,6 +230,7 @@ private fun AppDetailScreenPreview() {
                 isSystemApp = false,
                 certificates = listOf(previewCert),
             ),
+            onAction = {},
             onDismiss = {},
         )
     }
@@ -209,6 +248,7 @@ private fun AppDetailScreenMultiSignerPreview() {
                 isSystemApp = false,
                 certificates = listOf(previewCert, previewOldCert),
             ),
+            onAction = {},
             onDismiss = {},
         )
     }
@@ -227,6 +267,7 @@ private fun AppDetailScreenWithHistoryPreview() {
                 certificates = listOf(previewCert),
                 historicalCertificates = listOf(previewOldCert),
             ),
+            onAction = {},
             onDismiss = {},
         )
     }
@@ -238,6 +279,7 @@ private fun AppDetailScreenLoadingPreview() {
     CertHunterTheme {
         AppDetailScreen(
             uiState = AppDetailUiModel(isLoading = true),
+            onAction = {},
             onDismiss = {},
         )
     }
@@ -249,6 +291,7 @@ private fun AppDetailScreenNoDetailsPreview() {
     CertHunterTheme {
         AppDetailScreen(
             uiState = AppDetailUiModel(isLoading = false, appName = "CertHunter"),
+            onAction = {},
             onDismiss = {},
         )
     }

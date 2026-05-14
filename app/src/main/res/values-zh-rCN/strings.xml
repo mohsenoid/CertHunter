@@ -46,4 +46,12 @@
     <string name="app_detail_history_show">显示签名历史（%1$d 次轮换）</string>
     <string name="app_detail_history_hide">隐藏签名历史（%1$d 次轮换）</string>
     <string name="app_detail_history_entry_label">历史证书 %1$d</string>
+    <string name="share_certificate_button">分享证书</string>
+    <string name="share_certificate_chooser_title">通过以下方式分享证书</string>
+    <string name="share_certificate_label_status">状态</string>
+    <string name="share_certificate_label_valid_range">有效期</string>
+    <string name="share_certificate_marker_expired">已过期</string>
+    <string name="share_certificate_marker_expiring">还有 %1$d 天过期</string>
+    <string name="share_certificate_marker_valid">有效</string>
+    <string name="share_certificate_signer_header">--- 签名者 %1$d ---</string>
 </resources>

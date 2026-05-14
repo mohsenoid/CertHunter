@@ -46,4 +46,12 @@
     <string name="app_detail_history_show">Показать историю подписи (%1$d ротаций)</string>
     <string name="app_detail_history_hide">Скрыть историю подписи (%1$d ротаций)</string>
     <string name="app_detail_history_entry_label">Исторический сертификат %1$d</string>
+    <string name="share_certificate_button">Поделиться сертификатом</string>
+    <string name="share_certificate_chooser_title">Поделиться сертификатом через</string>
+    <string name="share_certificate_label_status">Статус</string>
+    <string name="share_certificate_label_valid_range">Срок действия</string>
+    <string name="share_certificate_marker_expired">ИСТЁК</string>
+    <string name="share_certificate_marker_expiring">ИСТЕКАЕТ ЧЕРЕЗ %1$d ДНЕЙ</string>
+    <string name="share_certificate_marker_valid">ДЕЙСТВИТЕЛЕН</string>
+    <string name="share_certificate_signer_header">--- Подписант %1$d ---</string>
 </resources>

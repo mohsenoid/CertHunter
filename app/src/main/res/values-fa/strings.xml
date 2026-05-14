@@ -46,4 +46,12 @@
     <string name="app_detail_history_show">نمایش تاریخچه امضا (%1$d چرخش)</string>
     <string name="app_detail_history_hide">پنهان کردن تاریخچه امضا (%1$d چرخش)</string>
     <string name="app_detail_history_entry_label">گواهینامه تاریخی %1$d</string>
+    <string name="share_certificate_button">اشتراک‌گذاری گواهینامه</string>
+    <string name="share_certificate_chooser_title">اشتراک‌گذاری گواهینامه از طریق</string>
+    <string name="share_certificate_label_status">وضعیت</string>
+    <string name="share_certificate_label_valid_range">معتبر</string>
+    <string name="share_certificate_marker_expired">منقضی شده</string>
+    <string name="share_certificate_marker_expiring">در %1$d روز منقضی می‌شود</string>
+    <string name="share_certificate_marker_valid">معتبر</string>
+    <string name="share_certificate_signer_header">--- امضاکننده %1$d ---</string>
 </resources>
