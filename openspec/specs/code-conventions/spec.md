@@ -140,6 +140,8 @@ The following non-`libs.*` forms are explicitly permitted because the version is
 
 Libraries whose version is managed by a BOM (e.g. Compose libraries under `platform(libs.androidx.compose.bom)`) MAY omit `version.ref` in their `[libraries]` entry. In that case the catalog entry SHALL declare `group` and `name` only.
 
+Gradle's Kotlin DSL converts kebab-case (`-`) and dotted (`.`) segments in aliases to nested accessors. The catalog alias `androidx-core-ktx` is consumed as `libs.androidx.core.ktx`, and the bundle alias `unit-test` is consumed as `libs.bundles.unit.test`. Write the kebab-case form in `libs.versions.toml` and the dotted form in `build.gradle.kts`.
+
 #### Scenario: Adding a new versioned library
 
 - **WHEN** a contributor adds a new third-party library that is not managed by a BOM
@@ -184,6 +186,10 @@ The catalog SHALL use a consistent naming style:
 ### Requirement: Bundles for co-used libraries
 
 The catalog SHALL declare a `[bundles]` entry whenever two or more library aliases are consumed together in every current consumer module. Consumer modules SHALL prefer `libs.bundles.<name>` over listing the same aliases individually.
+
+A single-item bundle MAY be declared when it represents a stable role slot expected to grow (e.g. `compose-android-test`), so that consumer modules refer to a role rather than to a specific dependency.
+
+Bundle aliases follow the same kebab-case-to-dotted-accessor mapping as library aliases: `unit-test` in `libs.versions.toml` is consumed as `libs.bundles.unit.test` in `build.gradle.kts`.
 
 The following role-based bundles SHALL exist as long as their member libraries remain in use:
 

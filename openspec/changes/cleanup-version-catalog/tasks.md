@@ -51,4 +51,4 @@
 
 - [x] 7.1 Run `openspec status --change cleanup-version-catalog` to confirm all artifacts are done.
 - [x] 7.2 Update `openspec/project.md` only if a wording reference to the catalog must change (the existing "authoritative source for library versions" line should stay).
-- [ ] 7.3 Open the PR with the proposal summary and link this change directory in the PR description. (Not done — branch `enhance/cleanup-version-catalog` exists with commits `Research cleanup-version-catalog` and `impl`; PR has not been opened yet, and the change is NOT archived until after PR merge.)
+- [x] 7.3 Open the PR with the proposal summary and link this change directory in the PR description. (PR #23 opened; archival happens after merge.)
