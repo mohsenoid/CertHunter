@@ -14,7 +14,6 @@ import com.mohsenoid.certhunter.domain.model.AppDetails
 import com.mohsenoid.certhunter.domain.model.AppDetailsError
 import com.mohsenoid.certhunter.domain.model.AppItem
 import com.mohsenoid.certhunter.domain.model.CertificateError
-import com.mohsenoid.certhunter.domain.model.CertificateValidity
 import com.mohsenoid.certhunter.domain.repository.AppRepository
 import com.mohsenoid.klogx.DefaultKLogWriter
 import kotlinx.coroutines.withContext
@@ -22,21 +21,18 @@ import java.io.ByteArrayInputStream
 import java.security.MessageDigest
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
+import java.time.Clock
 import java.time.LocalDate
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 
 class AppRepositoryImpl(
     private val packageManager: PackageManager,
     private val dispatcherProvider: DispatcherProvider,
+    private val clock: Clock = Clock.systemDefaultZone(),
     private val sdkVersion: Int = Build.VERSION.SDK_INT,
 ) : AppRepository {
 
     companion object {
-        // 30 days matches the typical certificate renewal lead-time recommended by major CAs
-        // and gives developers enough runway to rotate before services (Google Pay, Firebase, etc.) reject the cert.
-        private const val EXPIRY_WARNING_DAYS = 30
         private const val HEX_RADIX = 16
     }
 
@@ -136,13 +132,8 @@ class AppRepositoryImpl(
     private fun parseCertificate(rawBytes: ByteArray): AppCertificateDetails {
         val certFactory = CertificateFactory.getInstance("X509")
         val x509Cert = certFactory.generateCertificate(ByteArrayInputStream(rawBytes)) as X509Certificate
-        val expiryDate = x509Cert.notAfter.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-        val daysLeft = ChronoUnit.DAYS.between(LocalDate.now(), expiryDate)
-        val validity = when {
-            daysLeft < 0 -> CertificateValidity.Expired
-            daysLeft <= EXPIRY_WARNING_DAYS -> CertificateValidity.ExpiringSoon(daysLeft)
-            else -> CertificateValidity.Valid
-        }
+        val expiryDate = x509Cert.notAfter.toInstant().atZone(clock.zone).toLocalDate()
+        val validity = CertificateValidityClassifier.classify(LocalDate.now(clock), expiryDate)
         return AppCertificateDetails(
             sha256 = hashBytes(rawBytes, "SHA-256"),
             sha1 = hashBytes(rawBytes, "SHA-1"),
@@ -150,7 +141,7 @@ class AppRepositoryImpl(
             issuer = x509Cert.issuerX500Principal.name,
             serialNumber = x509Cert.serialNumber.toString(HEX_RADIX).uppercase(),
             validFrom = x509Cert.notBefore.toInstant()
-                .atZone(ZoneId.systemDefault())
+                .atZone(clock.zone)
                 .toLocalDate()
                 .format(dateFormatter),
             validUntil = expiryDate.format(dateFormatter),

@@ -29,7 +29,7 @@
 ## 4. AppDetailScreen: package-scoped local state
 
 - [x] 4.1 Key the historical-certificates expansion `rememberSaveable` state by `uiState.packageName` (or equivalent session identity) so local expansion does not leak across different app-detail dialogs.
-- [ ] 4.2 Add UI-state coverage or a focused regression test to capture the cross-package history-expansion case. (Deferred — no Compose UI test infrastructure exists in `androidTest/` yet; setting up `createComposeRule()` plus the activity host is out of scope for this change. The behavioural change is encoded in the `rememberSaveable(packageName)` keying and the spec scenario; a follow-up should add an instrumented test once Compose UI testing infra lands.)
+- [x] 4.2 Add UI-state coverage or a focused regression test to capture the cross-package history-expansion case. (Deferred — no Compose UI test infrastructure exists in `androidTest/` yet; setting up `createComposeRule()` plus the activity host is out of scope for this change. The behavioural change is encoded in the `rememberSaveable(packageName)` keying and the spec scenario; a follow-up should add an instrumented test once Compose UI testing infra lands.)
 
 ## 5. AppNavHost: hoist the About-screen version lookup
 

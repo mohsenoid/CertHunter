@@ -13,6 +13,7 @@ import com.github.michaelbull.result.getOrElse
 import com.mohsenoid.certhunter.data.repository.TestCertificates.CERT_1_DER
 import com.mohsenoid.certhunter.data.repository.TestCertificates.CERT_2_DER
 import com.mohsenoid.certhunter.domain.model.AppDetailsError
+import com.mohsenoid.certhunter.domain.model.CertificateValidity
 import com.mohsenoid.certhunter.fake.TestDispatcherProvider
 import io.mockk.every
 import io.mockk.junit5.MockKExtension
@@ -28,6 +29,9 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import java.time.Clock
+import java.time.LocalDate
+import java.time.ZoneId
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
@@ -87,9 +91,13 @@ class AppRepositoryImplTest {
         Dispatchers.resetMain()
     }
 
-    private fun repositoryAt(sdkVersion: Int) = AppRepositoryImpl(
+    private fun repositoryAt(
+        sdkVersion: Int,
+        clock: Clock = Clock.systemDefaultZone(),
+    ) = AppRepositoryImpl(
         packageManager = mockPm,
         dispatcherProvider = TestDispatcherProvider(testDispatcher),
+        clock = clock,
         sdkVersion = sdkVersion,
     )
 
@@ -427,6 +435,84 @@ class AppRepositoryImplTest {
 
                 // then
                 assertEquals(42_000L, details.getOrElse { fail("$it") }.item.firstInstallTime)
+            }
+    }
+
+    // ─── Validity classification boundaries (with a fixed clock) ─────────────
+
+    @Nested
+    inner class ValidityBoundaries {
+
+        // CERT_1_DER notAfter encoded as UTCTime "360415145839Z" -> 2036-04-15 in UTC.
+        private val cert1ExpiryUtc: LocalDate = LocalDate.of(2036, 4, 15)
+        private val utc: ZoneId = ZoneId.of("UTC")
+
+        private lateinit var mockPkgInfoSigning: PackageInfo
+        private lateinit var mockSigningInfo: SigningInfo
+
+        @BeforeEach
+        fun setUpSigning() {
+            mockSigningInfo = mockk(relaxed = true)
+            mockPkgInfoSigning = mockk(relaxed = true)
+            mockPkgInfoSigning.signingInfo = mockSigningInfo
+
+            every {
+                mockPm.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES)
+            } returns mockPkgInfoSigning
+            every { mockSigningInfo.hasMultipleSigners() } returns false
+            every { mockSigningInfo.apkContentsSigners } returns arrayOf(sig1)
+            every { mockSigningInfo.signingCertificateHistory } returns arrayOf(sig1)
+        }
+
+        private fun clockAt(date: LocalDate): Clock =
+            Clock.fixed(date.atStartOfDay(utc).toInstant(), utc)
+
+        @Test
+        fun `given today is one day after notAfter when getAppDetails then validity is Expired`() =
+            runTest(testDispatcher) {
+                val clock = clockAt(cert1ExpiryUtc.plusDays(1))
+
+                val result = repositoryAt(Build.VERSION_CODES.P, clock).getAppDetails(packageName)
+                advanceUntilIdle()
+
+                val cert = result.getOrElse { fail("Expected Ok but got: $it") }.certificates[0]
+                assertEquals(CertificateValidity.Expired, cert.validity)
+            }
+
+        @Test
+        fun `given today equals notAfter when getAppDetails then validity is ExpiringSoon with zero days left`() =
+            runTest(testDispatcher) {
+                val clock = clockAt(cert1ExpiryUtc)
+
+                val result = repositoryAt(Build.VERSION_CODES.P, clock).getAppDetails(packageName)
+                advanceUntilIdle()
+
+                val cert = result.getOrElse { fail("Expected Ok but got: $it") }.certificates[0]
+                assertEquals(CertificateValidity.ExpiringSoon(0), cert.validity)
+            }
+
+        @Test
+        fun `given today is 30 days before notAfter when getAppDetails then validity is ExpiringSoon with 30 days left`() =
+            runTest(testDispatcher) {
+                val clock = clockAt(cert1ExpiryUtc.minusDays(30))
+
+                val result = repositoryAt(Build.VERSION_CODES.P, clock).getAppDetails(packageName)
+                advanceUntilIdle()
+
+                val cert = result.getOrElse { fail("Expected Ok but got: $it") }.certificates[0]
+                assertEquals(CertificateValidity.ExpiringSoon(30), cert.validity)
+            }
+
+        @Test
+        fun `given today is 31 days before notAfter when getAppDetails then validity is Valid`() =
+            runTest(testDispatcher) {
+                val clock = clockAt(cert1ExpiryUtc.minusDays(31))
+
+                val result = repositoryAt(Build.VERSION_CODES.P, clock).getAppDetails(packageName)
+                advanceUntilIdle()
+
+                val cert = result.getOrElse { fail("Expected Ok but got: $it") }.certificates[0]
+                assertEquals(CertificateValidity.Valid, cert.validity)
             }
     }
 }
