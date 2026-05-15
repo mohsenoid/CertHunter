@@ -13,7 +13,7 @@ import java.time.Clock
 
 val appModule = module {
     single<DispatcherProvider> { DefaultDispatcherProvider() }
-    single<Clock> { Clock.systemDefaultZone() }
+    single<Clock> { SystemDefaultZoneClock }
     single<AppRepository> {
         AppRepositoryImpl(
             packageManager = androidContext().packageManager,
