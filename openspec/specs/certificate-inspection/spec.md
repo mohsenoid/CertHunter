@@ -146,3 +146,15 @@ The formatted text SHALL be produced by a pure helper `AppDetails.toShareText(la
 - **THEN** the shared text contains one signer block per active signer
 - **AND** each signer block is preceded by a signer-header marker that identifies the signer's index
 - **AND** no entry from `AppDetails.historicalCertificates` appears in the shared text
+
+### Requirement: Detail-dialog local UI state is package-scoped
+
+Local UI state owned by the certificate detail dialog, such as whether the historical-certificates section is expanded, SHALL belong to the currently displayed package only. Opening a different app's detail dialog SHALL NOT restore local expansion state from a previous app.
+
+#### Scenario: History expansion does not leak across apps
+
+- **WHEN** the user opens app A's detail dialog and expands the historical certificates section
+- **AND** dismisses that dialog
+- **AND** later opens app B's detail dialog
+- **THEN** app B's historical certificates section starts from its default collapsed state
+- **AND** app A's previous expansion state does not leak into app B's dialog

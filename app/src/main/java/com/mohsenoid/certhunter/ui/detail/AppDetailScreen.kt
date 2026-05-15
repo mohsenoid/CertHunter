@@ -146,7 +146,7 @@ private fun AppDetailContent(uiState: AppDetailUiModel) {
             }
 
             if (uiState.historicalCertificates.isNotEmpty()) {
-                HistoricalCertificatesSection(uiState.historicalCertificates)
+                HistoricalCertificatesSection(uiState.packageName, uiState.historicalCertificates)
             }
         }
     }
@@ -166,8 +166,9 @@ private fun CertificateBlock(cert: AppCertificateDetails) {
 }
 
 @Composable
-private fun HistoricalCertificatesSection(certs: List<AppCertificateDetails>) {
-    var expanded by rememberSaveable { mutableStateOf(false) }
+private fun HistoricalCertificatesSection(packageName: String, certs: List<AppCertificateDetails>) {
+    // Key by package so expansion state does not leak across different app-detail dialogs.
+    var expanded by rememberSaveable(packageName) { mutableStateOf(false) }
     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
     TextButton(
         onClick = { expanded = !expanded },

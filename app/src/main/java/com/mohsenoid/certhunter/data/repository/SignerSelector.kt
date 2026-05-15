@@ -26,8 +26,8 @@ internal object SignerSelector {
     ): Pair<List<ByteArray>, List<ByteArray>> = if (isMultiSigned) {
         Pair(currentSignerBytes, emptyList())
     } else {
-        // Drop the last element from history because it is the current signer (already in currentSignerBytes)
-        val historical = if (historyBytes.size > 1) historyBytes.dropLast(1) else emptyList()
-        Pair(currentSignerBytes, historical)
+        // Drop the last element from history because it is the current signer (already in currentSignerBytes).
+        // dropLast(1) is safe on empty and size-1 lists — both yield an empty historical list.
+        Pair(currentSignerBytes, historyBytes.dropLast(1))
     }
 }

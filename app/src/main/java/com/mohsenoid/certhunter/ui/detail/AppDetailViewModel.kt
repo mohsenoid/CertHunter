@@ -8,6 +8,7 @@ import com.github.michaelbull.result.onSuccess
 import com.mohsenoid.certhunter.coroutine.DispatcherProvider
 import com.mohsenoid.certhunter.domain.model.AppDetails
 import com.mohsenoid.certhunter.domain.model.AppDetailsError
+import com.mohsenoid.certhunter.domain.model.AppItem
 import com.mohsenoid.certhunter.domain.model.toShareText
 import com.mohsenoid.certhunter.domain.repository.AppRepository
 import com.mohsenoid.klogx.DefaultKLogWriter
@@ -36,8 +37,6 @@ class AppDetailViewModel(
     private val _events = MutableSharedFlow<AppDetailEvent>(extraBufferCapacity = 1)
     val events: SharedFlow<AppDetailEvent> = _events.asSharedFlow()
 
-    private var loadedDetails: AppDetails? = null
-
     init {
         load()
     }
@@ -45,7 +44,17 @@ class AppDetailViewModel(
     fun onAction(action: AppDetailAction) {
         when (action) {
             is AppDetailAction.ShareCertificate -> {
-                val details = loadedDetails ?: return
+                val state = _uiState.value
+                if (state.isLoading || state.error != null || state.certificates.isEmpty()) return
+                val details = AppDetails(
+                    item = AppItem(
+                        name = state.appName,
+                        packageName = state.packageName,
+                        isSystemApp = state.isSystemApp,
+                    ),
+                    certificates = state.certificates,
+                    historicalCertificates = state.historicalCertificates,
+                )
                 _events.tryEmit(AppDetailEvent.Share(details.toShareText(action.labels)))
             }
         }
@@ -56,7 +65,6 @@ class AppDetailViewModel(
             val result = repository.getAppDetails(packageName)
                 .onSuccess {
                     logger.d("Loaded certificate details for $packageName")
-                    loadedDetails = it
                 }
                 .onFailure { error ->
                     // CertificateNotFound and CertificateParseFailed are already logged

@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -25,9 +26,11 @@ fun AppNavHost() {
 
     val listViewModel: AppListViewModel = koinViewModel()
     val listUiState by listViewModel.uiState.collectAsState()
+    val displayedApps by listViewModel.displayedApps.collectAsState()
 
     AppListScreen(
         uiState = listUiState,
+        displayedApps = displayedApps,
         onSearchQueryChanged = listViewModel::onSearchQueryChanged,
         onAppClick = { app -> backStack.add(AppDetail(app.packageName)) },
         onToggleSystemApps = listViewModel::onToggleSystemApps,
@@ -66,10 +69,12 @@ fun AppNavHost() {
     if (backStack.lastOrNull() is AppAbout) {
         val context = LocalContext.current
         val unknownVersion = stringResource(R.string.app_about_version_unknown)
-        val versionName = try {
-            context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: unknownVersion
-        } catch (_: PackageManager.NameNotFoundException) {
-            unknownVersion
+        val versionName = remember(context.packageName) {
+            try {
+                context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: unknownVersion
+            } catch (_: PackageManager.NameNotFoundException) {
+                unknownVersion
+            }
         }
         AppAboutScreen(
             versionName = versionName,
