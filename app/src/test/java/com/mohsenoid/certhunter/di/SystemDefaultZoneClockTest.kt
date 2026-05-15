@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import java.time.ZoneId
 import java.util.TimeZone
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class SystemDefaultZoneClockTest {
 
@@ -41,6 +42,8 @@ class SystemDefaultZoneClockTest {
         val second = SystemDefaultZoneClock.instant()
 
         // instant() must be live, not snapshotted; ordering proves it's reading the clock each call.
-        assert(!second.isBefore(first))
+        // kotlin.test.assertTrue is used instead of Kotlin's `assert` so the check runs even when
+        // JVM assertions are disabled.
+        assertTrue(!second.isBefore(first), "instant() must read live time on each call")
     }
 }

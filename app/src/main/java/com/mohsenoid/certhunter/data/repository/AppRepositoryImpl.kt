@@ -132,8 +132,12 @@ class AppRepositoryImpl(
     private fun parseCertificate(rawBytes: ByteArray): AppCertificateDetails {
         val certFactory = CertificateFactory.getInstance("X509")
         val x509Cert = certFactory.generateCertificate(ByteArrayInputStream(rawBytes)) as X509Certificate
-        val expiryDate = x509Cert.notAfter.toInstant().atZone(clock.zone).toLocalDate()
-        val validity = CertificateValidityClassifier.classify(LocalDate.now(clock), expiryDate)
+        // Snapshot zone once so today and expiry project through the same zone even if the
+        // device timezone changes mid-call.
+        val zone = clock.zone
+        val today = LocalDate.ofInstant(clock.instant(), zone)
+        val expiryDate = x509Cert.notAfter.toInstant().atZone(zone).toLocalDate()
+        val validity = CertificateValidityClassifier.classify(today, expiryDate)
         return AppCertificateDetails(
             sha256 = hashBytes(rawBytes, "SHA-256"),
             sha1 = hashBytes(rawBytes, "SHA-1"),
@@ -141,7 +145,7 @@ class AppRepositoryImpl(
             issuer = x509Cert.issuerX500Principal.name,
             serialNumber = x509Cert.serialNumber.toString(HEX_RADIX).uppercase(),
             validFrom = x509Cert.notBefore.toInstant()
-                .atZone(clock.zone)
+                .atZone(zone)
                 .toLocalDate()
                 .format(dateFormatter),
             validUntil = expiryDate.format(dateFormatter),
