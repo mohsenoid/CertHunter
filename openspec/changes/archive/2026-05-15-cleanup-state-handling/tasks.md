@@ -46,4 +46,4 @@
 - [x] 6.1 Run `./gradlew :app:detekt` and address any new findings (or baseline with justification — but prefer fixes).
 - [x] 6.2 Run `./gradlew :app:testDebugUnitTest` and ensure the suite passes locally.
 - [x] 6.3 Run `openspec validate cleanup-state-handling --strict` once tasks are checked off; ensure it stays green.
-- [ ] 6.4 Run `openspec archive cleanup-state-handling` after the implementation PR merges so the `code-conventions` delta folds into the living spec.
+- [x] 6.4 Run `openspec archive cleanup-state-handling` after the implementation PR merges so the `code-conventions` delta folds into the living spec.
