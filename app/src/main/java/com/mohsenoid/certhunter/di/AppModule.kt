@@ -9,10 +9,18 @@ import com.mohsenoid.certhunter.ui.list.AppListViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
+import java.time.Clock
 
 val appModule = module {
     single<DispatcherProvider> { DefaultDispatcherProvider() }
-    single<AppRepository> { AppRepositoryImpl(androidContext().packageManager, get()) }
+    single<Clock> { SystemDefaultZoneClock }
+    single<AppRepository> {
+        AppRepositoryImpl(
+            packageManager = androidContext().packageManager,
+            dispatcherProvider = get(),
+            clock = get(),
+        )
+    }
     viewModel { AppListViewModel(repository = get(), dispatcherProvider = get()) }
     viewModel { (packageName: String) ->
         AppDetailViewModel(
