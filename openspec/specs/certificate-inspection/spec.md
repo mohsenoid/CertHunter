@@ -3,9 +3,7 @@
 ## Purpose
 
 The certificate-inspection capability parses the signing certificate(s) of a single installed app, splits active signers from rotation history, computes validity state, and presents the fields in a detail view. It supports the user goal *"tell me what key actually signed this app and is that key still valid?"*.
-
 ## Requirements
-
 ### Requirement: Load app details by package name
 
 The system SHALL load an app's certificate details by `packageName` via `AppRepository.getAppDetails(packageName: String)`. The repository SHALL return `Result<AppDetails, AppDetailsError>` (`com.michael-bull.kotlin-result`). The detail load SHALL run off the main thread on `DispatcherProvider.io`.
@@ -158,3 +156,24 @@ Local UI state owned by the certificate detail dialog, such as whether the histo
 - **AND** later opens app B's detail dialog
 - **THEN** app B's historical certificates section starts from its default collapsed state
 - **AND** app A's previous expansion state does not leak into app B's dialog
+
+### Requirement: Validity classification uses a controlled current-date source
+
+The system SHALL compute certificate validity (`Expired`, `ExpiringSoon(daysLeft)`, `Valid`) from a controlled current-date dependency supplied to the implementation, rather than by reading the ambient wall clock directly inside certificate parsing logic.
+
+#### Scenario: Boundary case tested with a fixed current date
+
+- **WHEN** the implementation evaluates certificate validity in unit tests
+- **THEN** the current date can be fixed explicitly by the test
+- **AND** the resulting validity classification is deterministic for expiry-boundary cases
+
+#### Scenario: Certificate expires in exactly 30 days
+
+- **WHEN** the controlled current date is 30 days before the certificate's `notAfter` date
+- **THEN** the validity is `ExpiringSoon(30)`
+
+#### Scenario: Certificate expires in 31 days
+
+- **WHEN** the controlled current date is 31 days before the certificate's `notAfter` date
+- **THEN** the validity is `Valid`
+
