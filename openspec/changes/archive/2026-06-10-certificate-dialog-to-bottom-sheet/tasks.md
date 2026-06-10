@@ -24,6 +24,6 @@
 
 - [x] 4.1 Run `./gradlew :app:detekt` and fix any new violations
 - [x] 4.2 Run `./gradlew :app:testDebugUnitTest` and confirm all tests pass
-- [ ] 4.3 Build and install the debug APK; tap an app in the list and confirm the bottom sheet opens from the bottom, all certificate fields are visible, scrolling works without triggering unwanted sheet dismissal, and swipe-to-dismiss and scrim-tap both dismiss smoothly with animation
-- [ ] 4.4 Enable TalkBack; open the certificate bottom sheet and verify (a) the close `IconButton` is focusable and announces correctly, (b) the sheet is dismissible via the system accessibility dismiss action
-- [ ] 4.5 On an API 34+ device or emulator, verify that the predictive-back swipe on the bottom sheet plays the correct peek-and-dismiss animation
+- [x] 4.3 Build and install the debug APK; tap an app in the list and confirm the bottom sheet opens from the bottom, all certificate fields are visible, scrolling works without triggering unwanted sheet dismissal, and swipe-to-dismiss and scrim-tap both dismiss smoothly with animation
+- [x] 4.4 Enable TalkBack; open the certificate bottom sheet and verify (a) the close `IconButton` is focusable and announces correctly, (b) the sheet is dismissible via the system accessibility dismiss action
+- [x] 4.5 On an API 34+ device or emulator, verify that the predictive-back swipe on the bottom sheet plays the correct peek-and-dismiss animation
